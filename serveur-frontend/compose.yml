@@ -1,0 +1,14 @@
+services:
+  frontend:
+    container_name: frontend_${NAME}
+    platform: linux/x86_64
+    image: ${FOLDER_FRONT}:latest
+    restart: unless-stopped
+    build:
+      context: .
+    env_file:
+      - .env
+    volumes:
+      - /app/node_modules
+      - /app/hooks
+    command: npm run prev:android
