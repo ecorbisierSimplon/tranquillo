@@ -10,5 +10,5 @@
 /.vscode/sftp*
 /.docker/database/mariadb
 deploy
-/database/
-!/database/sql/
+database/*
+!database/sql/
