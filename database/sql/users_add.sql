@@ -1,0 +1,2 @@
+CREATE USER 'api'@'%' IDENTIFIED BY 'pass';
+GRANT GRANT OPTION, SELECT, INSERT, UPDATE, REFERENCES ON `tranquillo\_sql`.* TO 'api'@'%';
