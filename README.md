@@ -7,6 +7,12 @@
 
 ## BACKEND
 
+### Projet inital
+
+[symfony-docker github](https://github.com/dunglas/symfony-docker/)
+
+### Initialsation du projet
+
 Avec le terminal, excuter les commande suivantes :
 
 ```bash
@@ -18,5 +24,11 @@ cd serveur-backend
 # Par sécurité, effacé le dossier de la base de donnée (ne supprime pas le dossier sql)
 chmod +x ./init.sh && ./init.sh
 ```
+
+Une fois fait, [vous pouvez lancer symfony.](https://localhost:443)
+
+### Création 1ère page
+
+[Tuto symfony](https://symfony.com/doc/current/page_creation.html)
 
 ## FRONTEND
