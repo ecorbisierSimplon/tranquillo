@@ -12,6 +12,13 @@ pause s 20
 rm -rf ./$server_folder
 
 echo
+echo -e "'\e[1m Ajout d'un module php 8.3 '$server_folder'\e[0m'"
+echo "---------------------------------------------------"
+pause s 20
+
+sudo apt-get install php8.3-xml
+
+echo
 echo -e "'\e[1m Clonage de dunglas/symfony-docker.git\e[0m'"
 echo "---------------------------------------------------"
 pause s 20
@@ -162,6 +169,13 @@ echo "--------------------------------"
 pause s 20
 
 docker compose up --pull always -d --wait
+
+echo
+echo -e "'\e[1mAjout du module maker bundle \e[0m'"
+echo "---------------------------------"
+pause s 20
+
+composer require symfony/maker-bundle --dev
 
 echo
 echo -e "'\e[1mInstallation terminée \e[0m'"
