@@ -1,10 +1,10 @@
 services:
   php:
-    container_name: backend_${NAME}
     image: backend_${NAME}:${BACKEND_VERSION}
+    container_name: backend_${NAME}
     restart: unless-stopped
     environment:
-      SERVER_NAME: ${SERVER_NAME:-localhost}, php:8000
+      SERVER_NAME: ${SERVER_NAME:-localhost}, php:80
       MERCURE_PUBLISHER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       MERCURE_SUBSCRIBER_JWT_KEY: ${CADDY_MERCURE_JWT_SECRET:-!ChangeThisMercureHubJWTSecretKey!}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
@@ -21,19 +21,51 @@ services:
     volumes:
       - caddy_data:/data
       - caddy_config:/config
+    env_file:
+      - .env
     ports:
       # HTTP
-      - target: 8000
-        published: ${HTTP_PORT:-8000}
+      - target: ${HTTP_DOCKER_PORT:-80}
+        published: ${HTTP_LOCALHOST_PORT:-80}
         protocol: tcp
       # HTTPS
-      - target: 443
-        published: ${HTTPS_PORT:-443}
+      - target: ${HTTPS_DOCKER_PORT:-443}
+        published: ${HTTPS_LOCALHOST_PORT:-443}
         protocol: tcp
       # HTTP/3
-      - target: 443
-        published: ${HTTP3_PORT:-443}
+      - target: ${HTTP3_DOCKER_PORT:-443}
+        published: ${HTTP3_LOCALHOST_PORT:-443}
         protocol: udp
+    depends_on:
+      - database
+
+# ##> BASE DE DONNÉES // ADMINER ET mariadb
+  adminer:
+    platform: linux/x86_64
+    container_name: adminer_${NAME}_${ADMINER_VERSION}
+    image: adminer:${ADMINER_VERSION}
+    restart: unless-stopped
+    ports:
+      - ${ADMINER_LOCALHOST_PORT}:${ADMINER_DOCKER_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - database
+
+  database:
+    platform: linux/x86_64
+    container_name: mariadb_${NAME}_${MARIADB_VERSION}
+    image: mariadb:${MARIADB_VERSION}
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ../${DATA}/sql:/docker-entrypoint-initdb.d/
+      - ../${MYSQL_DATA}:/var/lib/mysql
+    ports:
+      - ${SQL_LOCALHOST_PORT}:${SQL_DOCKER_PORT}
+# ##< BASE DE DONNÉES // ADMINER ET mariadb
+ 
 
 # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
 ###> symfony/mercure-bundle ###
@@ -42,5 +74,6 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+  tranquillo_sql:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
