@@ -15,8 +15,6 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
 
 Avec le terminal, excuter les commande suivantes à la racine de "tranquillo©":
 
-#### Initialisation du projet
-
 **Pour la 1ère installation, exécutez :**
 
 ```bash
@@ -24,7 +22,8 @@ chmod +x ./install.sh && ./install.sh
 ```
 
 **Pour les mise à jour ou reconstruction utilisez back.sh**
-_Vous pouvez effacer le dossier de la base de donnée (cela ne supprime pas le dossier sql)_
+_Vous pouvez effacer le dossier de la base de donnée_
+_(cela ne supprime pas le dossier sql)_
 
 ```bash
 chmod +x ./back.sh && ./back.sh
