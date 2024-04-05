@@ -9,19 +9,24 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
 
 ### Projet inital
 
-[symfony-docker github](https://github.com/dunglas/symfony-docker/)
+[projet de Dunglas symfony-docker github](https://github.com/dunglas/symfony-docker/)
 
 ### Initialsation du projet
 
 Avec le terminal, excuter les commande suivantes à la racine de "tranquillo©":
 
-```bash
-# Initialisation du projet
-# Pour la 1ère installation faire
-chmod +x ./install.sh && ./install.sh
+#### Initialisation du projet
 
-# Pour les mise à jour ou reconstruction utilisez back.sh
-# Vous pouvez effacer le dossier de la base de donnée (ne supprime pas le dossier sql)
+**Pour la 1ère installation, exécutez :**
+
+```bash
+chmod +x ./install.sh && ./install.sh
+```
+
+**Pour les mise à jour ou reconstruction utilisez back.sh**
+_Vous pouvez effacer le dossier de la base de donnée (cela ne supprime pas le dossier sql)_
+
+```bash
 chmod +x ./back.sh && ./back.sh
 ```
 
