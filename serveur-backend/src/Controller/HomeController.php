@@ -9,10 +9,10 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function index(Request $request): Response
+    #[Route('/{name}', name: 'home')]
+    public function index(Request $request, string $name): Response
     {
         // dd($request); // permet de visualiser le contenu request
-        return new Response('Hello world ! ' . $request->query->get('name', 'Inconnu'));
+        return new Response('Hello world ! ' . $name);
     }
 }
