@@ -1,14 +1,5 @@
 INSERT INTO
-    `tpa_roles` (`role_code`, `role_name`)
-VALUES
-    ('100', 'webmaster'),
-    ('90', 'admin'),
-    ('20', 'utilisateur'),
-    ('10', 'inscrit');
-
-INSERT INTO
     `tpa_users` (
-        `user_id`,
         `email`,
         `lastname`,
         `firstname`,
@@ -17,10 +8,9 @@ INSERT INTO
     )
 VALUES
     (
-        '1',
         'emploi@corbisier.fr',
         'CORBISIER',
         'Eric',
         '1234',
-        '100'
+        (SELECT id FROM tpa_roles r WHERE r.role_code = 'role@webmaster'))
     );

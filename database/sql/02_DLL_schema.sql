@@ -15,16 +15,17 @@ CREATE DATABASE IF NOT EXISTS tranquillo
 
 USE tranquillo;
 
-DROP TABLE IF EXISTS tpa_users,
-tpa_roles,
-tpa_tasks,
-tpa_understains;
+DROP TABLE IF EXISTS tpa_tasks,
+tpa_subtasks,
+tpa_users,
+tpa_roles;
 
 CREATE TABLE
     IF NOT EXISTS tpa_roles (
-        role_code INT AUTO_INCREMENT PRIMARY KEY,
+        role_id INT AUTO_INCREMENT PRIMARY KEY,
+        role_code VARCHAR(50) NOT NULL,
         role_name VARCHAR(50) NOT NULL,
-        CONSTRAINT tpa_roles_code_ukey UNIQUE (role_name)
+        CONSTRAINT tpa_roles_code_ukey UNIQUE (role_code),
     );
 
 CREATE TABLE
@@ -34,9 +35,9 @@ CREATE TABLE
         lastname VARCHAR(50) NOT NULL,
         firstname VARCHAR(50) NOT NULL,
         user_password VARCHAR(255) NOT NULL,
-        roles_code INT NOT NULL,
+        roles_id INT NOT NULL,
         CONSTRAINT tpa_users_ukey UNIQUE (email),
-        CONSTRAINT tpa_users_tpa_roles_fkey FOREIGN KEY (roles_code) REFERENCES tpa_roles (role_code)
+        CONSTRAINT tpa_users_tpa_roles_fkey FOREIGN KEY (roles_id) REFERENCES tpa_roles (role_id)
     );
 
 CREATE TABLE
@@ -50,7 +51,7 @@ CREATE TABLE
         datetime_end DATETIME DEFAULT NULL,
         users_id INT NOT NULL,
         CONSTRAINT tpa_tasks_users_fkey FOREIGN KEY (users_id) REFERENCES tpa_users (user_id),
-        UNIQUE (task_name, task_datetime_create)
+        CONSTRAINT tpa_tasks_ukey UNIQUE (task_name, task_datetime_create)
     );
 
 CREATE TABLE
@@ -62,5 +63,5 @@ CREATE TABLE
         is_finished INT NOT NULL,
         tasks_id INT NOT NULL,
         CONSTRAINT tpa_subtasks_tasks_fkey FOREIGN KEY (tasks_id) REFERENCES tpa_tasks (task_id),
-        UNIQUE (subtask_name, subtask_datetime_create)
+        CONSTRAINT tpa_subtasks_ukey UNIQUE (subtask_name, subtask_datetime_create)
     );

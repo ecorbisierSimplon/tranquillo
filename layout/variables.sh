@@ -2,8 +2,25 @@
 
 env_file=".env"
 default_version="1.0.00"
+
 name="tranquillo"
+user=$LOGNAME
+
+myfolder=$PWD
+home=~
 server_folder="serveur-backend"
+layout="$PWD/layout"
+
+current_version="1.0.00"
+# Vérifier si le fichier .env n'existe pas
+
+folder_env=$myfolder/$server_folder/$env_file
+echo "variables.sh = $folder_env"
+
+if [ ! -f "$folder_env" ]; then
+    current_version=$(grep '^BACKEND_VERSION=' $folder_env | cut -d '=' -f2)
+fi
+
 # Définir l'indentation
 file=compose.yaml
 basedonnees="\n# ##> BASE DE DONNÉES \/\/ ADMINER ET mariadb\n  adminer:\n    platform: linux\/x86_64\n    container_name: adminer_\${NAME}_\${ADMINER_VERSION}\n    image: adminer:\${ADMINER_VERSION}\n    restart: unless-stopped\n    ports:\n      - \${ADMINER_LOCALHOST_PORT}:\${ADMINER_DOCKER_PORT}\n    env_file:\n      - .env\n    depends_on:\n      - database\n\n  database:\n    platform: linux\/x86_64\n    container_name: mariadb_\${NAME}_\${MARIADB_VERSION}\n    image: mariadb:\${MARIADB_VERSION}\n    restart: unless-stopped\n    env_file:\n      - .env\n    volumes:\n      - ..\/\${DATA}\/sql:\/docker-entrypoint-initdb.d\/\n      - ..\/\${MYSQL_DATA}:\/var\/lib\/mysql\n    ports:\n      - \${SQL_LOCALHOST_PORT}:\${SQL_DOCKER_PORT}\n# ##< BASE DE DONNÉES \/\/ ADMINER ET mariadb\n "
@@ -55,14 +72,16 @@ pause() {
                 for ((i = $num; i >= 1; i--)); do
                     # Efface la ligne précédente
                     printf "\r"
+                    printf "\033[J"
                     # Affiche le message de patientez
-                    printf "Appuyez sur [c] pour continuer( %ds ) ou [q] pour quitter > " "$i"
+                    printf "Appuyez sur [\033[36;5mc\033[0m] pour continuer (\033[31;1m%ds\033[0m) ou [\033[36;5mq\033[0m] pour quitter > " "$i"
                     # Attendre 1 seconde
                     read -t 1 -n 1 key                            # Lire une touche en temps limité (1 seconde)
                     if [[ "$key" == "q" || "$key" == "Q" ]]; then # Si "q" est pressé, quitter
                         printf "\n"
                         # Effacer la ligne après la fin du compte à rebours
                         printf "\r"
+                        printf "\033[J"
                         # Afficher un message final
                         printf "Le processus est arrêté.\n"
                         exit 1
@@ -73,8 +92,10 @@ pause() {
 
                 # Effacer la ligne après la fin du compte à rebours
                 printf "\r"
+                printf "\033[J"
                 # Afficher un message final
                 printf "Merci d'avoir patienté.\n"
+                sleep 1
             fi
         fi
 
