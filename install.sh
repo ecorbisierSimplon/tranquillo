@@ -2,73 +2,99 @@
 # Exectute > chmod +x ./install.sh && ./install.sh
 clear
 sudo test
-layout="$PWD/layout"
+layout="$PWD/install"
 source "$layout/variables.sh"
 
-cd $server_folder
-
-echo docker compose
-echo -e "\e[31m\e[1m[n]\e[0m - New install (delete all images and recreate build)"
+echo "Menu :"
+echo "-------------------------------"
+echo
+echo -e "\e[31m\e[1m[i]\e[0m - New install (delete all images and recreate build)"
 echo -e "\e[31m\e[1m[c]\e[0m - Create build (default)"
 echo -e "\e[31m\e[1m[r]\e[0m - Recreate containers (compose up)"
 echo -e "\e[31m\e[1m[b]\e[0m - Rebuild (delete old images and recreate build)"
 echo -e "\e[31m\e[1m[q]\e[0m - Quitter"
-read -p " > " val
+read -n 1 -rp " > " val
+line -t ""
 #
-if [[ "$val" == "q" ]]; then
+if [[ "${val^^}" == "Q" ]]; then
     clear
     exit 1
 fi
-pause s 2
+pause s 1 m
 
-# Vérifier si le fichier .env n'existe pas
-if [ ! -f "$folder_env" ]; then
-    # Écrire le contenu par défaut dans le fichier .env
-    sudo cp "$layout/env" "$folder_env"
-fi
-
-if [[ "$val" == "n" ]]; then
+if [[ ${val^^} == "I" ]]; then
     echo "Nouvelle Installation :"
     echo "----------"
 
-elif [[ "$val" == "r" ]]; then
-    echo "Recreate :"
+elif [[ ${val^^} == "R" ]]; then
+    echo "Recreate containers (compose up) :"
     echo "----------"
 
-elif [[ "$val" == "b" ]]; then
+elif [[ ${val^^} == "B" ]]; then
     echo "Rebuild :"
     echo "----------"
 else
-    echo "Recreate containers (compose up) :"
+    echo "Create Build :"
     echo "-------------"
 fi
 
-# Suppression de la base de donnée
-echo
-echo "Voulez-vous supprimer la base de donnée ? "
-read -p " \e[31m\e[1m[Y]\e[0mes / \e[31m\e[1m[N]\e[0mo (is default) > " val_bd
+if [ -d "$folder_rel_data" ]; then
+    case "$val" in
+    [Rr] | [Bb] | [Cc])
+        # Suppression de la base de donnée
+        echo
+        echo "Voulez-vous supprimer la base de donnée ? "
+        read -n 1 -rp $'\e[31m\e[1m[Y]\e[0mes / \e[31m\e[1m[N]\e[0mo (is default) -- \e[31m\e[1m[Q]\e[0muitter> ' val_bd
+        line
+        line -t ""
 
-case "$val_bd" in
-[Yy] | [Yy][Ee][Ss])
-    sudo rm -rf ../database/${name}/
+        if [[ "${val^^}" == "Q" ]]; then
+            clear
+            exit 1
+        fi
+
+        case "$val_bd" in
+        [Yy] | [Yy][Ee][Ss])
+            sudo rm -rf $folder_rel_data
+            ;;
+        esac
+        ;;
+    esac
+fi
+case "$val" in
+[Rr] | [Bb] | [Cc])
+    source $layout/default.sh
     ;;
 esac
 
-if [[ "$val" == "n" ]]; then
+if [[ ${val^^} == "I" ]]; then
     source "$layout/installation.sh"
-elif [[ "$val" == "r" ]]; then
-    source "$layout/buildnews.sh"
 
-elif [[ "$val" == "b" ]]; then
+elif [[ ${val^^} == "R" ]]; then
     source "$layout/composeup.sh"
 
+elif [[ ${val^^} == "B" ]]; then
+    source "$layout/rebuild.sh"
+
 else
-    source "$layout/installation.sh"
+    source "$layout/buildnews.sh"
 
 fi
-pause s 3
+pause s 1 m
+
+if [ -d "$folder_rel_data" ]; then
+    sudo chown -R $user $folder_rel_data
+fi
+
+echo -e "'\e[1m Nettoyage des images\e[0m'"
+echo "-----------------------------"
+pause s 1 m
+docker rmi $(docker images | grep backend_tranquillo | awk '{print $3}')
+echo "** Images nettoyées **"
+echo
+
 echo
 echo "---------------------------------"
 echo -e " Lien pour ouvrir symfony (CTRL + clic): "
-echo -e "'\e[1m\e[34mhttps://localhost:443\e[0m'"
+echo -e "\e[1m\e[34mhttps://localhost:443\e[0m"
 echo

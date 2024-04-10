@@ -1,29 +1,30 @@
 #!/bin/bash
 
-# "Rebuild :"
-
 echo "remove-orphans"
 echo "--------------------------------"
 docker compose down --remove-orphans
-
-sleep 5
+echo " ** Opération effectuée **"
 echo
-echo "image rm "
+
+echo "image rm _$name"
 echo "--------------------------------"
-docker image rm backend_$name:$current_version
-
+pause s 1 m
+docker rmi $(docker images | grep backend_$name | awk '{print $3}')
+echo " ** Opération effectuée **"
 echo
+
 echo "build --pull"
 echo "--------------------------------"
+pause s 1 m
 docker compose build --pull --no-cache
+echo " ** Opération effectuée **"
+echo
 
 # docker-compose up --force-recreate -d
 
-echo
 echo "compose up pull"
 echo "--------------------------------"
+pause s 1 m
 docker compose up --pull always -d --wait
-
-# echo "compose exec php"
-# echo "--------------------------------"
-# docker compose exec php bin/console dbal:run-sql -q "SELECT 1" && echo "OK" || echo "Connection is not working"
+echo " ** Opération effectuée **"
+echo
