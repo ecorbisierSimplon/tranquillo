@@ -74,6 +74,6 @@ services:
 volumes:
   caddy_data:
   caddy_config:
-  tranquillo_sql:
+  tranquillo_mariadb:
 ###> symfony/mercure-bundle ###
 ###< symfony/mercure-bundle ###
