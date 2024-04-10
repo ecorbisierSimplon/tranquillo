@@ -3,7 +3,8 @@
 default_version="1.0.00"
 
 name="tranquillo"
-dataname="${name}_mariadb"
+basedb="mariabd"
+dataname="${name}_${basedb}"
 user=$LOGNAME
 
 myfolder=$PWD
@@ -149,3 +150,12 @@ function in_array() {
         return 0
     fi
 }
+
+line_bashrc='alias docker-desktop="/opt/docker-desktop/bin/docker-desktop"'
+file_bashrc=~/.bashrc
+# add line docker-desktop in bashrc
+test=$(grep "$line_bashrc" "$file_bashrc")
+if [[ -z "$test" ]]; then
+    echo $line_bashrc >>$file_bashrc
+    source $file_bashrc
+fi
