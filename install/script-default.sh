@@ -1,14 +1,22 @@
 #!/bin/bash
 
 # Vérifier si le fichier .env n'existe pas
-if [ ! -f "$folder_env" ]; then
+if [ ! -f "$file_rel_env" ]; then
+    echo -e "'\e[1m Écrire le contenu par défaut dans le fichier .env\e[0m'"
+    echo "---------------------------------------------------"
+    pause s 1 m
     # Écrire le contenu par défaut dans le fichier .env
-    sudo cp "$layout/env" "$folder_env"
+    source "$layout/script-env.sh"
+    echo "** Fichier .env est prêt **"
+    echo
 fi
 
+echo -e "'\e[1m Mise à jour du n° de version \e[0m'"
+echo "---------------------------------------------------"
+pause s 1 m
 # Extraire le numéro de version actuel
 if [[ "$current_version" == "" ]]; then
-    echo "BACKEND_VERSION=$default_version" >>"$env_file"
+    echo "BACKEND_VERSION=$default_version" >>"$file_rel_env"
 fi
 
 # Séparer le numéro de version en parties (major, minor, patch)
@@ -34,6 +42,7 @@ fi
 new_version="$major.$minor.$patch"
 
 # Remplacer la valeur de BACKEND_VERSION dans le fichier .env
-sed -i "s/^BACKEND_VERSION=.*/BACKEND_VERSION=$new_version/" .env
+sed -i "s/^BACKEND_VERSION=.*/BACKEND_VERSION=$new_version/" $file_rel_env
 
-echo "La version a été mise à jour à $new_version"
+echo " ** La version a été mise à jour à $new_version **"
+echo
