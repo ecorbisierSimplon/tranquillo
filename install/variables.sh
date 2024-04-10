@@ -15,11 +15,13 @@ current_version="1.0.00"
 # Vérifier si le fichier .env n'existe pas
 file_env=".env"
 
+folder_rel_bin=~/bin
 folder_serveur="serveur-backend"
 folder_rel_serveur="$myfolder/$folder_serveur"
 folder_rel_env=$folder_rel_serveur/
 folder_rel_data=$myfolder/database/$dataname
 
+file_rel_URL=$folder_rel_bin/URL
 file_rel_env="$folder_rel_serveur/$file_env"
 file_rel_compose="$folder_rel_serveur/compose.yaml"
 
