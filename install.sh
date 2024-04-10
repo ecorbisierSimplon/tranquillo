@@ -5,28 +5,7 @@ sudo test
 
 layout="$PWD/install"
 source "$layout/variables.sh"
-
-if ! dpkg-query -l docker-desktop >/dev/null 2>&1; then
-    echo "Docker desktop n'est pas installer."
-    echo " ** Veux tu l'installer ?"
-    echo -e "\e[31m\e[1m[y]\e[0mes / \e[31m\e[1m[n]\e[0mo > "
-    read -n 1 -rp " > " val
-    line -t ""
-    if [[ "${val^^}" == "Y" ]]; then
-        dl_docker="https://desktop.docker.com/linux/main/amd64/139021/docker-desktop-4.28.0-amd64.deb?utm_source=docker&utm_medium=webreferral&utm_campaign=docs-driven-download-linux-amd64"
-        WGET -O $myfolder/install/docker-desktop.deb $dl_docker
-        sudo apt-get -y install $myfolder/install/docker-desktop.deb
-        pause s 1 m
-    else
-        echo
-        echo "Installation interrompu !!!"
-        echo "Il faut installer Docker Desktop : "
-        echo " * Ubuntu : https://docs.docker.com/desktop/install/ubuntu/"
-        echo " * Windows et Mac : https://www.docker.com/products/docker-desktop/"
-        echo
-        exit 1
-    fi
-fi
+source "$layout/script-init.sh"
 
 echo "Menu :"
 echo "-------------------------------"
@@ -118,6 +97,14 @@ echo
 
 echo
 echo "---------------------------------"
+echo "Veux tu ouvrir le site ? "
+echo -e "\e[31m\e[1m[y]\e[0mes / \e[31m\e[1m[n]\e[0mo > "
+read -n 1 -rp " > " val
+line -t ""
+if [[ "${val^^}" == "Y" ]]; then
+    URL "https://localhost:443"
+fi
+echo
 echo -e " Lien pour ouvrir symfony (CTRL + clic): "
 echo -e "\e[1m\e[34mhttps://localhost:443\e[0m"
 echo
