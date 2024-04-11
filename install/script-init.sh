@@ -1,6 +1,9 @@
 # ---------------------------
 # Création du fichier URL
 # ---------------------------
+shopt -s expand_aliases
+source $file_rel_bashrc
+source $file_rel_bashal
 
 if [ ! -f "$file_rel_URL" ]; then
     echo "Création du fichier $file_rel_URL"
@@ -49,3 +52,55 @@ if ! dpkg-query -l docker-desktop >/dev/null 2>&1; then
         exit 1
     fi
 fi
+
+# add line docker-desktop in bashrc
+title_bashal="# ALIAS DOKER"
+line_bashal='alias docker-desktop="/opt/docker-desktop/bin/docker-desktop"'
+test=$(grep "$title_bashal" "$file_rel_bashal")
+if [[ -z "$test" ]]; then
+    echo "Création du fichier $file_rel_bashal"
+    echo "--------------------------------"
+    pause s 1 m
+    echo $line_bashal >>$file_rel_bashal
+    source $file_rel_bashal
+    echo " ** Création effectuée **"
+    echo
+fi
+# source $file_rel_bashrc
+if ! docker images >/dev/null 2>&1; then
+    echo "Lancement de Docker desktop"
+    echo "--------------------------------"
+    pause s 1 m
+    docker-desktop
+    echo " ** Lancement en cours ... **"
+
+    i=0
+    while true; do
+        ((i++))
+        printf "\r"
+        printf "\033[J"
+        printf "Appuyez sur [\033[36;5mq\033[0m] pour quitter (%ds) > " "$i"
+
+        read -t 1 -n 1 -s keys # Lire un seul caractère en mode silencieux
+
+        if [[ "${keys^^}" == "Q" ]]; then
+            printf "\n"
+            printf "\r"
+            printf "\033[J"
+            echo "Attente annulée"
+            exit 1
+        fi
+
+        if docker images >/dev/null 2>&1; then
+            printf "\n"
+            printf "\r"
+            printf "\033[J"
+            echo "Lancement effectué"
+            break
+        fi
+    done
+
+fi
+echo "-------------------------"
+echo
+pause s 3 m
