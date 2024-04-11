@@ -77,3 +77,9 @@ composer require twig/twig
 composer require twig
 echo "** Twig est prêt **"
 echo
+echo -e "'\e[1m Ajout du template orm\e[0m'"
+echo "-----------------------------"
+pause s 1 m
+composer require symfony/orm-pack
+echo "** Orm est prêt **"
+echo
