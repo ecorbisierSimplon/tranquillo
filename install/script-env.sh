@@ -76,7 +76,7 @@ ADMINER_LOCALHOST_PORT=5050
 ADMINER_DOCKER_PORT=8080
 # DATABASE_URL="sqlite:///%kernel.project_dir%/var/data.db"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
-# ## DATABASE_URL="mysql://\${MYSQL_USER}:\${MYSQL_PASSWORD}@\${MYSQL_HOST}:\${SQL_DOCKER_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+DATABASE_URL="mysql://\${MYSQL_USER}:\${MYSQL_PASSWORD}@\${MYSQL_HOST}:\${SQL_DOCKER_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
 # DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
 #
 # ##> MYSQL/ mariadb - adminer ###

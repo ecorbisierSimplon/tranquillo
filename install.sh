@@ -94,6 +94,7 @@ echo -e "'\e[1m Nettoyage des images\e[0m'"
 echo "-----------------------------"
 pause s 1 m
 docker rmi $(docker images | grep backend_tranquillo | awk '{print $3}')
+docker rmi $(docker images | grep "<none>" | awk '{print $3}')
 echo "** Images nettoyées **"
 echo
 

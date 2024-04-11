@@ -26,6 +26,7 @@ file_rel_bashal=~/.bash_aliases
 file_rel_URL=$folder_rel_bin/URL
 file_rel_env="$folder_rel_serveur/$file_env"
 file_rel_compose="$folder_rel_serveur/compose.yaml"
+file_rel_compose_o="$folder_rel_serveur/compose.override.yaml"
 
 if [ -f "$file_rel_env" ]; then
     current_version=$(grep '^BACKEND_VERSION=' $file_rel_env | cut -d '=' -f2)

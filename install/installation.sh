@@ -46,6 +46,8 @@ cd $myfolder
 git clone git@github.com:dunglas/symfony-docker.git
 mv $myfolder/symfony-docker $folder_rel_serveur
 cd $folder_rel_serveur
+sudo rm -rf .git
+
 echo " ** clonage effectué **"
 echo
 
