@@ -3,6 +3,7 @@
         "symfony/maker-bundle": "^1.58"
     },
     "require": {
-        "twig/twig": "^3.8"
+        "twig/twig": "^3.8",
+        "symfony/orm-pack": "^2.4"
     }
 }
