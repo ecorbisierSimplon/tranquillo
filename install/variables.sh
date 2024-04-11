@@ -21,6 +21,8 @@ folder_rel_serveur="$myfolder/$folder_serveur"
 folder_rel_env=$folder_rel_serveur/
 folder_rel_data=$myfolder/database/$dataname
 
+file_rel_bashrc=~/.bashrc
+file_rel_bashal=~/.bash_aliases
 file_rel_URL=$folder_rel_bin/URL
 file_rel_env="$folder_rel_serveur/$file_env"
 file_rel_compose="$folder_rel_serveur/compose.yaml"
@@ -152,12 +154,3 @@ function in_array() {
         return 0
     fi
 }
-
-line_bashrc='alias docker-desktop="/opt/docker-desktop/bin/docker-desktop"'
-file_bashrc=~/.bashrc
-# add line docker-desktop in bashrc
-test=$(grep "$line_bashrc" "$file_bashrc")
-if [[ -z "$test" ]]; then
-    echo $line_bashrc >>$file_bashrc
-    source $file_bashrc
-fi

@@ -5,6 +5,8 @@ sudo test
 
 layout="$PWD/install"
 source "$layout/variables.sh"
+
+chmod +x "$layout/script-init.sh"
 source "$layout/script-init.sh"
 
 echo "Menu :"
@@ -23,7 +25,7 @@ if [[ "${val^^}" == "Q" ]]; then
     exit 1
 fi
 pause s 1 m
-exit 1
+
 if [[ ${val^^} == "I" ]]; then
     echo "Nouvelle Installation :"
     echo "----------"
@@ -94,6 +96,8 @@ pause s 1 m
 docker rmi $(docker images | grep backend_tranquillo | awk '{print $3}')
 echo "** Images nettoyées **"
 echo
+
+docker-desktop
 
 echo
 echo "---------------------------------"
