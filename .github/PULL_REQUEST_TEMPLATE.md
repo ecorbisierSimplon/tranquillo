@@ -25,7 +25,8 @@
 
 > [!TIP]
 >
-> Pour les pull requests liées à un ticket ou les fermant, veuillez le n° du ticket après le # ci-dessous.
+> Pour les pull requests liées à un ticket et/ou pour les cloturer,
+> veuillez noter le n° du ticket après le # ci-dessous.
 
 - Related Issue #
 - Closes #
