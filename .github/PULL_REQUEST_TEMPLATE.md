@@ -1,3 +1,14 @@
+# TEMPLATE PULL REQUEST
+
+## ❗ _Si vous avez un 📜 ticket :_
+
+> [!TIP]
+>
+> Pour les pull requests liées à un ticket ou les fermant, veuillez le n° du ticket après le # ci-dessous.
+
+- Related Issue #
+- Closes #
+
 <!--
      Pour les Pull Requests en cours, veuillez utiliser la fonctionnalité de Pull Request en mode brouillon,
      consultez https://github.blog/2019-02-14-introducing-draft-pull-requests/ pour plus de détails.
@@ -37,19 +48,10 @@
 
 ## 📑 Liste de vérification
 
-- [ ] 📜 Ma PR a un ticket lié.
+- [ ] 📜 Ma PR a un ticket lié et le champ est remplis.
 - [ ] 📋 J'ai correctement rempli le modèle de PR.
 - [ ] ✅ J'ai examiné mes modifications moi-même.
 - [ ] 👉 J'ai vérifié manuellement mon changement.
-
-### ❗ _Si vous avez un 📜 ticket :_
-
-> [!TIP]
->
-> Pour les pull requests liées à un ticket ou les fermant, veuillez le n° du ticket après le # ci-dessous.
-
-- Related Issue #
-- Closes #
 
 ---
 
