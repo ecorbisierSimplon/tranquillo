@@ -101,6 +101,4 @@ if ! docker images >/dev/null 2>&1; then
     done
 
 fi
-echo "-------------------------"
-echo
-pause s 3 m
+clear

@@ -46,6 +46,8 @@ cd $myfolder
 git clone git@github.com:dunglas/symfony-docker.git
 mv $myfolder/symfony-docker $folder_rel_serveur
 cd $folder_rel_serveur
+sudo rm -rf .git
+
 echo " ** clonage effectué **"
 echo
 
@@ -77,9 +79,25 @@ composer require twig/twig
 composer require twig
 echo "** Twig est prêt **"
 echo
+
 echo -e "'\e[1m Ajout du template orm\e[0m'"
 echo "-----------------------------"
 pause s 1 m
 composer require symfony/orm-pack
 echo "** Orm est prêt **"
 echo
+
+echo -e "'\e[1m Ajout du template mercure\e[0m'"
+echo "-----------------------------"
+pause s 1 m
+composer require symfony/mercure-bundle
+echo "** Mercure bundle est prêt **"
+echo
+
+pause s 5 m
+
+docker compose down --remove-orphans
+pause s 5 m
+
+docker compose up --pull always -d --wait
+pause s 5 m
