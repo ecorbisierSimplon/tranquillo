@@ -1,6 +1,8 @@
 #!/bin/bash
 
-default_version="1.0.00"
+version_default="1.0.00"
+version_mariadb="11.3.2"
+version_adminer="4.8.1"
 
 name="tranquillo"
 basedb="mariabd"
@@ -12,6 +14,7 @@ home=~
 layout="$PWD/install"
 
 current_version="1.0.00"
+
 # Vérifier si le fichier .env n'existe pas
 file_env=".env"
 

@@ -12,9 +12,10 @@ source "$layout/script-init.sh"
 echo "Menu :"
 echo "-------------------------------"
 echo
-echo -e "\e[31m\e[1m[i]\e[0m - New install (delete all images and recreate build)"
 echo -e "\e[31m\e[1m[c]\e[0m - Create build (default)"
 echo -e "\e[31m\e[1m[r]\e[0m - Recreate containers (compose up)"
+echo -e "\e[31m\e[1m[d]\e[0m - Recreate containers (compose up) with delete and recreate database"
+echo -e "\e[31m\e[1m[i]\e[0m - New install (delete all images and recreate build)"
 echo -e "\e[31m\e[1m[b]\e[0m - Rebuild (delete old images and recreate build)"
 echo -e "\e[31m\e[1m[q]\e[0m - Quitter"
 read -n 1 -rp " > " val
@@ -32,6 +33,10 @@ if [[ ${val^^} == "I" ]]; then
 
 elif [[ ${val^^} == "R" ]]; then
     echo "Recreate containers (compose up) :"
+    echo "----------"
+
+elif [[ ${val^^} == "D" ]]; then
+    echo "Recreate containers (compose up) with recreate db:"
     echo "----------"
 
 elif [[ ${val^^} == "B" ]]; then
@@ -77,6 +82,9 @@ if [[ ${val^^} == "I" ]]; then
 elif [[ ${val^^} == "R" ]]; then
     source "$layout/composeup.sh"
 
+elif [[ ${val^^} == "D" ]]; then
+    source "$layout/newsdb.sh"
+
 elif [[ ${val^^} == "B" ]]; then
     source "$layout/rebuild.sh"
 
@@ -92,9 +100,15 @@ fi
 
 echo -e "'\e[1m Nettoyage des images\e[0m'"
 echo "-----------------------------"
+my_array=("backend_$name" "<none>" "app-php")
 pause s 1 m
-docker rmi $(docker images | grep backend_tranquillo | awk '{print $3}')
-docker rmi $(docker images | grep "<none>" | awk '{print $3}')
+
+# Boucle pour lire le tableau
+for element in "${my_array[@]}"; do
+    docker rmi $(docker images | grep "$element" | awk '{print $3}')
+done
+
+docker volume prune --force
 echo "** Images nettoyées **"
 echo
 
@@ -110,6 +124,6 @@ if [[ "${val^^}" == "Y" ]]; then
     URL "https://localhost:443"
 fi
 echo
-echo -e " Lien pour ouvrir symfony (CTRL + clic): "
+echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
 echo -e "\e[1m\e[34mhttps://localhost:443\e[0m"
 echo

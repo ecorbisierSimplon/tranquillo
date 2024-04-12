@@ -8,7 +8,7 @@ pause s 1 m
 docker compose build --no-cache
 echo " ** build effectuée **"
 echo
-pause s 120
+pause s 30
 echo "compose up pull"
 echo "--------------------------------"
 pause s 1 m
