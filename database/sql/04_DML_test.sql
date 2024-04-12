@@ -13,5 +13,12 @@ VALUES
         'CORBISIER',
         'Eric',
         '1234',
-        (SELECT id FROM tpa_roles r WHERE r.role_code = 'role@webmaster'))
+        (
+            SELECT
+                role_id
+            FROM
+                tpa_roles r
+            WHERE
+                r.role_code = 'role@webmaster'
+        )
     );
