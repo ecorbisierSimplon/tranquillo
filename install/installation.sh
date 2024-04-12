@@ -13,6 +13,14 @@ if [ -d "$myfolder/symfony-docker" ]; then
 fi
 
 if [ -d "$folder_rel_serveur" ]; then
+    cd $folder_rel_serveur
+    echo "remove-orphans"
+    echo "--------------------------------"
+    docker compose down --remove-orphans
+    echo " ** Opération effectuée **"
+    echo
+    cd $myfolder
+
     echo "suppression backend"
     echo "--------------------------------"
     pause s 1 m
@@ -34,7 +42,7 @@ echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
 pause s 1 m
 
-sudo apt install php8.3-xml
+sudo apt install php8.3-xml -y
 echo
 echo "** module php 8.3 est prêt **"
 echo
@@ -50,6 +58,9 @@ sudo rm -rf .git
 
 echo " ** clonage effectué **"
 echo
+
+mkdir $folder_rel_serveur/caddy_data
+mkdir $folder_rel_serveur/caddy_config
 
 # Mise à jour de env et n° de version
 source "$layout/script-default.sh"
@@ -96,8 +107,9 @@ echo
 
 pause s 5 m
 
-docker compose down --remove-orphans
-pause s 5 m
+docker-compose up --force-recreate -d
+# docker compose down --remove-orphans
+# pause s 5 m
 
-docker compose up --pull always -d --wait
+# docker compose up --pull always -d --wait
 pause s 5 m

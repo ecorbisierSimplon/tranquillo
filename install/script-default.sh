@@ -16,7 +16,7 @@ echo "---------------------------------------------------"
 pause s 1 m
 # Extraire le numéro de version actuel
 if [[ "$current_version" == "" ]]; then
-    echo "BACKEND_VERSION=$default_version" >>"$file_rel_env"
+    echo "BACKEND_VERSION=$version_default" >>"$file_rel_env"
 fi
 
 # Séparer le numéro de version en parties (major, minor, patch)
