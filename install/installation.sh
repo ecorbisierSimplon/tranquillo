@@ -64,7 +64,6 @@ source "$layout/script-compose.sh"
 echo "** Fichier compose.yaml est prêt **"
 echo
 
-exit 1
 source "$layout/buildnews.sh"
 
 cd $folder_rel_serveur
