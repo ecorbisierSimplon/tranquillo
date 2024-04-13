@@ -71,6 +71,9 @@ SQL_LOCALHOST_PORT=3336
 
 ADMINER_DOCKER_PORT=5088
 ADMINER_LOCALHOST_PORT=5050
+
+MAILER_SMTP_PORT=1025
+MAILER_HTML_PORT=8025
 ###< PORTS ###
 
 
@@ -90,9 +93,9 @@ APP_SECRET=4c4ad78b8a9ed1347ed8113081a3f6cf
 ## TRUSTED_PROXIES=\${TRUSTED_PROXIES:-127.0.0.0/8,10.0.0.0/8,172.16.0.0/12,192.168.0.0/16}
 ## TRUSTED_HOSTS=^\${SERVER_NAME:-example\\.com|localhost}|php\$$
 # Run "composer require symfony/mercure-bundle" to install and configure the Mercure integration
-MERCURE_URL=\${CADDY_MERCURE_URL:-http://php/.well-known/mercure}
-MERCURE_PUBLIC_URL=http://\${SERVER_NAME:-localhost}:\${HTTP_LOCALHOST_PORT:-443}/.well-known/mercure
-MERCURE_JWT_SECRET=\${CADDY_MERCURE_JWT_SECRET:-4c4ad78b8a9ed1347ed8113081a3f6cf}
+# MERCURE_URL=\${CADDY_MERCURE_URL:-http://php/.well-known/mercure}
+# MERCURE_PUBLIC_URL=http://\${SERVER_NAME:-localhost}:\${HTTP_LOCALHOST_PORT:-443}/.well-known/mercure
+# MERCURE_JWT_SECRET=\${CADDY_MERCURE_JWT_SECRET:-4c4ad78b8a9ed1347ed8113081a3f6cf}
 # The two next lines can be removed after initial installation
 ## SYMFONY_VERSION=\${SYMFONY_VERSION:-7.0}
 ## STABILITY=\${STABILITY:-stable}
@@ -106,5 +109,18 @@ MERCURE_JWT_SECRET=\${CADDY_MERCURE_JWT_SECRET:-4c4ad78b8a9ed1347ed8113081a3f6cf
 # DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
 DATABASE_URL="mysql://\${MYSQL_USER_API}:\${MYSQL_PASSWORD_API}@\${MYSQL_HOST}:\${SQL_DOCKER_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
 ###< doctrine/doctrine-bundle ###
+
+
+###> symfony/messenger ###
+# Choose one of the transports below
+# MESSENGER_TRANSPORT_DSN=amqp://guest:guest@localhost:5672/%2f/messages
+# MESSENGER_TRANSPORT_DSN=redis://localhost:6379/messages
+MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0
+###< symfony/messenger ###
+
+###> symfony/mailer ###
+# MAILER_DSN=null://null
+###< symfony/mailer ###
+
 EOF
 fi

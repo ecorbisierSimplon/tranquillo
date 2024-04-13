@@ -4,15 +4,6 @@
 clear
 cd $myfolder
 
-if [ -d "$myfolder/symfony-docker" ]; then
-    echo "suppression du dossier clone symfony"
-    echo "--------------------------------"
-    pause s 1 m
-    sudo rm -rf $myfolder/symfony-docker
-    echo " ** suppression effectuée **"
-    echo
-fi
-
 if [ -d "$folder_rel_serveur" ]; then
     cd $folder_rel_serveur
     echo "remove-orphans"
@@ -21,23 +12,22 @@ if [ -d "$folder_rel_serveur" ]; then
     echo " ** Opération effectuée **"
     echo
     cd $myfolder
-
-    echo "suppression backend"
-    echo "--------------------------------"
-    pause s 1 m
-    sudo rm -rf $folder_rel_serveur
-    echo " ** suppression effectuée **"
-    echo
 fi
 
-if [ -d "$folder_rel_data" ]; then
-    echo "suppression base de données"
-    echo "--------------------------------"
-    pause s 1 m
-    sudo rm -rf $folder_rel_data
-    echo " ** suppression effectuée **"
-    echo
-fi
+# Définition du tableau
+my_array=("$myfolder/symfony-docke" "$folder_rel_serveur" "$folder_rel_data" "TutoSymfony")
+
+# Boucle pour lire le tableau
+for element in "${my_array[@]}"; do
+    if [ -d "$element" ]; then
+        echo "suppression de '$element'"
+        echo "--------------------------------"
+        pause s 1 m
+        sudo rm -rf $element
+        echo " ** suppression effectuée **"
+        echo
+    fi
+done
 
 echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
@@ -74,6 +64,7 @@ source "$layout/script-compose.sh"
 echo "** Fichier compose.yaml est prêt **"
 echo
 
+exit 1
 source "$layout/buildnews.sh"
 
 cd $folder_rel_serveur
