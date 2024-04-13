@@ -116,17 +116,21 @@ echo "** Images nettoyées **"
 echo
 
 docker-desktop
+pause s 10 m
 
-echo
-echo "---------------------------------"
-echo "Veux tu ouvrir le site ? "
-echo -e "\e[31m\e[1m[y]\e[0mes / \e[31m\e[1m[n]\e[0mo > "
-read -n 1 -rp " > " val
-line -t ""
-if [[ "${val^^}" == "Y" ]]; then
-    URL "https://localhost:443"
-fi
+# echo
+# echo "---------------------------------"
+# echo "Veux tu ouvrir le site ? "
+# echo -e "\e[31m\e[1m[y]\e[0mes / \e[31m\e[1m[n]\e[0mo > "
+# read -n 1 -rp " > " val
+# line -t ""
+# if [[ "${val^^}" == "Y" ]]; then
+#     URL "http://localhost:$port_symfony"
+# fi
 echo
 echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
-echo -e "\e[1m\e[34mhttp://localhost:8088\e[0m"
+echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
 echo
+
+php -S localhost:$port_symfony -t public
+pause s 10 m

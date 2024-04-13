@@ -55,10 +55,11 @@ services:
 
 ###> symfony/mailer ###
   mailer:
+    container_name: MAILPIT_\${NAME}
     image: axllent/mailpit
     ports:
-      - \${MAILER_SMTP_PORT}
-      - \${MAILER_HTML_PORT}
+      - \${MAILER_LOCALHOST_SMTP_PORT}:\${MAILER_DOCKER_SMTP_PORT}
+      - \${MAILER_LOCALHOST_HTML_PORT}:\${MAILER_DOCKER_HTML_PORT}
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
