@@ -14,7 +14,7 @@ myfolder=$PWD
 home=~
 layout="$PWD/install"
 
-current_version="1.0.00"
+default_version="1.0.00"
 
 # Vérifier si le fichier .env n'existe pas
 file_env=".env"

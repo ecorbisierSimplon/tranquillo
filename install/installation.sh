@@ -48,7 +48,7 @@ cd $folder_rel_serveur
 composer create-project symfony/skeleton:"$version_symfony" .
 
 pause s 1 m
-composer require webapp
+composer require webapp --quiet
 
 pause s 1 m
 echo " ** Installation effectué**"

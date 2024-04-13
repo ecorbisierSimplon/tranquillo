@@ -128,5 +128,5 @@ if [[ "${val^^}" == "Y" ]]; then
 fi
 echo
 echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
-echo -e "\e[1m\e[34mhttps://localhost:443\e[0m"
+echo -e "\e[1m\e[34mhttp://localhost:8088\e[0m"
 echo

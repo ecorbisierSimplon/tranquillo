@@ -1,4 +1,4 @@
-cat >"$file_rel_env" <<EOF
+cat >"$file_rel_compose" <<EOF
 version: '3.8'
 
 services:
@@ -37,10 +37,13 @@ volumes:
 ###> doctrine/doctrine-bundle ###
   database:
 ###< doctrine/doctrine-bundle ###
- "
+ 
 EOF
 
 cat >"$file_rel_compose_o" <<EOF
+version: '3.8'
+
+services:
 ###> doctrine/doctrine-bundle ###
   database:
     env_file:
@@ -60,7 +63,7 @@ cat >"$file_rel_compose_o" <<EOF
       MP_SMTP_AUTH_ACCEPT_ANY: 1
       MP_SMTP_AUTH_ALLOW_INSECURE: 1
 ###< symfony/mailer ###
-"
+
 EOF
 
 pause s 5
