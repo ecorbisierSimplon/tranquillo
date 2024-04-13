@@ -1,7 +1,6 @@
 #!/bin/bash
 
 version_default="1.0.00"
-version_symfony="7.0.*"
 version_mariadb="11.3.2"
 version_adminer="4.8.1"
 
