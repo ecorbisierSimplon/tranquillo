@@ -17,6 +17,7 @@ echo
 # echo -e "\e[31m\e[1m[d]\e[0m - Recreate containers (compose up) with delete and recreate database"
 echo -e "\e[31m\e[1m[i]\e[0m - New install (delete all and recreate all)"
 # echo -e "\e[31m\e[1m[b]\e[0m - Rebuild (delete old images and recreate build)"
+# echo -e "\e[31m\e[1m[l]\e[0m - Lancer les serveurs"
 echo -e "\e[31m\e[1m[q]\e[0m - Quitter (default)"
 read -n 1 -rp " > " val
 line -t ""
