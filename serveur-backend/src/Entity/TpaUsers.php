@@ -9,8 +9,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use function Symfony\Component\Clock\now;
+
 #[ORM\Entity(repositoryClass: TpaUsersRepository::class)]
-#[UniqueEntity('email')]
+#[ORM\UniqueConstraint(name: "tpa_users_email_ukey",columns: ["email"])]
+#[ORM\Index(name: "tpa_users_email_ikey", columns: ["email"])]
+#[ORM\Index(name: "tpa_roles_id_users_ikey", columns: ["roles_id"])]
+#[ORM\Index(name: "tpa_users_create_at_ikey", columns: ["user_create_at"])]
 class TpaUsers
 {
     #[ORM\Id]
@@ -31,21 +36,21 @@ class TpaUsers
     #[ORM\Column(length: 50)]
     private ?string $userPassword = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeImmutable $userCreateAt = null;
 
     /**
      * @var Collection<int, TpaTasks>
      */
     #[ORM\OneToMany(targetEntity: TpaTasks::class, mappedBy: 'users')]
-    private Collection $usersTasksEmail;
+    private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'roles')]
     private ?TpaRoles $roles = null;
 
     public function __construct()
     {
-        $this->usersTasksEmail = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -116,27 +121,27 @@ class TpaUsers
     /**
      * @return Collection<int, TpaTasks>
      */
-    public function getUsersTasksEmail(): Collection
+    public function getUsers(): Collection
     {
-        return $this->usersTasksEmail;
+        return $this->users;
     }
 
-    public function addUsersTasksEmail(TpaTasks $usersTasksEmail): static
+    public function addUsers(TpaTasks $users): static
     {
-        if (!$this->usersTasksEmail->contains($usersTasksEmail)) {
-            $this->usersTasksEmail->add($usersTasksEmail);
-            $usersTasksEmail->setUsers($this);
+        if (!$this->users->contains($users)) {
+            $this->users->add($users);
+            $users->setUsers($this);
         }
 
         return $this;
     }
 
-    public function removeUsersTasksEmail(TpaTasks $usersTasksEmail): static
+    public function removeUsers(TpaTasks $users): static
     {
-        if ($this->usersTasksEmail->removeElement($usersTasksEmail)) {
+        if ($this->users->removeElement($users)) {
             // set the owning side to null (unless already changed)
-            if ($usersTasksEmail->getUsers() === $this) {
-                $usersTasksEmail->setUsers(null);
+            if ($users->getUsers() === $this) {
+                $users->setUsers(null);
             }
         }
 

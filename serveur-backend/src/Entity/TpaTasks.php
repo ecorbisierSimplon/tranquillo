@@ -7,8 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 #[ORM\Entity(repositoryClass: TpaTasksRepository::class)]
+#[ORM\UniqueConstraint(name: "tpa_tasks_name_roles_id_ukey",columns: ["task_name" ,"users_id"])]
+#[UniqueEntity(
+    fields: ['task_name', 'roles_id'],
+    message: 'Enregistrement impossible, tache déjà existante.',
+    errorPath: 'roles_id',
+)]
+#[ORM\Index(name: "tpa_users_id_tasks_ikey", columns: ["users_id"])]
+#[ORM\Index(name: "tpa_tasks_name_ikey", columns: ["task_name"])]
+#[ORM\Index(name: "tpa_tasks_create_at_ikey", columns: ["task_create_at"])]
 class TpaTasks
 {
     #[ORM\Id]
@@ -16,17 +26,14 @@ class TpaTasks
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 100 )]
     private ?string $taskName = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
     private ?\DateTimeImmutable $taskCreateAt = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $taskDescription = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $tpaDescription = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $taskReminder = null;
@@ -37,7 +44,7 @@ class TpaTasks
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $taskEndAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'usersTasksEmail')]
+    #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
     private ?TpaUsers $users = null;
 
@@ -93,17 +100,6 @@ class TpaTasks
         return $this;
     }
 
-    public function getTpaDescription(): ?string
-    {
-        return $this->tpaDescription;
-    }
-
-    public function setTpaDescription(?string $tpaDescription): static
-    {
-        $this->tpaDescription = $tpaDescription;
-
-        return $this;
-    }
 
     public function getTaskReminder(): ?int
     {

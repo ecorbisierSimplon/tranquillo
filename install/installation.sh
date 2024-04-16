@@ -30,7 +30,8 @@ for element in "${my_array[@]}"; do
 done
 
 folder_rel_containerjs=~/.vscode/extensions/thenouillet.symfony-vscode-1.0.2/out/symfony/provider
-file_containerjs=ContainerProviderInterface.js
+file_containerjs=ConsoleContainerProvider.js
+sudo sed -i 's/*--show-private*/--show-hidden/g' "${folder_rel_containerjs}/${file_containerjs}"
 
 echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
