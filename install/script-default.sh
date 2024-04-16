@@ -4,7 +4,7 @@
 
 echo -e "'\e[1m Écrire le contenu par défaut dans le fichier .env\e[0m'"
 echo "---------------------------------------------------"
-pause s 1 m
+pause s 2 m
 # Écrire le contenu par défaut dans le fichier .env
 source "$layout/script-env.sh"
 echo "** Fichier .env est prêt **"
@@ -12,7 +12,7 @@ echo
 
 echo -e "'\e[1m Mise à jour du n° de version \e[0m'"
 echo "---------------------------------------------------"
-pause s 1 m
+pause s 2 m
 # Extraire le numéro de version actuel
 if [[ "$current_version" == "" ]]; then
     current_version=$version_default

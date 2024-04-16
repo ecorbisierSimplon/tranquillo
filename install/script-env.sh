@@ -26,10 +26,12 @@ BASE=$basedb
 #
 DATABASE_NAME=\${NAME}_\${BASE}
 MYSQL_HOST=database
-MYSQL_ROOT_PASSWORD=P@ssW0rd!
+MYSQL_LOCALHOST=127.0.0.1
 MYSQL_DATABASE=\${NAME}
 MYSQL_USER=user
 MYSQL_PASSWORD=password
+MYSQL_ROOT=root
+MYSQL_ROOT_PASSWORD=P@ssW0rd!
 
 MYSQL_USER_API=api
 MYSQL_PASSWORD_API=password
@@ -109,7 +111,8 @@ APP_SECRET=4c4ad78b8a9ed1347ed8113081a3f6cf
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=8.0.32&charset=utf8mb4"
 # DATABASE_URL="mysql://app:!ChangeMe!@127.0.0.1:3306/app?serverVersion=10.11.2-MariaDB&charset=utf8mb4"
 # DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=16&charset=utf8"
-DATABASE_URL="mysql://\${MYSQL_USER_API}:\${MYSQL_PASSWORD_API}@\${MYSQL_HOST}:\${SQL_DOCKER_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+# DATABASE_URL="mysql://\${MYSQL_USER}:\${MYSQL_PASSWORD}@\${MYSQL_LOCALHOST}:\${SQL_LOCALHOST_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
+DATABASE_URL="mysql://\${MYSQL_ROOT}:\${MYSQL_ROOT_PASSWORD}@\${MYSQL_LOCALHOST}:\${SQL_LOCALHOST_PORT}/\${MYSQL_DATABASE}?serverVersion=\${MARIADB_VERSION}-MariaDB&charset=utf8mb4"
 ###< doctrine/doctrine-bundle ###
 
 

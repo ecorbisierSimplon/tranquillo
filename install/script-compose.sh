@@ -1,5 +1,5 @@
 cat >"$file_rel_compose" <<EOF
-version: '3.8'
+version: "3.8"
 
 services:
 # ##> BASE DE DONNÉES // ADMINER ET mariadb
@@ -26,7 +26,7 @@ services:
       - .env
     volumes:
       - ../\${FOLDER_DATASQL}:/docker-entrypoint-initdb.d/
-      - ../\${FOLDER_DATABASE}:/var/lib/mysql:rw
+      - ../\${FOLDER_DATABASE}:/var/lib/mysql
     ports:
       - \${SQL_LOCALHOST_PORT}:\${SQL_DOCKER_PORT}
 ###< doctrine/doctrine-bundle ###
@@ -35,7 +35,7 @@ services:
 
 volumes:
 ###> doctrine/doctrine-bundle ###
-  database:
+  ${name}_${basedb}:
 ###< doctrine/doctrine-bundle ###
  
 EOF
@@ -67,4 +67,4 @@ services:
 
 EOF
 
-pause s 5
+pause s 2

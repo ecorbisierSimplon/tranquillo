@@ -22,7 +22,7 @@ for element in "${my_array[@]}"; do
     if [ -d "$element" ]; then
         echo "suppression de '$element'"
         echo "--------------------------------"
-        pause s 1 m
+        pause s 2 m
         sudo rm -rf $element
         echo " ** suppression effectuée **"
         echo
@@ -31,10 +31,10 @@ done
 
 echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
-pause s 1 m
+pause s 2 m
 
 sudo apt install php8.3 -y
-pause s 1 m
+pause s 2 m
 sudo apt install php8.3-xml -y
 echo
 echo "** module php 8.3 est prêt **"
@@ -42,15 +42,15 @@ echo
 
 echo -e "'\e[1m Installation de Symfony \e[0m'"
 echo "---------------------------------------------------"
-pause s 1 m
+pause s 2 m
 mkdir $folder_rel_serveur
 cd $folder_rel_serveur
 composer create-project symfony/skeleton:"$version_symfony" .
 
-pause s 1 m
+pause s 2 m
 composer require webapp --quiet
 
-pause s 1 m
+pause s 2 m
 echo " ** Installation effectué**"
 echo
 
@@ -59,13 +59,17 @@ source "$layout/script-default.sh"
 
 echo -e "'\e[1m Mise à jour de compose.yaml\e[0m'"
 echo "-----------------------------"
-pause s 1 m
+pause s 2 m
 source "$layout/script-compose.sh"
 echo "** Fichier compose.yaml est prêt **"
 echo
+pause s 2 m
+
+docker volume rm $(docker volume ls)
+pause s 2 m
 
 source "$layout/buildnews.sh"
 
 cd $folder_rel_serveur
 
-pause s 5 m
+pause s 2 m

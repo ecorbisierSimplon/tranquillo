@@ -12,18 +12,18 @@ source "$layout/script-init.sh"
 echo "Menu :"
 echo "-------------------------------"
 echo
-# echo -e "\e[31m\e[1m[c]\e[0m - Create build"
-# echo -e "\e[31m\e[1m[r]\e[0m - Recreate containers (compose up)"
-# echo -e "\e[31m\e[1m[d]\e[0m - Recreate containers (compose up) with delete and recreate database"
+echo -e "\e[31m\e[1m[c]\e[0m - Create build"
+echo -e "\e[31m\e[1m[r]\e[0m - Recreate containers (compose up)"
+echo -e "\e[31m\e[1m[d]\e[0m - Recreate containers (compose up) with delete and recreate database"
 echo -e "\e[31m\e[1m[i]\e[0m - New install (delete all and recreate all)"
-# echo -e "\e[31m\e[1m[b]\e[0m - Rebuild (delete old images and recreate build)"
+echo -e "\e[31m\e[1m[b]\e[0m - Rebuild (delete old images and recreate build)"
 # echo -e "\e[31m\e[1m[l]\e[0m - Lancer les serveurs"
 echo -e "\e[31m\e[1m[q]\e[0m - Quitter (default)"
 read -n 1 -rp " > " val
 line -t ""
 #
 
-pause s 1 m
+pause s 2 m
 
 if [[ ${val^^} == "I" ]]; then
     echo "Nouvelle Installation :"
@@ -73,7 +73,7 @@ if [ -d "$folder_rel_data" ]; then
 fi
 case "$val" in
 [Rr] | [Bb] | [Cc])
-    source $layout/default.sh
+    source $layout/script-default.sh
     ;;
 esac
 
@@ -96,7 +96,7 @@ else
     exit 1
 
 fi
-pause s 1 m
+pause s 2 m
 
 if [ -d "$folder_rel_data" ]; then
     sudo chown -R $user $folder_rel_data
@@ -105,7 +105,7 @@ fi
 echo -e "'\e[1m Nettoyage des images\e[0m'"
 echo "-----------------------------"
 my_array=("backend_$name" "<none>" "app-php")
-pause s 1 m
+pause s 2 m
 
 # Boucle pour lire le tableau
 for element in "${my_array[@]}"; do
@@ -117,7 +117,7 @@ echo "** Images nettoyées **"
 echo
 
 docker-desktop
-pause s 10 m
+pause s 2 m
 
 # echo
 # echo "---------------------------------"
@@ -133,5 +133,5 @@ echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
 echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
 echo
 
-php -S localhost:$port_symfony -t public
-pause s 10 m
+# php -S localhost:$port_symfony -t public
+pause s 2 m

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # "Recreate :"
-
+cd $folder_rel_serveur
 echo "remove-orphans"
 echo "--------------------------------"
 docker compose down --remove-orphans
@@ -25,8 +25,9 @@ cd $folder_rel_serveur
 echo "compose up pull"
 echo "--------------------------------"
 pause s 2 m
-docker compose up --pull always -d --wait
-docker-compose up --force-recreate -d
+# docker compose up --pull always -d --wait
+docker-compose up -d
 echo " ** compose up effectuée **"
 echo
 pause s 2 m
+cd ..
