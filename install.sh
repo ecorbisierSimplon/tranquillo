@@ -98,9 +98,9 @@ else
 fi
 pause s 2 m
 
-if [ -d "$folder_rel_data" ]; then
-    sudo chown -R $user $folder_rel_data
-fi
+# if [ -d "$folder_rel_data" ]; then
+# sudo chown -R $user $folder_rel_data
+# fi
 
 echo -e "'\e[1m Nettoyage des images\e[0m'"
 echo "-----------------------------"
