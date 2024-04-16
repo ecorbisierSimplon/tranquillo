@@ -8,6 +8,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: TpaRolesRepository::class)]
+#[ORM\UniqueConstraint(name: "tpa_roles_code_ukey",columns: ["role_code"])]
+#[ORM\UniqueConstraint(name: "tpa_roles_name_ukey",columns: ["role_name"])]
+#[ORM\Index(name: "tpa_roles_code_ikey", columns: ["role_code"])]
 class TpaRoles
 {
     #[ORM\Id]
@@ -15,10 +18,10 @@ class TpaRoles
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique:true)]
     private ?string $roleCode = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, unique:true)]
     private ?string $roleName = null;
 
     /**

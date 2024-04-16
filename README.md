@@ -41,9 +41,9 @@ _(cela ne supprime pas le dossier sql)_
 chmod +x ./back.sh && ./back.sh
 ```
 
-Une fois l'installation terminée, [vous pouvez lancer symfony avec https://localhost:443 en cliquant sur ce lien.](https://localhost:443)
+Une fois l'installation terminée, [vous pouvez lancer symfony avec http://localhost:8088 en cliquant sur ce lien.](http://localhost:8088)
 
-**<span style="color:red">N'utilisez pas les liens Docker pour symfony <br>(un paramètre fausse les liens dans docker).</span>**
+**`<span style="color:red">`N'utilisez pas les liens Docker pour symfony `<br>`(un paramètre fausse les liens dans docker).**
 
 ---
 
@@ -57,7 +57,7 @@ Une fois l'installation terminée, [vous pouvez lancer symfony avec https://loca
 
 - **Ajout d'un controller :**
 
-Remplacer <name> par le nom de votre controller
+Remplacer `<name>` par le nom de votre controller
 
 ```bash
 php bin/console make:controller <name>Controller
