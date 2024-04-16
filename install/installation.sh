@@ -29,6 +29,9 @@ for element in "${my_array[@]}"; do
     fi
 done
 
+folder_rel_containerjs=~/.vscode/extensions/thenouillet.symfony-vscode-1.0.2/out/symfony/provider
+file_containerjs=ContainerProviderInterface.js
+
 echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
 pause s 2 m
