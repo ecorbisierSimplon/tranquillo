@@ -55,6 +55,9 @@ pause s 2 m
 composer require webapp --quiet
 
 pause s 2 m
+composer require "symfony/var-exporter:7.0.4"
+
+pause s 2 m
 echo " ** Installation effectué**"
 echo
 
