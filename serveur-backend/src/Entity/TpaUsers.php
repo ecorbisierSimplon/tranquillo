@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 use function Symfony\Component\Clock\now;
@@ -21,22 +22,28 @@ class TpaUsers
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['users.index','tasks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true)]
     #[Assert\Email]
+    #[Groups(['users.index', 'tasks.show'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['users.show'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['users.show'])]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
+    #[Groups(['users.secure'])]
     private ?string $userPassword = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups(['users.at'])]
     private ?\DateTimeImmutable $userCreateAt = null;
 
     /**
@@ -46,6 +53,7 @@ class TpaUsers
     private Collection $users;
 
     #[ORM\ManyToOne(inversedBy: 'roles')]
+    #[Groups(['users.index', 'users.show'])]
     private ?TpaRoles $roles = null;
 
     public function __construct()

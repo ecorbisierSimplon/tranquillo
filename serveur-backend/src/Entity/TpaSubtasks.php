@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\TpaSubtasksRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /* `UniqueEntity` is a Symfony validation constraint that ensures the uniqueness of a combination of
 fields in the database table. In the provided code snippet, the `UniqueEntity` constraint is
@@ -28,22 +29,28 @@ class TpaSubtasks
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['subtasks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['subtasks.show'])]
     private ?string $subtaskName = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups(['subtasks.at'])]
     private ?\DateTimeImmutable $subtaskCreateAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['subtasks.technic'])]
     private ?int $subtaskOrder = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['subtasks.technic'])]
     private ?bool $subtaskIsFinished = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['subtasks.index', 'subtasks.show'])]
     private ?TpaTasks $tasks = null;
 
     public function getId(): ?int
