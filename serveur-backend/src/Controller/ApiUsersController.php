@@ -10,7 +10,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/users')]
 class ApiUsersController extends AbstractController
@@ -18,7 +21,7 @@ class ApiUsersController extends AbstractController
     #[Route('/', name: 'app_api_users_index', methods: ['GET'])]
     public function index(TpaUsersRepository $tpaUsersRepository): JsonResponse
     {
-        return $this->json($tpaUsersRepository->findAll(),200,[],[
+        return $this->json($tpaUsersRepository->findAll(), 200, [], [
             'groups' => ['users.index']
         ]);
         // return $this->render('api_users/index.html.twig', [
@@ -26,30 +29,22 @@ class ApiUsersController extends AbstractController
         // ]);
     }
 
-    #[Route('/new', name: 'app_api_users_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $tpaUser = new TpaUsers();
-        $form = $this->createForm(TpaUsersType::class, $tpaUser);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($tpaUser);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_api_users_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('api_users/new.html.twig', [
-            'tpa_user' => $tpaUser,
-            'form' => $form,
-        ]);
+    #[Route(['', '/'], name: 'app_api_users_new', methods: ['POST'])]
+    public function new(
+        Request $request,
+        #[MapRequestPayload(
+            serializationContext: ['users.create']
+        )]
+        TpaUsers $user
+    ) {
+        $user->setUserCreateAt(new \DateTimeImmutable());
+        dd($user);
     }
 
     #[Route('/{id}', name: 'app_api_users_show', methods: ['GET'])]
     public function show(TpaUsers $tpaUser): JsonResponse
     {
-        return $this->json($tpaUser,201,[],[
+        return $this->json($tpaUser, 201, [], [
             'groups' => ['users.index', 'users.show']
         ]);
         // return $this->render('api_users/show.html.twig', [
@@ -57,7 +52,7 @@ class ApiUsersController extends AbstractController
         // ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['POST'])]
     public function edit(Request $request, TpaUsers $tpaUser, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(TpaUsersType::class, $tpaUser);
@@ -75,10 +70,10 @@ class ApiUsersController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_api_users_delete', methods: ['POST'])]
+    #[Route('/delete/{id}', name: 'app_api_users_delete', methods: ['POST'])]
     public function delete(Request $request, TpaUsers $tpaUser, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tpaUser->getId(), $request->getPayload()->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
             $entityManager->remove($tpaUser);
             $entityManager->flush();
         }

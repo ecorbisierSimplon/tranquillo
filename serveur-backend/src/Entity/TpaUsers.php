@@ -13,33 +13,64 @@ use Symfony\Component\Validator\Constraints as Assert;
 use function Symfony\Component\Clock\now;
 
 #[ORM\Entity(repositoryClass: TpaUsersRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_users_email_ukey",columns: ["email"])]
+#[ORM\UniqueConstraint(name: "tpa_users_email_ukey", columns: ["email"])]
 #[ORM\Index(name: "tpa_users_email_ikey", columns: ["email"])]
 #[ORM\Index(name: "tpa_roles_id_users_ikey", columns: ["roles_id"])]
 #[ORM\Index(name: "tpa_users_create_at_ikey", columns: ["user_create_at"])]
 class TpaUsers
 {
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users.index','tasks.index'])]
+    #[Groups(['users.index', 'tasks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true)]
     #[Assert\Email]
-    #[Groups(['users.index', 'tasks.show'])]
+    #[Groups(['users.index', 'tasks.show', 'users.create'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['users.show'])]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/',
+        message: "Le prénom est invalide !"
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Votre prénom doit avoir un minimum de {{ limit }} caractères.',
+        maxMessage: 'Votre prénom ne doit pas dépasser {{ limit }} caractères.'
+    )]
+    #[Groups(['users.show', 'users.create'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['users.show'])]
+    #[Groups(['users.show', 'users.create'])]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/',
+        message: "Le nom est invalide !"
+    )]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Votre nom doit avoir un minimum de `{{ limit }}` caratères.',
+        maxMessage: 'Votre nom ne doit pas dépasser `{{ limit }}` caractères.',
+    )]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['users.secure'])]
+    #[Groups(['users.secure', 'users.create'])]
+    #[Assert\Length(
+        min: 8,
+        max: 50,
+        minMessage: 'Votre mot de passe doit avoir un minimum de `{{ limit }}` caratères.',
+        maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
+    )]
+    #[Assert\Regex(
+        pattern: '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&§+=!])(?!.*[ç<\">[\]\'µ`~\\/]).{0,}$/',
+        message: "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ."
+    )]
     private ?string $userPassword = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
