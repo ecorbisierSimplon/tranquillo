@@ -15,6 +15,18 @@ services:
     depends_on:
       - database
 
+  phpmyadmin:
+    platform: linux/x86_64
+    container_name: phpmyadmin_\${NAME}_\${PHPMYADMIN_VERSION}
+    image: phpmyadmin:\${PHPMYADMIN_VERSION}
+    restart: unless-stopped
+    ports:
+      - \${PHPMYADMIN_LOCALHOST_PORT}:\${PHPMYADMIN_DOCKER_PORT}
+    env_file:
+      - .env
+    depends_on:
+      - database
+
 
 ###> doctrine/doctrine-bundle ###
   database:
