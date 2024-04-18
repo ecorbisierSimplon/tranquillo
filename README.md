@@ -116,6 +116,17 @@ php bin/console make:auth
 
 ---
 
+- **Générer les crud :**
+
+```bash
+php bin/console make:crud
+```
+
+> _Génère les crud POST et GET._
+> A adapter pour le fetch
+
+---
+
 - **Lister les routes :**
 
 ```bash
