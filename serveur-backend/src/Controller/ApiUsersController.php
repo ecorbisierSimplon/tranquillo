@@ -70,7 +70,7 @@ class ApiUsersController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{id}', name: 'app_api_users_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_api_users_delete', methods: ['DELETE'])]
     public function deletes(Request $request, TpaUsers $tpaUser, EntityManagerInterface $entityManager): JsonResponse
     {
         // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
@@ -83,18 +83,5 @@ class ApiUsersController extends AbstractController
         return $this->json($tpaUser, 201, [], [
             'groups' => ['users.index']
         ]);
-    }
-
-
-    #[Route(['/rm'], name: 'app_api_users_rm', methods: ['DELETE'])]
-    public function delete(
-        Request $request,
-        #[MapRequestPayload(
-            serializationContext: ['users.create']
-        )]
-        TpaUsers $user
-    ) {
-        $user->setUserCreateAt(new \DateTimeImmutable());
-        dd($user);
     }
 }
