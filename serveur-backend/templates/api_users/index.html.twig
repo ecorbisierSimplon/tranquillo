@@ -27,8 +27,8 @@
                 <td>{{ tpa_user.userPassword }}</td>
                 <td>{{ tpa_user.userCreateAt ? tpa_user.userCreateAt|date('Y-m-d H:i:s') : '' }}</td>
                 <td>
-                    <a href="{{ path('app_tpa_users_show', {'id': tpa_user.id}) }}">show</a>
-                    <a href="{{ path('app_tpa_users_edit', {'id': tpa_user.id}) }}">edit</a>
+                    <a href="{{ path('app_api_users_show', {'id': tpa_user.id}) }}">show</a>
+                    <a href="{{ path('app_api_users_edit', {'id': tpa_user.id}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -39,5 +39,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_tpa_users_new') }}">Create new</a>
+    <a href="{{ path('app_api_users_new') }}">Create new</a>
 {% endblock %}
