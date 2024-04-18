@@ -1,7 +1,7 @@
 version: "3.8"
 
 services:
-  # ##> BASE DE DONNÉES // ADMINER ET mariadb
+# ##> BASE DE DONNÉES // ADMINER ET mariadb
   adminer:
     platform: linux/x86_64
     container_name: adminer_${NAME}_${ADMINER_VERSION}
@@ -26,7 +26,8 @@ services:
     depends_on:
       - database
 
-  ###> doctrine/doctrine-bundle ###
+
+###> doctrine/doctrine-bundle ###
   database:
     platform: linux/x86_64
     container_name: mariadb_${NAME}_${MARIADB_VERSION}
@@ -42,8 +43,9 @@ services:
 ###< doctrine/doctrine-bundle ###
 # ##< BASE DE DONNÉES // ADMINER ET mariadb
 
+
 volumes:
-  ###> doctrine/doctrine-bundle ###
+###> doctrine/doctrine-bundle ###
   tranquillo_mariabd:
 ###< doctrine/doctrine-bundle ###
-
+ 

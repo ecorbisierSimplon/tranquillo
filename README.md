@@ -57,10 +57,61 @@ Une fois l'installation terminée, [vous pouvez lancer symfony avec http://local
 
 - **Ajout d'un controller :**
 
-Remplacer `<name>` par le nom de votre controller
+```bash
+php bin/console make:controller
+```
+
+> donner lui un nom de type <name>Controller
+> Remplacer `<name>` par le nom de votre controller
+
+---
+
+- **Ajout d'une entitée :**
 
 ```bash
-php bin/console make:controller <name>Controller
+php bin/console make:entity
+```
+
+> donner lui un nom de type <name>
+> Remplacer `<name>` par le nom de votre entité
+
+---
+
+- **Création de la database:**
+
+```bash
+php bin/console doctrine:database:create
+```
+
+> _LA DATABASE N'EST PAS ENCORE ENREGISTRÉES DANS LA BDD_
+> Elle sera générée lors de la 1ère éxecution de migrate
+
+---
+
+- **Enregistrer les entitées :**
+
+```bash
+php bin/console make:migration
+```
+
+> _Un fichier est généré dans le dossiers migrations_
+
+```bash
+php bin/console doctrine:migration:migrate
+```
+
+> _Envoie de toutes le créations et modifications liées au entitée (tables) à la base de données_
+
+---
+
+- **Ajouter la gestions des utilisateurs :**
+
+```bash
+php bin/console make:user
+```
+
+```bash
+php bin/console make:auth
 ```
 
 ---

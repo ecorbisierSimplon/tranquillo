@@ -11,4 +11,4 @@
 /.docker/database/mariadb
 deploy
 database/*
-!database/sql/
+!database/sql*/
