@@ -12,9 +12,9 @@ echo -e "\e[32m\e[3mIdentifiant root\e[0m\e[97m : \e[33m${root}\e[0m"
 echo "-----------------"
 echo
 
-echo -e "\e[32mMot de pass root \e[97m[\e[33mpassword\e[97m] : \e[0m"
+echo -e "\e[32mMot de pass root \e[97m[\e[33mP@ssW0rd!\e[97m] : \e[0m"
 read -rp $'\e[97m> \e[35m' pass_root
-pass_root=${pass_root:-"password"}
+pass_root=${pass_root:-"P@ssW0rd!"}
 echo -e "\e[32m\e[3mMot de pass root\e[0m\e[97m : \e[33m${pass_root}\e[0m"
 echo "-----------------"
 echo
@@ -26,9 +26,9 @@ echo -e "\e[32m\e[3mIdentifiant utilisateur\e[0m\e[97m : \e[33m${user}"
 echo "-----------------"
 echo
 
-echo -e "\e[32mMot de passe utilisateur \e[97m[\e[33mP@ssW0rd!\e[97m] : \e[0m"
+echo -e "\e[32mMot de passe utilisateur \e[97m[\e[33mpassword\e[97m] : \e[0m"
 read -rp $'\e[97m> \e[35m' password
-password=${password:-"P@ssW0rd!"}
+password=${password:-"password"}
 echo -e "\e[32m\e[3mMot de passe utilisateur\e[0m\e[97m : \e[33m${password}\e[0m"
 echo "-----------------"
 echo
