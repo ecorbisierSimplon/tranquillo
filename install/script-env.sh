@@ -1,3 +1,38 @@
+# =========================================================
+# =========================================================
+# DEFINIR LES UTILISATEURS DE LA BASE DE DONNÉS
+# =========================================================
+# =========================================================
+# ADMINSTRATEUR :
+
+echo -e "\e[32mIdentifiant root \e[97m[\e[33mroot\e[97m] : \e[0m"
+read -rp $'\e[97m> \e[35m' root
+root=${root:-"root"}
+echo -e "\e[32m\e[3mIdentifiant root\e[0m\e[97m : \e[33m${root}\e[0m"
+echo "-----------------"
+echo
+
+echo -e "\e[32mMot de pass root \e[97m[\e[33mpassword\e[97m] : \e[0m"
+read -rp $'\e[97m> \e[35m' pass_root
+pass_root=${pass_root:-"password"}
+echo -e "\e[32m\e[3mMot de pass root\e[0m\e[97m : \e[33m${pass_root}\e[0m"
+echo "-----------------"
+echo
+
+echo -e "\e[32mIdentifiant utilisateur \e[97m[\e[33muser\e[97m] : \e[0m"
+read -rp $'\e[97m> \e[35m' user
+user=${user:-"user"}
+echo -e "\e[32m\e[3mIdentifiant utilisateur\e[0m\e[97m : \e[33m${user}"
+echo "-----------------"
+echo
+
+echo -e "\e[32mMot de passe utilisateur \e[97m[\e[33mP@ssW0rd!\e[97m] : \e[0m"
+read -rp $'\e[97m> \e[35m' password
+password=${password:-"P@ssW0rd!"}
+echo -e "\e[32m\e[3mMot de passe utilisateur\e[0m\e[97m : \e[33m${password}\e[0m"
+echo "-----------------"
+echo
+
 # Écrire le contenu par défaut dans le fichier .env
 cat >"$file_rel_env" <<EOF
 # Fichier de configuration .env par défaut
@@ -22,33 +57,7 @@ cat >"$file_rel_env" <<EOF
 NAME=$name
 BASE=$basedb
 
-###> MYSQL/ mariadb - adminer ###
-#
 DATABASE_NAME=\${NAME}_\${BASE}
-MYSQL_HOST=database
-MYSQL_LOCALHOST=127.0.0.1
-MYSQL_DATABASE=\${NAME}
-MYSQL_USER=user
-MYSQL_PASSWORD=password
-MYSQL_ROOT=root
-MYSQL_ROOT_PASSWORD=P@ssW0rd!
-
-MYSQL_USER_API=api
-MYSQL_PASSWORD_API=password
-
-PMA_HOST=\${MYSQL_HOST}
-PMA_USER=\${MYSQL_ROOT}
-PMA_PASSWORD=\${MYSQL_ROOT_PASSWORD}
-PMA_ARBITRARY=1
-
-
-ADMINER_DEFAULT_SERVER=\${MYSQL_HOST}
-ADMINER_DEFAULT_DRIVER=mySQL
-ADMINER_DEFAULT_DB_NAME=\${MYSQL_DATABASE}
-
-#
-###< MYSQL/ mariadb - adminer ###
-
 
 ###> VERSIONS ###
 BACKEND_VERSION=$version_default
@@ -89,6 +98,44 @@ PMA_PORT=\${SQL_DOCKER_PORT}
 MAILER_LOCALHOST_HTML_PORT=8025
 MAILER_DOCKER_HTML_PORT=8025
 ###< PORTS ###
+
+
+EOF
+
+# Écrire le contenu par défaut dans le fichier .env
+cat >"$file_rel_env.local" <<EOF
+# Fichier de configuration .env par défaut
+
+###> symfony/docker ###
+#
+
+
+###> MYSQL/ mariadb - adminer ###
+#
+MYSQL_HOST=database
+MYSQL_LOCALHOST=127.0.0.1
+MYSQL_DATABASE=\${NAME}
+MYSQL_USER=$user
+MYSQL_PASSWORD=$password
+MYSQL_ROOT=$root
+MYSQL_ROOT_PASSWORD=$pass_root
+
+MYSQL_USER_API=api
+MYSQL_PASSWORD_API=password
+
+PMA_HOST=\${MYSQL_HOST}
+PMA_USER=\${MYSQL_ROOT}
+PMA_PASSWORD=\${MYSQL_ROOT_PASSWORD}
+PMA_ARBITRARY=1
+
+
+ADMINER_DEFAULT_SERVER=\${MYSQL_HOST}
+ADMINER_DEFAULT_DRIVER=mySQL
+ADMINER_DEFAULT_DB_NAME=\${MYSQL_DATABASE}
+
+#
+###< MYSQL/ mariadb - adminer ###
+
 
 
 #

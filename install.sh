@@ -12,14 +12,14 @@ source "$layout/script-init.sh"
 echo "Menu :"
 echo "-------------------------------"
 echo
-echo -e "\e[31m\e[1m[c]\e[0m - Docker  - Créer un nouveau Build"
-echo -e "\e[31m\e[1m[r]\e[0m - Docker  - Recréer les containers (compose up)"
-echo -e "\e[31m\e[1m[d]\e[0m - Docker  - Recréer des containers (composer) avec suppression et remise à zéro de la base de données"
-echo -e "\e[31m\e[1m[i]\e[0m - Symfony - Docker - Nouvelle installation (tout supprimer et tout recréer)"
-echo -e "\e[31m\e[1m[b]\e[0m - Docker  - Rebuild (supprimer les anciennes images et recréer le Build)"
-echo -e "\e[31m\e[1m[l]\e[0m - Lancer les serveurs"
-echo -e "\e[31m\e[1m[q]\e[0m - Quitter (default)"
-read -n 1 -rp " > " val
+echo -e "\e[31m[\e[33m\e[1mc\e[0m\e[31m]\e[32m - Docker  - \e[33mCréer un nouveau Build\e[0m"
+echo -e "\e[31m[\e[33m\e[1mr\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer les containers (compose up)\e[0m"
+echo -e "\e[31m[\e[33m\e[1md\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer des containers (composer) avec suppression et remise à zéro de la base de données\e[0m"
+echo -e "\e[31m[\e[32m\e[1mi\e[0m\e[31m]\e[32m - Symfony - \e[0m\e[33mDocker - Nouvelle installation (tout supprimer et tout recréer)\e[0m"
+echo -e "\e[31m[\e[33m\e[1mb\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRebuild (supprimer les anciennes images et recréer le Build)\e[0m"
+echo -e "\e[31m[\e[33m\e[1ml\e[0m\e[31m]\e[32m - Lancer les serveurs\e[0m"
+echo -e "\e[31m[\e[34m\e[1mq\e[0m\e[31m]\e[32m - Quitter \e[97m[\e[34mpar défaut\e[0m]"
+read -n 1 -rp "> " val
 line -t ""
 #
 if [[ ! ${val^^} == "L" ]]; then
@@ -53,18 +53,19 @@ if [[ ! ${val^^} == "L" ]]; then
         [Rr] | [Bb] | [Cc])
             # Suppression de la base de donnée
             echo
-            echo "Voulez-vous supprimer la base de donnée ? "
-            read -n 1 -rp $'\e[31m\e[1m[Y]\e[0mes / \e[31m\e[1m[N]\e[0mo (is default) -- \e[31m\e[1m[Q]\e[0muitter> ' val_bd
+            echo "------------------------------------------"
+            echo -e "Voulez-vous supprimer la base de donnée ?  \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[33mq\e[32muitter\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
+            read -n 1 -rp "> " val_bd
             line
             line -t ""
 
-            if [[ "${val^^}" == "Q" ]]; then
+            if [[ "${val_bd^^}" == "Q" ]]; then
                 clear
                 exit 1
             fi
 
             case "$val_bd" in
-            [Yy] | [Yy][Ee][Ss])
+            [YyOo] | [YyOo][EeUu][SsIi])
                 sudo rm -rf $folder_rel_data
                 ;;
             esac
@@ -96,7 +97,6 @@ if [[ ! ${val^^} == "L" ]]; then
         exit 1
 
     fi
-    pause s 2 m
 
     # if [ -d "$folder_rel_data" ]; then
     # sudo chown -R $user $folder_rel_data
@@ -126,11 +126,14 @@ echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
 echo
 echo
 echo "---------------------------------"
-echo "Veux tu lancer le serveur symfony ? "
-echo -e "\e[31m\e[1m[y]\e[0mes / \e[31m\e[1m[n]\e[0mo > "
-read -n 1 -rp " > " val
+echo -e "Veux-tu lancer le serveur symfony ? \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
+read -n 1 -rp "> " val
 line -t ""
-if [[ "${val^^}" == "Y" ]]; then
+
+case "$val" in
+[YyOo] | [YyOo][EeUu][SsIi])
     php -S localhost:$port_symfony -t public
-fi
+    ;;
+esac
+
 pause s 2 m

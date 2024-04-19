@@ -67,14 +67,15 @@ source "$layout/script-compose.sh"
 echo "** Fichier compose.yaml est prêt **"
 echo
 
-echo "Voulez-vous générer Docker ? "
-read -n 1 -rp $'\e[31m\e[1m[Y]\e[0mes / \e[31m\e[1m[N]\e[0mo (is default) > ' val_bd
+echo -e "Voulez-vous générer Docker ? \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
+read -n 1 -rp "> " val_dk
 line
 line -t ""
 
-if [[ "${val^^}" == "Y" ]]; then
+case "$val_dk" in
+[YyOo] | [YyOo][EeUu][SsIi])
     source "$layout/buildnews.sh"
-fi
-cd $folder_rel_serveur
+    ;;
+esac
 
-pause s 5 m
+cd $folder_rel_serveur
