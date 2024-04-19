@@ -173,5 +173,3 @@ php bin/console debug:router
 ```
 
 ## FRONTEND
-
-[def]: https://fakerphp.github.io/
