@@ -26,13 +26,6 @@ class ApiUsersController extends AbstractController
 
         $jsonUsersList = $serializer->serialize($usersList, 'json', ['groups' => 'users.show']);
         return new JsonResponse($jsonUsersList, Response::HTTP_OK, [], true);
-
-        // return $this->json($tpaUsersRepository->findAll(), 200, [], [
-        //     "groups" => "users.show"
-        // ]);
-        // return $this->render('api_users/index.html.twig', [
-        //     'tpa_users' => $tpaUsersRepository->findAll(),
-        // ]);
     }
 
     /**

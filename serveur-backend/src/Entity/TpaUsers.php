@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TpaUsersRepository;
+use App\Validator\UserRegex;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,10 +33,7 @@ class TpaUsers
     private ?string $email = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\Regex(
-        pattern: '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/',
-        message: "Le prénom est invalide !"
-    )]
+    #[UserRegex(regex: 'name', champ: 'prénom')]
     #[Assert\Length(
         min: 3,
         max: 50,
@@ -47,10 +45,7 @@ class TpaUsers
 
     #[ORM\Column(length: 50)]
     #[Groups(['users.show', 'users.create'])]
-    #[Assert\Regex(
-        pattern: '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/',
-        message: "Le nom est invalide !"
-    )]
+    #[UserRegex(regex: 'name', champ: 'nom')]
     #[Assert\Length(
         min: 3,
         max: 50,
@@ -67,10 +62,7 @@ class TpaUsers
         minMessage: 'Votre mot de passe doit avoir un minimum de `{{ limit }}` caratères.',
         maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
     )]
-    #[Assert\Regex(
-        pattern: '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&§+=!])(?!.*[ç<\">[\]\'µ`~\\/]).{0,}$/',
-        message: "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ."
-    )]
+    #[UserRegex(regex: 'password')]
     private ?string $userPassword = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
