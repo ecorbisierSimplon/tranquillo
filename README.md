@@ -82,10 +82,6 @@ composer require orm-fixtures --dev
 
 [Video de Grafikart : Fixtures](https://grafikart.fr/tutoriels/symfony-fixtures-2198)
 
-```
-
-```
-
 _Ajouter des faux éléments_
 
 ```bash
