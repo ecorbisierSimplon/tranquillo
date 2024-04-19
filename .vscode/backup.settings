@@ -1,0 +1,161 @@
+{
+  "highlight.regexes": {
+    "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *TODO(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
+      "filterFileRegex": ".*(?<!CHANGELOG.md)$",
+      "decorations": [
+        {
+          "overviewRulerColor": "#ffcc00",
+          "backgroundColor": "#ffcc00",
+          "color": "#1f1f1f",
+          "fontWeight": "bold"
+        },
+        {
+          "backgroundColor": "#ffcc00",
+          "color": "#1f1f1f"
+        }
+      ]
+    },
+    "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *(?:FIXME|FIX|BUG|UGLY|DEBUG|HACK)(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
+      "filterFileRegex": ".*(?<!CHANGELOG.md)$",
+      "decorations": [
+        {
+          "overviewRulerColor": "#cc0000",
+          "backgroundColor": "#cc0000",
+          "color": "#1f1f1f",
+          "fontWeight": "bold"
+        },
+        {
+          "backgroundColor": "#cc0000",
+          "color": "#1f1f1f"
+        }
+      ]
+    },
+    "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *(?:REVIEW|OPTIMIZE|TSC)(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
+      "filterFileRegex": ".*(?<!CHANGELOG.md)$",
+      "decorations": [
+        {
+          "overviewRulerColor": "#00ccff",
+          "backgroundColor": "#00ccff",
+          "color": "#1f1f1f",
+          "fontWeight": "bold"
+        },
+        {
+          "backgroundColor": "#00ccff",
+          "color": "#1f1f1f"
+        }
+      ]
+    },
+    "((?:<!-- *)?(?:#|// @|//|./\\*+|<!--|--|\\* @|{!|{{!--|{{!) *(?:IDEA)(?:\\s*\\([^)]+\\))?:?)((?!\\w)(?: *-->| *\\*/| *!}| *--}}| *}}|(?= *(?:[^:]//|/\\*+|<!--|@|--|{!|{{!--|{{!))|(?: +[^\\n@]*?)(?= *(?:[^:]//|/\\*+|<!--|@|--(?!>)|{!|{{!--|{{!))|(?: +[^@\\n]+)?))": {
+      "filterFileRegex": ".*(?<!CHANGELOG.md)$",
+      "decorations": [
+        {
+          "overviewRulerColor": "#cc00cc",
+          "backgroundColor": "#cc00cc",
+          "color": "#1f1f1f",
+          "fontWeight": "bold"
+        },
+        {
+          "backgroundColor": "#cc00cc",
+          "color": "#1f1f1f"
+        }
+      ]
+    },
+    "(console.log)([(])(.*)([)])": [
+      {
+        "textDecoration": "#f8f409 wavy underline 0.5px"
+      },
+      {},
+      {},
+      {}
+    ],
+    "(// )(@\\w+.*)": [
+      {},
+      {
+        "color": "#e9ecea"
+      }
+    ]
+  },
+
+  "database-client.highlightSQLBlock": true,
+
+  "diffEditor.hideUnchangedRegions.enabled": true,
+
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.snippetSuggestions": "top",
+
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+
+  "emmet.triggerExpansionOnTab": true,
+  "emmet.showSuggestionsAsSnippets": true,
+
+  "git.enableSmartCommit": true,
+  "git.autofetch": true,
+
+  "liveSassCompile.settings.watchOnLaunch": true,
+  // "liveSassCompile.settings.useNewCompiler": false,
+  "liveSassCompile.settings.formats": [
+    // This is Default.
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": "~/../css/"
+    },
+    // You can add more
+    {
+      "format": "compressed",
+      "extensionName": ".min.css",
+      "savePath": "~/../css/"
+    },
+    // More Complex
+    {
+      "format": "compressed",
+      "extensionName": ".min.css",
+      "savePath": "~/../css/"
+    }
+  ],
+  "liveServer.settings.donotShowInfoMsg": true,
+
+  "markdown.allAvailableLanguages": true,
+  "markdown.showToolbar": true,
+
+  "[php]": {
+    "editor.linkedEditing": true,
+    "editor.defaultFormatter": "bmewburn.vscode-intelephense-client"
+  },
+
+  "security.workspace.trust.untrustedFiles": "open",
+
+  "[sql]": {
+    "editor.defaultFormatter": "cweijan.vscode-mysql-client2"
+  },
+
+  "sqlite.sqlite3": "",
+  "sqlite.setupDatabase": {},
+
+  "redhat.telemetry.enabled": true,
+
+  "terminal.integrated.encoding": "utf-8",
+  "terminal.integrated.env.linux": {},
+  "terminal.integrated.fontFamily": "Cascadia Code, Courier New, monospace",
+
+  "vscodeGoogleTranslate.preferredLanguage": "French",
+  "vscode-office.openOutline": true,
+
+  "workbench.colorCustomizations": {},
+  "workbench.editor.empty.hint": "hidden",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "workbench.iconTheme": "office-material-icon-theme",
+  "workbench.colorTheme": "Default Dark+"
+
+  // "vscode-office.editorTheme": "Dracula",
+}
