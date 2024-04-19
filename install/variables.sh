@@ -8,8 +8,12 @@ version_phpmyadmin="5.2.1"
 
 port_symfony=8088
 
+# -----------------------------
+# BASE DE DONNEE
+# -----------------------------
 name="tranquillo"
 basedb="mariabd"
+
 dataname="${name}_${basedb}"
 user=$LOGNAME
 
@@ -38,6 +42,11 @@ if [ -f "$file_rel_env" ]; then
     current_version=$(grep '^BACKEND_VERSION=' $file_rel_env | cut -d '=' -f2)
 fi
 
+# ================================================================
+# ================================================================
+# FUNCTIONS - NE PAS MODIFIER
+# ================================================================
+# ================================================================
 # Définir l'indentation
 
 line() {

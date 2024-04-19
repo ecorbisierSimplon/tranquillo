@@ -12,6 +12,7 @@ services:
       - \${ADMINER_LOCALHOST_PORT}:\${ADMINER_DOCKER_PORT}
     env_file:
       - .env
+      - .env.local
     depends_on:
       - database
 
@@ -24,6 +25,7 @@ services:
       - \${PHPMYADMIN_LOCALHOST_PORT}:\${PHPMYADMIN_DOCKER_PORT}
     env_file:
       - .env
+      - .env.local
     depends_on:
       - database
 
@@ -36,6 +38,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+      - .env.local
     volumes:
       - ../\${FOLDER_DATASQL}:/docker-entrypoint-initdb.d/
       - ../\${FOLDER_DATABASE}:/var/lib/mysql
@@ -60,6 +63,7 @@ services:
   database:
     env_file:
       - .env
+      - .env.local
     ports:
       - \${SQL_LOCALHOST_PORT}:\${SQL_DOCKER_PORT}
 ###< doctrine/doctrine-bundle ###

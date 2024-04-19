@@ -7,12 +7,19 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
 
 <!-- TOC -->
 
-- [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo)
-  - [BASE DE DONNÉES](#base-de-données)
+- [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo%C2%A9)
+  - [BASE DE DONNÉES](#base-de-donn%C3%A9es)
     - [Projet inital](#projet-inital)
     - [Initialsation du projet](#initialsation-du-projet)
-    - [Création 1ère page](#création-1ère-page)
+    - [Création 1ère page](#cr%C3%A9ation-1%C3%A8re-page)
       - [COMMANDES UTILES](#commandes-utiles)
+        - [Ajout d'un controller](#ajout-dun-controller)
+        - [Ajout d'une entitée](#ajout-dune-entit%C3%A9e)
+        - [Création de la database](#cr%C3%A9ation-de-la-database)
+        - [Enregistrer les entitées](#enregistrer-les-entit%C3%A9es)
+        - [Ajouter la gestions des utilisateurs](#ajouter-la-gestions-des-utilisateurs)
+        - [Générer les crud](#g%C3%A9n%C3%A9rer-les-crud)
+        - [Lister les routes](#lister-les-routes)
   - [FRONTEND](#frontend)
 
 <!-- /TOC -->
@@ -55,7 +62,7 @@ Une fois l'installation terminée, [vous pouvez lancer symfony avec http://local
 
 #### COMMANDES UTILES
 
-- **Ajout d'un controller :**
+##### Ajout d'un controller
 
 ```bash
 php bin/console make:controller
@@ -66,7 +73,7 @@ php bin/console make:controller
 
 ---
 
-- **Ajout d'une entitée :**
+##### Ajout d'une entitée
 
 ```bash
 php bin/console make:entity
@@ -77,7 +84,7 @@ php bin/console make:entity
 
 ---
 
-- **Création de la database:**
+##### Création de la database
 
 ```bash
 php bin/console doctrine:database:create
@@ -88,7 +95,7 @@ php bin/console doctrine:database:create
 
 ---
 
-- **Enregistrer les entitées :**
+##### Enregistrer les entitées
 
 ```bash
 php bin/console make:migration
@@ -104,7 +111,7 @@ php bin/console doctrine:migration:migrate
 
 ---
 
-- **Ajouter la gestions des utilisateurs :**
+##### Ajouter la gestions des utilisateurs
 
 ```bash
 php bin/console make:user
@@ -116,7 +123,7 @@ php bin/console make:auth
 
 ---
 
-- **Générer les crud :**
+##### Générer les crud
 
 ```bash
 php bin/console make:crud
@@ -127,7 +134,7 @@ php bin/console make:crud
 
 ---
 
-- **Lister les routes :**
+##### Lister les routes
 
 ```bash
 php bin/console debug:router

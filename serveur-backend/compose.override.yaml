@@ -5,6 +5,7 @@ services:
   database:
     env_file:
       - .env
+      - .env.local
     ports:
       - ${SQL_LOCALHOST_PORT}:${SQL_DOCKER_PORT}
 ###< doctrine/doctrine-bundle ###
