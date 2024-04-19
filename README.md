@@ -7,18 +7,21 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
 
 <!-- TOC -->
 
-- [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo%C2%A9)
-  - [BASE DE DONNÉES](#base-de-donn%C3%A9es)
+- [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo)
+  - [BASE DE DONNÉES](#base-de-données)
     - [Projet inital](#projet-inital)
     - [Initialsation du projet](#initialsation-du-projet)
-    - [Création 1ère page](#cr%C3%A9ation-1%C3%A8re-page)
-      - [COMMANDES UTILES](#commandes-utiles)
+    - [Création 1ère page](#création-1ère-page)
+      - [LIBRARY ET/OU COMPOSANT](#library-etou-composant)
+        - [Correction d'un bug](#correction-dun-bug)
+        - [Ajouter des valeurs dans la bases de données](#ajouter-des-valeurs-dans-la-bases-de-données)
+      - [COMMANDES UTILES SYMFONY](#commandes-utiles-symfony)
         - [Ajout d'un controller](#ajout-dun-controller)
-        - [Ajout d'une entitée](#ajout-dune-entit%C3%A9e)
-        - [Création de la database](#cr%C3%A9ation-de-la-database)
-        - [Enregistrer les entitées](#enregistrer-les-entit%C3%A9es)
+        - [Ajout d'une entitée](#ajout-dune-entitée)
+        - [Création de la database](#création-de-la-database)
+        - [Enregistrer les entitées](#enregistrer-les-entitées)
         - [Ajouter la gestions des utilisateurs](#ajouter-la-gestions-des-utilisateurs)
-        - [Générer les crud](#g%C3%A9n%C3%A9rer-les-crud)
+        - [Générer les crud](#générer-les-crud)
         - [Lister les routes](#lister-les-routes)
   - [FRONTEND](#frontend)
 
@@ -50,17 +53,50 @@ chmod +x ./back.sh && ./back.sh
 
 Une fois l'installation terminée, [vous pouvez lancer symfony avec http://localhost:8088 en cliquant sur ce lien.](http://localhost:8088)
 
-**`<span style="color:red">`N'utilisez pas les liens Docker pour symfony `<br>`(un paramètre fausse les liens dans docker).**
+**N'utilisez pas les liens Docker pour symfony**
+**(un paramètre fausse les liens dans docker).**
 
 ---
 
 ### Création 1ère page
 
-[Tuto symfony](https://symfony.com/doc/current/page_creation.html)
+[Page symfony](https://symfony.com/doc/current/page_creation.html)
 
 ---
 
-#### COMMANDES UTILES
+#### LIBRARY ET/OU COMPOSANT
+
+##### Correction d'un bug
+
+_En raison d'un bug sur Symfony 7.0.x, installer ce composants :_
+
+```bash
+composer require "symfony/var-exporter:7.0.4"
+```
+
+##### Ajouter des valeurs dans la bases de données
+
+```bash
+composer require orm-fixtures --dev
+```
+
+[Video de Grafikart : Fixtures](https://grafikart.fr/tutoriels/symfony-fixtures-2198)
+
+```
+
+```
+
+_Ajouter des faux éléments_
+
+```bash
+composer require fakerphp/faker --dev
+composer require league/factory-muffin --dev
+composer require league/factory-muffin-faker --dev
+```
+
+[Site de Faker PHP](https://fakerphp.github.io/)
+
+#### COMMANDES UTILES SYMFONY
 
 ##### Ajout d'un controller
 
@@ -141,3 +177,5 @@ php bin/console debug:router
 ```
 
 ## FRONTEND
+
+[def]: https://fakerphp.github.io/

@@ -53,6 +53,18 @@ composer require webapp --quiet
 pause s 2 m
 composer require "symfony/var-exporter:7.0.4"
 
+pause s 2 m
+composer require orm-fixtures --dev
+
+pause s 2 m
+composer require fakerphp/faker --dev
+
+pause s 2 m
+composer require league/factory-muffin --dev
+
+pause s 2 m
+composer require league/factory-muffin-faker --dev
+
 pause s 1 m
 echo " ** Installation effectué**"
 echo

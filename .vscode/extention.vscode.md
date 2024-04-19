@@ -143,5 +143,5 @@
  [] p1c2u.docker-compose
  [] pkief.material-icon-theme
  [] tomasvergara.vscode-fontawesome-gallery
- [] yoanbernabeu.yoandevpack [] ].
+ [] yoanbernabeu.yoandevpack []
 
