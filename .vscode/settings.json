@@ -3,5 +3,6 @@
   "twiggy.framework": "ignore",
   // "symfony-vscode.consolePath": "serveur-backend/bin/console",
   "modernTwig.phpBinConsoleCommand": "php serveur-backend/bin/console",
-  "commentTranslate.multiLineMerge": true
+  "commentTranslate.multiLineMerge": true,
+  "docwriter.language": "French"
 }
