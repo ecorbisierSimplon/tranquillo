@@ -22,23 +22,19 @@ for element in "${my_array[@]}"; do
     if [ -d "$element" ]; then
         echo "suppression de '$element'"
         echo "--------------------------------"
-        pause s 2 m
+        pause s 1 m
         sudo rm -rf $element
         echo " ** suppression effectuée **"
         echo
     fi
 done
 
-folder_rel_containerjs=~/.vscode/extensions/thenouillet.symfony-vscode-1.0.2/out/symfony/provider
-file_containerjs=ConsoleContainerProvider.js
-sudo sed -i 's/*--show-private*/--show-hidden/g' "${folder_rel_containerjs}/${file_containerjs}"
-
 echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
 echo "---------------------------------------------------"
-pause s 2 m
+pause s 1 m
 
 sudo apt install php8.3 -y
-pause s 2 m
+pause s 1 m
 sudo apt install php8.3-xml -y
 echo
 echo "** module php 8.3 est prêt **"
@@ -46,18 +42,18 @@ echo
 
 echo -e "'\e[1m Installation de Symfony \e[0m'"
 echo "---------------------------------------------------"
-pause s 2 m
+pause s 1 m
 mkdir $folder_rel_serveur
 cd $folder_rel_serveur
 composer create-project symfony/skeleton:"$version_symfony" .
 
-pause s 2 m
+pause s 1 m
 composer require webapp --quiet
 
 pause s 2 m
 composer require "symfony/var-exporter:7.0.4"
 
-pause s 2 m
+pause s 1 m
 echo " ** Installation effectué**"
 echo
 
@@ -66,17 +62,19 @@ source "$layout/script-default.sh"
 
 echo -e "'\e[1m Mise à jour de compose.yaml\e[0m'"
 echo "-----------------------------"
-pause s 2 m
+pause s 1 m
 source "$layout/script-compose.sh"
 echo "** Fichier compose.yaml est prêt **"
 echo
-pause s 2 m
 
-docker volume rm $(docker volume ls)
-pause s 2 m
+echo "Voulez-vous générer Docker ? "
+read -n 1 -rp $'\e[31m\e[1m[Y]\e[0mes / \e[31m\e[1m[N]\e[0mo (is default) > ' val_bd
+line
+line -t ""
 
-source "$layout/buildnews.sh"
-
+if [[ "${val^^}" == "Y" ]]; then
+    source "$layout/buildnews.sh"
+fi
 cd $folder_rel_serveur
 
-pause s 2 m
+pause s 5 m
