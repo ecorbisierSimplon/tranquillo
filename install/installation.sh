@@ -96,6 +96,10 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require twig asset
 
+cd $folder_rel_serveur
+pause s 1 m
+composer require api
+
 pause s 1 m
 echo " ** Installation effectué**"
 echo
