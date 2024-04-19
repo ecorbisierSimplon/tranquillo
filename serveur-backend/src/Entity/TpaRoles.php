@@ -9,8 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TpaRolesRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_roles_code_ukey",columns: ["role_code"])]
-#[ORM\UniqueConstraint(name: "tpa_roles_name_ukey",columns: ["role_name"])]
+#[ORM\UniqueConstraint(name: "tpa_roles_code_ukey", columns: ["role_code"])]
+#[ORM\UniqueConstraint(name: "tpa_roles_name_ukey", columns: ["role_name"])]
 #[ORM\Index(name: "tpa_roles_code_ikey", columns: ["role_code"])]
 class TpaRoles
 {
@@ -20,12 +20,12 @@ class TpaRoles
     #[Groups(['roles.index'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, unique:true)]
+    #[ORM\Column(length: 50, unique: true)]
     #[Groups(['users.index', 'roles.index'])]
     private ?string $roleCode = null;
 
-    #[ORM\Column(length: 50, unique:true)]
-    #[Groups(['users.show','roles.show'])]
+    #[ORM\Column(length: 50, unique: true)]
+    #[Groups(['users.show', 'roles.show'])]
     private ?string $roleName = null;
 
     /**

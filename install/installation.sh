@@ -47,23 +47,54 @@ mkdir $folder_rel_serveur
 cd $folder_rel_serveur
 composer create-project symfony/skeleton:"$version_symfony" .
 
+cd $folder_rel_serveur
 pause s 1 m
 composer require webapp --quiet
 
-pause s 2 m
+cd $folder_rel_serveur
+pause s 1 m
+composer require "symfony/symfony:7.0.*"
+
+cd $folder_rel_serveur
+pause s 1 m
 composer require "symfony/var-exporter:7.0.4"
 
-pause s 2 m
+cd $folder_rel_serveur
+pause s 1 m
 composer require orm-fixtures --dev
 
-pause s 2 m
+cd $folder_rel_serveur
+pause s 1 m
 composer require fakerphp/faker --dev
 
-pause s 2 m
+cd $folder_rel_serveur
+pause s 1 m
 composer require league/factory-muffin --dev
 
-pause s 2 m
+cd $folder_rel_serveur
+pause s 1 m
 composer require league/factory-muffin-faker --dev
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require symfony/serializer-pack
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require sensio/framework-extra-bundle
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require lexik/jwt-authentication-bundle
+
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require nelmio/api-doc-bundle
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require twig asset
 
 pause s 1 m
 echo " ** Installation effectué**"
