@@ -39,7 +39,8 @@ class ApiUsersController extends AbstractController
         EntityManagerInterface $em
     ) {
         $user->setUserCreateAt(new \DateTimeImmutable());
-        $user->setUserPassword("4566");
+        $user->setPassword("4566");
+        // $user->setRoles('ROLE_USER');
         $em->persist($user);
         $em->flush();
         return $this->json($user, 200, [], [

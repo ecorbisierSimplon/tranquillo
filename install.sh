@@ -120,6 +120,7 @@ if [[ ! ${val^^} == "L" ]]; then
     pause s 2 m
 
 fi
+cd $folder_rel_serveur
 echo
 echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
 echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
