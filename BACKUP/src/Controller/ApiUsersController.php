@@ -35,10 +35,17 @@ class ApiUsersController extends AbstractController
         #[MapRequestPayload(
             serializationContext: ['users.create']
         )]
-        TpaUsers $user
+        TpaUsers $user,
+        EntityManagerInterface $em
     ) {
         $user->setUserCreateAt(new \DateTimeImmutable());
-        dd($user);
+        $user->setPassword("4566");
+        // $user->setRoles('ROLE_USER');
+        $em->persist($user);
+        $em->flush();
+        return $this->json($user, 200, [], [
+            'groups' => ['users.index', 'users.show']
+        ]);
     }
 
     #[Route('/{id}', name: 'app_api_users_show', methods: ['GET'])]

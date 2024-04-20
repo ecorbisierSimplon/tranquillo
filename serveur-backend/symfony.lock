@@ -19,7 +19,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "main",
             "version": "2.12",
-            "ref": "32f890075233ac4a1176e848a0f8e932ac6536d6"
+            "ref": "a952424ca4d5ab4dbc66c8be78236a5f13124112"
         },
         "files": [
             "config/packages/doctrine.yaml",
@@ -62,19 +62,6 @@
         },
         "files": [
             "config/packages/lexik_jwt_authentication.yaml"
-        ]
-    },
-    "nelmio/api-doc-bundle": {
-        "version": "4.26",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "main",
-            "version": "3.0",
-            "ref": "c8e0c38e1a280ab9e37587a8fa32b251d5bc1c94"
-        },
-        "files": [
-            "config/packages/nelmio_api_doc.yaml",
-            "config/routes/nelmio_api_doc.yaml"
         ]
     },
     "nelmio/cors-bundle": {

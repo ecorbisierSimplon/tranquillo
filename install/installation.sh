@@ -51,9 +51,21 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require webapp --quiet
 
-cd $folder_rel_serveur
+
+# Mise à jour de env et n° de version
+source "$layout/script-default.sh"
+
+echo -e "'\e[1m Mise à jour de compose.yaml\e[0m'"
+echo "-----------------------------"
 pause s 1 m
-composer require "symfony/symfony:7.0.*"
+source "$layout/script-compose.sh"
+echo "** Fichier compose.yaml est prêt **"
+echo
+
+
+# cd $folder_rel_serveur
+# pause s 1 m
+# composer require "symfony/symfony:7.0.6"
 
 cd $folder_rel_serveur
 pause s 1 m
@@ -79,40 +91,37 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require symfony/serializer-pack
 
+# cd $folder_rel_serveur
+# pause s 1 m
+# composer require sensio/framework-extra-bundle
+
+
+# cd $folder_rel_serveur
+# pause s 1 m
+# composer require nelmio/api-doc-bundle
+
+# cd $folder_rel_serveur
+# pause s 1 m
+# composer require twig asset
+
+# cd $folder_rel_serveur
+# pause s 1 m
+# composer require symfony/mercure-bundle
+
 cd $folder_rel_serveur
 pause s 1 m
-composer require sensio/framework-extra-bundle
+composer require api
+
 
 cd $folder_rel_serveur
 pause s 1 m
 composer require lexik/jwt-authentication-bundle
 
 
-cd $folder_rel_serveur
-pause s 1 m
-composer require nelmio/api-doc-bundle
-
-cd $folder_rel_serveur
-pause s 1 m
-composer require twig asset
-
-cd $folder_rel_serveur
-pause s 1 m
-composer require api
-
 pause s 1 m
 echo " ** Installation effectué**"
 echo
 
-# Mise à jour de env et n° de version
-source "$layout/script-default.sh"
-
-echo -e "'\e[1m Mise à jour de compose.yaml\e[0m'"
-echo "-----------------------------"
-pause s 1 m
-source "$layout/script-compose.sh"
-echo "** Fichier compose.yaml est prêt **"
-echo
 
 echo -e "Voulez-vous générer Docker ? \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
 read -n 1 -rp "> " val_dk
@@ -126,3 +135,5 @@ case "$val_dk" in
 esac
 
 cd $folder_rel_serveur
+ mkdir ./config/jwt
+

@@ -4,5 +4,9 @@
   // "symfony-vscode.consolePath": "serveur-backend/bin/console",
   "modernTwig.phpBinConsoleCommand": "php serveur-backend/bin/console",
   "commentTranslate.multiLineMerge": true,
-  "docwriter.language": "French"
+  "docwriter.language": "French",
+  "docwriter.style": "Auto-detect",
+  "docwriter.progress.trackClasses": true,
+  "docwriter.progress.trackTypes": true,
+  "docwriter.progress.trackFunctions": true
 }

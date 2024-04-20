@@ -1,26 +1,21 @@
 <?php
 
+
 namespace App\Entity;
 
 use App\Repository\TpaUsersRepository;
 use App\Validator\UserRegex;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
-use function Symfony\Component\Clock\now;
 
 #[ORM\Entity(repositoryClass: TpaUsersRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_users_email_ukey", columns: ["email"])]
-#[ORM\Index(name: "tpa_users_email_ikey", columns: ["email"])]
-#[ORM\Index(name: "tpa_roles_id_users_ikey", columns: ["roles_id"])]
-#[ORM\Index(name: "tpa_users_create_at_ikey", columns: ["user_create_at"])]
-class TpaUsers
+#[ORM\UniqueConstraint(name: 'tpa_users_email_ukey', fields: ['email'])]
+class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
 {
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,6 +26,26 @@ class TpaUsers
     #[Assert\Email]
     #[Groups(['users.index', 'tasks.show', 'users.create'])]
     private ?string $email = null;
+
+    /**
+     * @var list<string> The user roles
+     */
+    #[ORM\Column]
+    private array $roles = [];
+
+    /**
+     * @var string The hashed password
+     */
+    // #[Groups(['users.secure', 'users.create'])]
+    // #[Assert\Length(
+    //     min: 8,
+    //     max: 50,
+    //     minMessage: 'Votre mot de passe doit avoir un minimum de `{{ limit }}` caratères.',
+    //     maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
+    // )]
+    // #[UserRegex(regex: 'password')]
+    #[ORM\Column]
+    private ?string $password = null;
 
     #[ORM\Column(length: 50)]
     #[UserRegex(regex: 'name', champ: 'prénom')]
@@ -54,35 +69,9 @@ class TpaUsers
     )]
     private ?string $firstname = null;
 
-    #[ORM\Column(length: 50)]
-    #[Groups(['users.secure', 'users.create'])]
-    #[Assert\Length(
-        min: 8,
-        max: 50,
-        minMessage: 'Votre mot de passe doit avoir un minimum de `{{ limit }}` caratères.',
-        maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
-    )]
-    #[UserRegex(regex: 'password')]
-    private ?string $userPassword = null;
-
-    #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column]
     #[Groups(['users.at'])]
     private ?\DateTimeImmutable $userCreateAt = null;
-
-    /**
-     * @var Collection<int, TpaTasks>
-     */
-    #[ORM\OneToMany(targetEntity: TpaTasks::class, mappedBy: 'users')]
-    private Collection $users;
-
-    #[ORM\ManyToOne(inversedBy: 'roles')]
-    #[Groups(['users.index', 'users.show'])]
-    private ?TpaRoles $roles = null;
-
-    public function __construct()
-    {
-        $this->users = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -99,6 +88,64 @@ class TpaUsers
         $this->email = $email;
 
         return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     *
+     * @return list<string>
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    /**
+     * @param list<string> $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getLastname(): ?string
@@ -125,18 +172,6 @@ class TpaUsers
         return $this;
     }
 
-    public function getUserPassword(): ?string
-    {
-        return $this->userPassword;
-    }
-
-    public function setUserPassword(string $userPassword): static
-    {
-        $this->userPassword = $userPassword;
-
-        return $this;
-    }
-
     public function getUserCreateAt(): ?\DateTimeImmutable
     {
         return $this->userCreateAt;
@@ -145,48 +180,6 @@ class TpaUsers
     public function setUserCreateAt(\DateTimeImmutable $userCreateAt): static
     {
         $this->userCreateAt = $userCreateAt;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, TpaTasks>
-     */
-    public function getUsers(): Collection
-    {
-        return $this->users;
-    }
-
-    public function addUsers(TpaTasks $users): static
-    {
-        if (!$this->users->contains($users)) {
-            $this->users->add($users);
-            $users->setUsers($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUsers(TpaTasks $users): static
-    {
-        if ($this->users->removeElement($users)) {
-            // set the owning side to null (unless already changed)
-            if ($users->getUsers() === $this) {
-                $users->setUsers(null);
-            }
-        }
-
-        return $this;
-    }
-
-    public function getRoles(): ?TpaRoles
-    {
-        return $this->roles;
-    }
-
-    public function setRoles(?TpaRoles $roles): static
-    {
-        $this->roles = $roles;
 
         return $this;
     }
