@@ -104,11 +104,10 @@ class UsersFixtures extends Fixture
         }
 
 
-
         require_once($cheminData . "/fixturesSubtasks.php");
         foreach ($fixturesSubtasks  as $fixSubtask) {
-            $subtask = new TpaSubtasks;
-            // Accéder aux éléments de la tâche
+            $subtask = new TpaSubtasks();
+            // Accéder aux éléments de la sous-tâche
             $userEmail = $fixSubtask['usersEmail'];
             $taskTitle = $fixSubtask['tasksTitle'];
 
@@ -116,25 +115,24 @@ class UsersFixtures extends Fixture
             $user = array_filter($listUsers, function ($user) use ($userEmail) {
                 return $user->getEmail() === $userEmail;
             });
-            // Accéder aux éléments de la tâche
-            $user = reset($filteredUsers); // Récupérer le premier utilisateur correspondant
-            // $userId = $user->getId(); // Récupérer l'ID de l'utilisateur
+            // Récupérer le premier utilisateur correspondant
+            $user = reset($user);
 
-            // Recherche de la tache par son titre (name) dans la liste des tasks et par l'id de l'utilisateur
-            $filteredTask = array_filter($listTasks, function ($task) use ($taskTitle, $user) {
-                return ($task->getTaskName() === $taskTitle && $task->getUsers() === $user);
+            // Recherche de la tâche par son titre et l'id de l'utilisateur
+            $filteredTasks = array_filter($listTasks, function ($task) use ($taskTitle, $user) {
+                return ($task->getTaskName() === $taskTitle && $task->getUsers()->getId() === $user->getId());
             });
 
-            // Accéder aux éléments de la tâche
-            // Accéder aux éléments de la tâche
-            $task = reset($filteredTask); // Récupérer le premier utilisateur correspondant
-            // $taskId = $task->getId(); // Récupérer l'ID de l'utilisateur
-            // Associer l'id de la tache à la sous-tâche
+            // Récupérer la première tâche correspondante
+            $task = reset($filteredTasks);
+
+            // Associer la tâche à la sous-tâche
             $subtask->setTasks($task);
-            $subtask->setSubtaskName($fixSubtask['subtaskTitle']);
+            $subtask->setSubtaskName($fixSubtask['subtaskName']);
             $subtask->setSubtaskOrder($fixSubtask['subtaskOrder']);
             $subtask->setSubtaskIsFinished($fixSubtask['subtaskIsFinished']);
 
+            $subtask->setSubtaskCreateAt(new \DateTimeImmutable());
 
             $manager->persist($subtask);
             $manager->flush();
