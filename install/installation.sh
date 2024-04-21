@@ -63,9 +63,9 @@ echo "** Fichier compose.yaml est prêt **"
 echo
 
 
-# cd $folder_rel_serveur
-# pause s 1 m
-# composer require "symfony/symfony:7.0.6"
+cd $folder_rel_serveur
+pause s 1 m
+composer remove "symfony/ux-turbo"
 
 cd $folder_rel_serveur
 pause s 1 m
