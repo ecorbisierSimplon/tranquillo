@@ -19,12 +19,12 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users.index', 'tasks.index'])]
+    #[Groups(['users:index', 'tasks:index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true)]
     #[Assert\Email]
-    #[Groups(['users.index', 'tasks.show', 'users.create'])]
+    #[Groups(['users:index', 'tasks:show', 'users:create'])]
     private ?string $email = null;
 
     /**
@@ -36,7 +36,7 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    // #[Groups(['users.secure', 'users.create'])]
+    // #[Groups(['users:secure', 'users:create'])]
     // #[Assert\Length(
     //     min: 8,
     //     max: 50,
@@ -55,11 +55,11 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
         minMessage: 'Votre prénom doit avoir un minimum de {{ limit }} caractères.',
         maxMessage: 'Votre prénom ne doit pas dépasser {{ limit }} caractères.'
     )]
-    #[Groups(['users.show', 'users.create'])]
+    #[Groups(['users:show', 'users:create'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
-    #[Groups(['users.show', 'users.create'])]
+    #[Groups(['users:show', 'users:create'])]
     #[UserRegex(regex: 'name', champ: 'nom')]
     #[Assert\Length(
         min: 3,
@@ -70,7 +70,7 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column]
-    #[Groups(['users.at'])]
+    #[Groups(['users:at'])]
     private ?\DateTimeImmutable $userCreateAt = null;
 
     public function getId(): ?int
@@ -98,6 +98,16 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    /**
+     * Méthode getUsername qui permet de retourner le champ qui est utilisé pour l'authentification.
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
     }
 
     /**
