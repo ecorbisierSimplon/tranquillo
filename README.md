@@ -96,8 +96,10 @@ JWT_PASSPHRASE=<clé à générer et ne pas transmettre ni envoyer sur git et d�
 
 [Générateur de clé aléatoires](https://pwpush.com/fr/pages/generate_key)
 
+---
+
 **_Commande pour créer les clés secrètes publique et privée :_**
-**----------------------------------------------------------**
+
 _Utiliser JWT_PASSPHRASE pour la **passphrase**_
 
 ```bash
@@ -109,6 +111,8 @@ openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
 ```
 
 [Tuto Openclassroom JWT avec symfony](https://openclassrooms.com/fr/courses/7709361-construisez-une-api-rest-avec-symfony/7795148-authentifiez-et-autorisez-les-utilisateurs-de-l-api-avec-jwt#/id/r-7795140)
+
+---
 
 ##### Ajouter des valeurs dans la bases de données
 
@@ -127,6 +131,8 @@ composer require league/factory-muffin-faker --dev
 ```
 
 [Site de Faker PHP](https://fakerphp.github.io/)
+
+---
 
 #### COMMANDES UTILES SYMFONY
 
