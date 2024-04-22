@@ -15,10 +15,10 @@ if a duplicate entry is attempted to be saved, a validation error with the messa
 already in use on that host.' will be triggered. */
 
 #[ORM\Entity(repositoryClass: TpaSubtasksRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_subtasks_name_tasks_id_ukey", columns: ['subtask_name', 'tasks_id'])]
+#[ORM\UniqueConstraint(name: "tpa_subtasks_name_tasks_id_ukey",columns: ['subtask_name', 'tasks_id'])]
 #[ORM\Index(name: "tpa_subtasks_name_ikey", columns: ["subtask_name"])]
 #[ORM\Index(name: "tpa_subtasks_create_at_ikey", columns: ["subtask_create_at"])]
-#[ORM\Index(name: "tpa_tasks_id_substask_ikey", columns: ["tasks_id"])]
+#[ORM\Index(name: "tpa_tasks_id_substask_ikey",columns: ["tasks_id"])]
 #[UniqueEntity(
     fields: ['subtask_name', 'tasks_id'],
     message: 'Enregistrement impossible, sous-tache déjà existante.',
@@ -29,28 +29,28 @@ class TpaSubtasks
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['subtasks:index'])]
+    #[Groups(['subtasks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
-    #[Groups(['subtasks:show'])]
+    #[Groups(['subtasks.show'])]
     private ?string $subtaskName = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups(['subtasks:at'])]
+    #[Groups(['subtasks.at'])]
     private ?\DateTimeImmutable $subtaskCreateAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['subtasks:technic'])]
+    #[Groups(['subtasks.technic'])]
     private ?int $subtaskOrder = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['subtasks:technic'])]
+    #[Groups(['subtasks.technic'])]
     private ?bool $subtaskIsFinished = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['subtasks:index', 'subtasks:show'])]
+    #[Groups(['subtasks.index', 'subtasks.show'])]
     private ?TpaTasks $tasks = null;
 
     public function getId(): ?int

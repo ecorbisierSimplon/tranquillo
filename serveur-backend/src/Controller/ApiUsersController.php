@@ -12,7 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api/users')]
 class ApiUsersController extends AbstractController
@@ -20,13 +21,8 @@ class ApiUsersController extends AbstractController
     #[Route('/', name: 'app_api_users_index', methods: ['GET'])]
     public function index(TpaUsersRepository $tpaUsersRepository): JsonResponse
     {
-        // dd(
-        //     $this->json($tpaUsersRepository->findAll(), Response::HTTP_OK, [], [
-        //         'groups' => ['users:index']
-        //     ])
-        // );
-        return $this->json($tpaUsersRepository->findAll(), Response::HTTP_OK, [], [
-            'groups' => ['users:index']
+        return $this->json($tpaUsersRepository->findAll(), 200, [], [
+            'groups' => ['users.index']
         ]);
         // return $this->render('api_users/index.html.twig', [
         //     'tpa_users' => $tpaUsersRepository->findAll(),
@@ -37,7 +33,7 @@ class ApiUsersController extends AbstractController
     public function new(
         Request $request,
         #[MapRequestPayload(
-            serializationContext: ['users:create']
+            serializationContext: ['users.create']
         )]
         TpaUsers $user,
         EntityManagerInterface $em
@@ -47,17 +43,20 @@ class ApiUsersController extends AbstractController
         // $user->setRoles('ROLE_USER');
         $em->persist($user);
         $em->flush();
-        return $this->json($user, Response::HTTP_OK, [], [
-            'groups' => ['users:index', 'users:show']
+        return $this->json($user, 200, [], [
+            'groups' => ['users.index', 'users.show']
         ]);
     }
 
     #[Route('/{id}', name: 'app_api_users_show', methods: ['GET'])]
     public function show(TpaUsers $tpaUser): JsonResponse
     {
-        return $this->json($tpaUser, Response::HTTP_OK, [], [
-            'groups' => ['users:index', 'users:show']
+        return $this->json($tpaUser, 201, [], [
+            'groups' => ['users.index', 'users.show']
         ]);
+        // return $this->render('api_users/show.html.twig', [
+        //     'tpa_user' => $tpaUser,
+        // ]);
     }
 
     #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['POST'])]

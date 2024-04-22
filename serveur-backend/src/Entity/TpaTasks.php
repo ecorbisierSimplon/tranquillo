@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TpaTasksRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_tasks_name_roles_id_ukey", columns: ["task_name", "users_id"])]
+#[ORM\UniqueConstraint(name: "tpa_tasks_name_roles_id_ukey",columns: ["task_name" ,"users_id"])]
 #[UniqueEntity(
     fields: ['task_name', 'roles_id'],
     message: 'Enregistrement impossible, tache déjà existante.',
@@ -25,36 +25,36 @@ class TpaTasks
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['tasks:index', 'subtasks:index'])]
+    #[Groups(['tasks.index', 'subtasks.index'])]
     private ?int $id = null;
 
-    #[Groups(['tasks:show', 'subtasks:show'])]
-    #[ORM\Column(length: 100)]
+    #[Groups(['tasks.show', 'subtasks.show'])]
+    #[ORM\Column(length: 100 )]
     private ?string $taskName = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups(['tasks:at'])]
+    #[Groups(['tasks.at'])]
     private ?\DateTimeImmutable $taskCreateAt = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['tasks:show'])]
+    #[Groups(['tasks.show'])]
     private ?string $taskDescription = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['tasks:technic'])]
+    #[Groups(['tasks.technic'])]
     private ?int $taskReminder = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['tasks:technic'])]
+    #[Groups(['tasks.technic'])]
     private ?\DateTimeImmutable $taskStartAt = null;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['tasks:technic'])]
+    #[Groups(['tasks.technic'])]
     private ?\DateTimeImmutable $taskEndAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['tasks:index', 'tasks:show'])]
+    #[Groups(['tasks.index', 'tasks.show'])]
     private ?TpaUsers $users = null;
 
     /**
