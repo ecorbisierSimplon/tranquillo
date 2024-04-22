@@ -14,6 +14,7 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
     - [Création 1ère page](#création-1ère-page)
       - [LIBRARY ET/OU COMPOSANT](#library-etou-composant)
         - [Correction d'un bug](#correction-dun-bug)
+        - [SECURITÉ AUTH JWT](#securité-auth-jwt)
         - [Ajouter des valeurs dans la bases de données](#ajouter-des-valeurs-dans-la-bases-de-données)
       - [COMMANDES UTILES SYMFONY](#commandes-utiles-symfony)
         - [Ajout d'un controller](#ajout-dun-controller)
@@ -74,6 +75,45 @@ _En raison d'un bug sur Symfony 7.0.x, installer ce composants :_
 composer require "symfony/var-exporter:7.0.4"
 ```
 
+##### SECURITÉ AUTH JWT
+
+```bash
+composer require lexik/jwt-authentication-bundle
+```
+
+> le dossier config/jwt doit être créer manuellement
+> _Créer automatiquement lors de l'installation bash_
+>
+> ajouter ces lignes DANS env.local :
+
+```bash
+###> lexik/jwt-authentication-bundle ###
+JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
+JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
+JWT_PASSPHRASE=<clé à générer et ne pas transmettre ni envoyer sur git et dépot distant>
+###< lexik/jwt-authentication-bundle ###
+```
+
+[Générateur de clé aléatoires](https://pwpush.com/fr/pages/generate_key)
+
+---
+
+**_Commande pour créer les clés secrètes publique et privée :_**
+
+_Utiliser JWT_PASSPHRASE pour la **passphrase**_
+
+```bash
+openssl genpkey -out config/jwt/private.pem -aes256 -algorithm rsa -pkeyopt rsa_keygen_bits:4096
+```
+
+```bash
+openssl pkey -in config/jwt/private.pem -out config/jwt/public.pem -pubout
+```
+
+[Tuto Openclassroom JWT avec symfony](https://openclassrooms.com/fr/courses/7709361-construisez-une-api-rest-avec-symfony/7795148-authentifiez-et-autorisez-les-utilisateurs-de-l-api-avec-jwt#/id/r-7795140)
+
+---
+
 ##### Ajouter des valeurs dans la bases de données
 
 ```bash
@@ -91,6 +131,8 @@ composer require league/factory-muffin-faker --dev
 ```
 
 [Site de Faker PHP](https://fakerphp.github.io/)
+
+---
 
 #### COMMANDES UTILES SYMFONY
 

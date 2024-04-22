@@ -3,8 +3,6 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Author;
-use App\Entity\Book;
 use App\Entity\TpaSubtasks;
 use App\Entity\TpaTasks;
 use App\Entity\TpaUsers;
@@ -12,7 +10,8 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UsersFixtures extends Fixture
+/** @package App\DataFixtures */
+class AppFixtures extends Fixture
 {
     private $userPasswordHasher;
 
@@ -21,6 +20,10 @@ class UsersFixtures extends Fixture
         $this->userPasswordHasher = $userPasswordHasher;
     }
 
+    /* La méthode `public function load(ObjectManager ): void` dans la classe `AppFixtures` est
+    une méthode requise par l'interface `Fixture` dans les appareils Doctrine. Cette méthode est
+    chargée de remplir la base de données avec des données factices pendant le processus de
+    chargement des appareils de données. */
     public function load(ObjectManager $manager): void
     {
         // Récupérer le chemin absolu du dossier courant
@@ -58,7 +61,9 @@ class UsersFixtures extends Fixture
             $user->setEmail($fixUser['email']);
             $user->setLastname($fixUser['lastname']);
             $user->setFirstname($fixUser['firstname']);
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, $fixUser['password'])); // Assumant que le mot de passe est stocké dans la colonne 'mot_de_passe'
+            /* Cette ligne de code est chargée de hacher le mot de passe de l'utilisateur avant de le
+            définir dans l'entité ``. Voici un aperçu de ce qui se passe : */
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $fixUser['password']));
             $user->setUserCreateAt(new \DateTimeImmutable());
             $manager->persist($user);
             $manager->flush();
@@ -140,6 +145,15 @@ class UsersFixtures extends Fixture
             $listSubtasks[] = $subtask;
         }
 
+        /* `->flush();` dans le contexte de Doctrine ORM est utilisé pour synchroniser les
+        modifications avec la base de données. Lorsque vous persistez ou supprimez des entités dans
+        Doctrine, les modifications sont conservées en mémoire jusqu'à ce que vous appeliez
+        `->flush();`. Cette méthode exécute ensuite les requêtes SQL nécessaires pour
+        insérer, mettre à jour ou supprimer les entités de la base de données. Il valide
+        essentiellement les modifications apportées au cours de la transaction en cours dans la base
+        de données. */
         $manager->flush();
+
+        echo "Fixture terminé.";
     }
 }
