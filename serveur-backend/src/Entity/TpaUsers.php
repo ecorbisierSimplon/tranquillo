@@ -15,42 +15,56 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\UniqueConstraint(name: 'tpa_users_email_ukey', fields: ['email'])]
 class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users:index', 'users:create', 'tasks:index'])]
+    #[Groups(['users:index', 'tasks:index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true)]
     #[Assert\Email]
-    #[Groups(['users:index', 'users:show', 'users:create'])]
+    #[Groups(['users:index', 'users:create', 'users:show', 'users:update'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups(['users:index', 'admin:edit'])]
+    #[Groups(['users:index', 'users:create', 'admin:edit'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column(length: 255)]
-    #[Groups(['users:pass'])]
+    #[Groups(['users:create', 'users:pass'])]
     #[UserRegex(regex: 'password', field: 'password')]
     private ?string $password = null;
 
+    // private ?string $hashPassword = null;
+
+
     #[ORM\Column(length: 50)]
-    #[Assert\Length(min: 3, max: 50)]
-    #[UserRegex(regex: 'name', field: 'lastname')]
-    #[Groups(['users:show', 'users:create'])]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Votre nom doit avoir un minimum de {{ limit }} caractères.',
+        maxMessage: 'Votre nom ne doit pas dépasser {{ limit }} caractères.'
+    )]
+    #[Groups(['users:create', 'users:show', 'users:update'])]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 50)]
-    #[Assert\Length(min: 3, max: 50)]
-    #[UserRegex(regex: 'name', field: 'firstname')]
-    #[Groups(['users:show', 'users:create'])]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Votre prénom doit avoir un minimum de {{ limit }} caractères.',
+        maxMessage: 'Votre prénom ne doit pas dépasser {{ limit }} caractères.'
+    )]
+    #[Groups(['users:create', 'users:show', 'users:update'])]
     private ?string $firstname = null;
 
     #[ORM\Column]
