@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Entity;
 
 use App\Repository\TpaUsersRepository;
@@ -8,23 +7,20 @@ use App\Validator\UserRegex;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: TpaUsersRepository::class)]
-#[ORM\UniqueConstraint(name: 'tpa_users_email_ukey', fields: ['email'])]
+#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['users.index', 'tasks.index'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 50, unique: true)]
     #[Assert\Email]
-    #[Groups(['users.index', 'tasks.show', 'users.create'])]
     private ?string $email = null;
 
     /**
@@ -36,41 +32,28 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      */
-    // #[Groups(['users.secure', 'users.create'])]
-    // #[Assert\Length(
-    //     min: 8,
-    //     max: 50,
-    //     minMessage: 'Votre mot de passe doit avoir un minimum de `{{ limit }}` caratères.',
-    //     maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
-    // )]
-    // #[UserRegex(regex: 'password')]
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(length: 50)]
-    #[UserRegex(regex: 'name', champ: 'prénom')]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Votre nom doit avoir un minimum de {{ limit }} caractères.',
+        maxMessage: 'Votre nom ne doit pas dépasser {{ limit }} caractères.'
+    )]
+    private ?string $lastname = null;
+
+    #[ORM\Column(length: 50)]
     #[Assert\Length(
         min: 3,
         max: 50,
         minMessage: 'Votre prénom doit avoir un minimum de {{ limit }} caractères.',
         maxMessage: 'Votre prénom ne doit pas dépasser {{ limit }} caractères.'
     )]
-    #[Groups(['users.show', 'users.create'])]
-    private ?string $lastname = null;
-
-    #[ORM\Column(length: 50)]
-    #[Groups(['users.show', 'users.create'])]
-    #[UserRegex(regex: 'name', champ: 'nom')]
-    #[Assert\Length(
-        min: 3,
-        max: 50,
-        minMessage: 'Votre nom doit avoir un minimum de `{{ limit }}` caratères.',
-        maxMessage: 'Votre nom ne doit pas dépasser `{{ limit }}` caractères.',
-    )]
     private ?string $firstname = null;
 
     #[ORM\Column]
-    #[Groups(['users.at'])]
     private ?\DateTimeImmutable $userCreateAt = null;
 
     public function getId(): ?int
@@ -98,6 +81,16 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+    /**
+     * Méthode getUsername qui permet de retourner le champ qui est utilisé pour l'authentification.
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
     }
 
     /**

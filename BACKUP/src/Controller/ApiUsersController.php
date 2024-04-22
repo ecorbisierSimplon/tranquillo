@@ -59,7 +59,7 @@ class ApiUsersController extends AbstractController
         // ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_api_users_edit', methods: ['PUT'])]
     public function edit(Request $request, TpaUsers $tpaUser, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(TpaUsersType::class, $tpaUser);
@@ -76,8 +76,7 @@ class ApiUsersController extends AbstractController
             'form' => $form,
         ]);
     }
-
-    #[Route('/delete/{id}', name: 'app_api_users_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_api_users_delete', methods: ['DELETE'])]
     public function delete(Request $request, TpaUsers $tpaUser, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {

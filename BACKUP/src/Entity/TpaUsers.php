@@ -44,6 +44,7 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     //     maxMessage: 'Votre mot de passe ne doit pas dépasser `{{ limit }}` caractères.',
     // )]
     // #[UserRegex(regex: 'password')]
+
     #[ORM\Column]
     private ?string $password = null;
 
