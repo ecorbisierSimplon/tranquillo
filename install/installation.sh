@@ -94,6 +94,7 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require symfony/serializer-pack
 
+## INCLUS DANS SYMFONY ^7.*
 # cd $folder_rel_serveur
 # pause s 1 m
 # composer require sensio/framework-extra-bundle

@@ -25,7 +25,7 @@ class UserRegex extends Constraint
         string $regex = null,
         string|array|null $pattern = null,
         ?string $message = null,
-        ?string $champ = "champ",
+        ?string $field = "champ",
         ?array $groups = null,
         mixed $payload = null,
         array $options = []
@@ -33,7 +33,7 @@ class UserRegex extends Constraint
         $pattern = ($regex === "password") ? '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&§+=!])(?!.*[ç<\">[\]\'µ`~\\/]).{0,}$/' : null;
         $pattern = ($regex === "name") ? '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/' : $pattern;
         $message = ($regex === "password") ? "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ." : $this->message;
-        $message = ($regex === "name") ? "La valeur '$champ' ne répond pas aux critères de sécurité !" : $message;
+        $message = ($regex === "name") ? "La valeur '$field' ne répond pas aux critères de sécurité !" : $message;
         if (\is_array($pattern)) {
             $options = array_merge($pattern, $options);
         } elseif (null !== $pattern) {
