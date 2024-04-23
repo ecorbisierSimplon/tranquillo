@@ -1,16 +1,12 @@
 # INSTALLATION DE TRANQUILLO©
 
-## BASE DE DONNÉES
-
-Enregistrer vos fichier sql dans database/sql
-La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n'est pas incluse dans le dépot git.
-
 <!-- TOC -->
 
 - [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo)
   - [BASE DE DONNÉES](#base-de-données)
+  - [BACKEND : SYNFONY](#backend--synfony)
     - [Projet inital](#projet-inital)
-    - [Initialsation du projet](#initialsation-du-projet)
+    - [Initialisation du projet](#initialisation-du-projet)
     - [Création 1ère page](#création-1ère-page)
       - [LIBRARY ET/OU COMPOSANT](#library-etou-composant)
         - [Correction d'un bug](#correction-dun-bug)
@@ -24,17 +20,40 @@ La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n
         - [Ajouter la gestions des utilisateurs](#ajouter-la-gestions-des-utilisateurs)
         - [Générer les crud](#générer-les-crud)
         - [Lister les routes](#lister-les-routes)
-  - [FRONTEND](#frontend)
+  - [FRONTEND : SVELTENATIVE ET NATIVE SCRIPT](#frontend--sveltenative-et-native-script)
+    - [Projet inital](#projet-inital-1)
+    - [Initialisation du projet](#initialisation-du-projet-1)
+    - [Création 1ère page](#création-1ère-page-1)
 
 <!-- /TOC -->
 
-### Projet inital
+    - [Initialisation du projet](#initialisation-du-projet-1)
+    - [Création 1ère page](#création-1ère-page-1)
 
-[projet de Dunglas symfony-docker github](https://github.com/dunglas/symfony-docker/)
+<!-- /TOC -->
 
 ---
 
-### Initialsation du projet
+## BASE DE DONNÉES
+
+Enregistrer vos fichier sql dans database/sql
+La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n'est pas incluse dans le dépot git.
+
+---
+
+## BACKEND : SYNFONY
+
+### Projet inital
+
+_Avec Docker_
+[projet de Dunglas symfony-docker github](https://github.com/dunglas/symfony-docker/)
+
+_En serveur local (Choix pour ce projet)_
+[Installation de Symfony Serveur local](https://grafikart.fr/tutoriels/installation-symfony-2180)
+
+---
+
+### Initialisation du projet
 
 Avec le terminal, excuter les commande suivantes à la racine de "tranquillo©":
 
@@ -214,4 +233,44 @@ php bin/console make:crud
 php bin/console debug:router
 ```
 
-## FRONTEND
+## FRONTEND : SVELTENATIVE ET NATIVE SCRIPT
+
+### Projet inital
+
+Le projet fonctionne en local
+[Svelte Native (Page officielle)](https://svelte-native.technology/)
+[Svelte Native - Installation](https://svelte-native.technology/blog/svelte-native-quick-start)
+
+---
+
+### Initialisation du projet
+
+Nous aurons besoins de nodejs installer globalement :
+
+```bash
+sudo apt install -y -g nodejs npm
+```
+
+> _Il faudra peut-être purger l'ancienne installation si nécéssaire avant d'installer NodeJs :_
+> Si node js à été installé avec nvm, il faut supprimer ce répertoire et redémarer l'ordinateur :
+
+```bash
+sudo rm -r ~/.nvm
+```
+
+```bash
+sudo apt update
+sudo apt remove nodejs
+sudo apt purge nodejs
+sudo apt autoremove nodejs
+```
+
+Pour l'installation, il faut installer NativeScript :
+
+```bash
+npm install -g nativescript
+```
+
+---
+
+### Création 1ère page
