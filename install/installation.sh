@@ -15,7 +15,7 @@ if [ -d "$folder_rel_serveur" ]; then
 fi
 
 # Définition du tableau
-my_array=("$myfolder/symfony-docke" "$folder_rel_serveur" "$folder_rel_data" "TutoSymfony")
+my_array=("$myfolder/symfony-docker" "$folder_rel_serveur" "$folder_rel_data" "TutoSymfony")
 
 # Boucle pour lire le tableau
 for element in "${my_array[@]}"; do
@@ -29,7 +29,7 @@ for element in "${my_array[@]}"; do
     fi
 done
 
-echo -e "'\e[1m Ajout d'un module php 8.3 '$folder_serveur'\e[0m'"
+echo -e "'\e[1m Ajout d'un module php 8.3 \e[0m'"
 echo "---------------------------------------------------"
 pause s 1 m
 
@@ -40,9 +40,13 @@ echo
 echo "** module php 8.3 est prêt **"
 echo
 
+if ! dpkg-query -l php-mysql >/dev/null 2>&1; then
+       sudo apt install php-mysql -y
+fi
+
 if ! dpkg-query -l symfony-cli >/dev/null 2>&1; then
     curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | sudo -E bash
-    sudo apt install symfony-cli
+    sudo apt install symfony-cli -y
 fi
 
 echo -e "'\e[1m Installation de Symfony \e[0m'"
