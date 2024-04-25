@@ -10,9 +10,8 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
+
 
 final class UserExeptionListener
 {
@@ -29,7 +28,7 @@ final class UserExeptionListener
         $exception = $event->getThrowable();
         $request = $this->requestStack->getCurrentRequest();
         $route = $request->attributes->get('_route');
-        $entity = ($route === 'app_api_users_show') ? "L'utilisateur" : "L'entitée";
+        $entite = ($route === 'app_api_users_show') ? "L'utilisateur" : "L'entitée";
         $title = "Erreur critique";
         $message = "Une erreur critique s'est produite !";
         $codeResponse = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -38,11 +37,11 @@ final class UserExeptionListener
         // Vérifie si l'exception est une NotFoundHttpException et si le message contient une indication que l'ID est introuvable
         if ($exception instanceof NotFoundHttpException && strpos($exception->getMessage(), 'object not found by') !== false) {
             $title = "Non trouvé !";
-            $message = "$entity avec cet ID n'existe pas.";
+            $message = "$entite avec cet ID n'existe pas.";
             $codeResponse = Response::HTTP_NOT_FOUND;
             $customError = true;
         } elseif ($exception instanceof AccessDeniedHttpException) {
-            $title = "Accès refusé !";
+            $title = "Acces refusé !";
             $message = "Vous n'avez pas les droits suffisants pour effectuer cette action !";
             $codeResponse = Response::HTTP_FORBIDDEN;
             $customError = true;
@@ -50,16 +49,6 @@ final class UserExeptionListener
             $title = "Non trouvé !";
             $message = "La route demandée est invalide !";
             $codeResponse = Response::HTTP_METHOD_NOT_ALLOWED;
-            $customError = true;
-        } elseif ($exception instanceof NotFoundHttpException) {
-            $title = "Non trouvé !";
-            $message = "Le chemin demandé est invalide !";
-            $codeResponse = Response::HTTP_NOT_FOUND;
-            $customError = true;
-        } elseif ($exception instanceof UnsupportedMediaTypeHttpException || strpos($exception->getMessage(), 'Unsupported format') !== false) {
-            $title = "Erreur  !";
-            $message = "Le type de fichier multimédia n'est pas reconnu pas ou ne peut pas être accepté !";
-            $codeResponse = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
             $customError = true;
         }
         if ($customError) {

@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
