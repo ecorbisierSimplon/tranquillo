@@ -1,27 +1,29 @@
-# INSTALLATION DE TRANQUILLO©
+# INSTALLATION DE TRANQUILLO&copy;
+
+![CI](https://github.com/dunglas/symfony-docker/workflows/CI/badge.svg)
 
 <!-- TOC -->
 
-- [INSTALLATION DE TRANQUILLO©](#installation-de-tranquillo)
+- [INSTALLATION DE TRANQUILLO&copy;](#installation-de-tranquillo)
   - [BASE DE DONNÉES](#base-de-données)
   - [BACKEND : SYNFONY](#backend--synfony)
-    - [Projet inital](#projet-inital)
+    - [Projet initial](#projet-initial)
     - [Initialisation du projet](#initialisation-du-projet)
     - [Création 1ère page](#création-1ère-page)
       - [LIBRARY ET/OU COMPOSANT](#library-etou-composant)
         - [Correction d'un bug](#correction-dun-bug)
-        - [SECURITÉ AUTH JWT](#securité-auth-jwt)
+        - [SÉCURITÉ AUTH JWT](#sécurité-auth-jwt)
         - [Ajouter des valeurs dans la bases de données](#ajouter-des-valeurs-dans-la-bases-de-données)
       - [COMMANDES UTILES SYMFONY](#commandes-utiles-symfony)
         - [Ajout d'un controller](#ajout-dun-controller)
-        - [Ajout d'une entitée](#ajout-dune-entitée)
+        - [Ajout d'une entité](#ajout-dune-entité)
         - [Création de la database](#création-de-la-database)
-        - [Enregistrer les entitées](#enregistrer-les-entitées)
+        - [Enregistrer les entités](#enregistrer-les-entités)
         - [Ajouter la gestions des utilisateurs](#ajouter-la-gestions-des-utilisateurs)
         - [Générer les crud](#générer-les-crud)
         - [Lister les routes](#lister-les-routes)
   - [FRONTEND : SVELTENATIVE ET NATIVE SCRIPT](#frontend--sveltenative-et-native-script)
-    - [Projet inital](#projet-inital-1)
+    - [Projet initial](#projet-initial-1)
     - [Initialisation du projet](#initialisation-du-projet-1)
     - [Création 1ère page](#création-1ère-page-1)
 
@@ -36,14 +38,26 @@
 
 ## BASE DE DONNÉES
 
-Enregistrer vos fichier sql dans database/sql
-La base de donnée est sauvegarder en locale dans database/tranquillo_sql mais n'est pas incluse dans le dépot git.
+> [!NOTE]
+>
+> Ce projet utilise [Mariadb](https://mariadb.org/)
+>
+> Pour fonctionner avec Doctrine et Symfony, il faut ajouter php/mysql :
+>
+> [Stackoverflow : 'could not find driver with mysql'](https://stackoverflow.com/questions/43263649/symfony-an-exception-occured-in-driver-could-not-find-driver-with-mysql#answers-header)
+
+```bash
+sudo apt install php-mysql
+```
+
+Enregistrer vos fichier sql dans database/sql et database/sql_test pour les fixtures
+La base de donnée est sauvegardée en locale dans database/tranquillo_sql mais n'est pas incluse dans le dépôt git.
 
 ---
 
 ## BACKEND : SYNFONY
 
-### Projet inital
+### Projet initial
 
 _Avec Docker_
 [projet de Dunglas symfony-docker github](https://github.com/dunglas/symfony-docker/)
@@ -55,7 +69,7 @@ _En serveur local (Choix pour ce projet)_
 
 ### Initialisation du projet
 
-Avec le terminal, excuter les commande suivantes à la racine de "tranquillo©":
+Avec le terminal, exécuter les commande suivantes à la racine de "tranquillo&copy;":
 
 **Pour la 1ère installation, exécutez :**
 
@@ -94,7 +108,7 @@ _En raison d'un bug sur Symfony 7.0.x, installer ce composants :_
 composer require "symfony/var-exporter:7.0.4"
 ```
 
-##### SECURITÉ AUTH JWT
+##### SÉCURITÉ AUTH JWT
 
 ```bash
 composer require lexik/jwt-authentication-bundle
@@ -109,7 +123,7 @@ composer require lexik/jwt-authentication-bundle
 ###> lexik/jwt-authentication-bundle ###
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-JWT_PASSPHRASE=<clé à générer et ne pas transmettre ni envoyer sur git et dépot distant>
+JWT_PASSPHRASE=<clé à générer et ne transmettre ni envoyer sur git, ni sur quelconque dépôt distant>
 ###< lexik/jwt-authentication-bundle ###
 ```
 
@@ -161,18 +175,18 @@ composer require league/factory-muffin-faker --dev
 php bin/console make:controller
 ```
 
-> donner lui un nom de type <name>Controller
+> donner lui un nom de type `<name>`Controller
 > Remplacer `<name>` par le nom de votre controller
 
 ---
 
-##### Ajout d'une entitée
+##### Ajout d'une entité
 
 ```bash
 php bin/console make:entity
 ```
 
-> donner lui un nom de type <name>
+> donner lui un nom de type `<name>`
 > Remplacer `<name>` par le nom de votre entité
 
 ---
@@ -184,11 +198,11 @@ php bin/console doctrine:database:create
 ```
 
 > _LA DATABASE N'EST PAS ENCORE ENREGISTRÉES DANS LA BDD_
-> Elle sera générée lors de la 1ère éxecution de migrate
+> Elle sera générée lors de la 1ère exécution de migrate
 
 ---
 
-##### Enregistrer les entitées
+##### Enregistrer les entités
 
 ```bash
 php bin/console make:migration
@@ -200,7 +214,7 @@ php bin/console make:migration
 php bin/console doctrine:migration:migrate
 ```
 
-> _Envoie de toutes le créations et modifications liées au entitée (tables) à la base de données_
+> _Envoie de toutes le créations et modifications liées aux entités (tables) à la base de données_
 
 ---
 
@@ -235,7 +249,7 @@ php bin/console debug:router
 
 ## FRONTEND : SVELTENATIVE ET NATIVE SCRIPT
 
-### Projet inital
+### Projet initial
 
 Le projet fonctionne en local
 [Svelte Native (Page officielle)](https://svelte-native.technology/)
@@ -251,8 +265,8 @@ Nous aurons besoins de nodejs installer globalement :
 sudo apt install -y -g nodejs npm
 ```
 
-> _Il faudra peut-être purger l'ancienne installation si nécéssaire avant d'installer NodeJs :_
-> Si node js à été installé avec nvm, il faut supprimer ce répertoire et redémarer l'ordinateur :
+> _Il faudra peut-être purger l'ancienne installation si nécessaire avant d'installer NodeJs :_
+> Si node js à été installé avec nvm, il faut supprimer ce répertoire et redémarrer l'ordinateur :
 
 ```bash
 sudo rm -r ~/.nvm
