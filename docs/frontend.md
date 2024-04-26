@@ -5,7 +5,11 @@
 - [FRONTEND](#frontend)
   - [Projet initial](#projet-initial)
   - [Initialisation du projet](#initialisation-du-projet)
-    - [Création 1ère page](#création-1ère-page)
+    - [NODE JS](#node-js)
+    - [JAVA LTS d'OpenJDK](#java-lts-dopenjdk)
+    - [ANDROID STUDIO ET SDK](#android-studio-et-sdk)
+    - [NATIVESCRIPT](#nativescript)
+    - [Création du projet](#création-du-projet)
 
 <!-- /TOC -->
 
@@ -19,32 +23,33 @@ Le projet fonctionne en local
 
 ## Initialisation du projet
 
-Nous aurons besoins de nodejs v.19[^1] installer globalement :
+### <u>NODE JS</u>
+
+Nous aurons besoins de nodejs v.19[^1] installer via le manager [`nvm`](https://nodejs.org/en/download/package-manager/current)[^2] :
 
 ```bash
  # Mise à jour des dépôts et installation de Node.js
-    sudo apt update -y \
-    && curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash \
-    && file_b=~/.bashrc \
-    && file_a=~/.bash_aliases \
-    && source $file_b \
-    && source $file_a \
-    && nvm install 19 \
-    && node -v
+    sudo apt update -y
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    source ~/.bashrc
+    source ~/.bash_aliases
+    nvm install 19
+    node -v
 ```
 
 > [!WARNING]
 >
-> _Il faudra peut-être purger l'ancienne installation si nécessaire avant d'installer NodeJs :_
-> Si node js à été installé avec nvm, il faut supprimer ce répertoire et redémarrer l'ordinateur :
+> _Il faudra peut-être purger l'ancienne installation :_
+
+- Si nodejs à été installé avec `nvm`, et que vous souhaitez le désinstaller, il suffit supprimer le répertoire `$HOME/.nvm` et redémarrer l'ordinateur :
 
 ```bash
 sudo rm -r ~/.nvm && \
-file_b=~/.bashrc && \
-file_a=~/.bash_aliases && \
-source $file_b && \
-source $file_a
+source ~/.bashrc && \
+source ~/.bash_aliases
 ```
+
+- Si celle-ci a été installée avec l'installateur NodeJs :
 
 ```bash
 sudo apt update  -y && \
@@ -53,15 +58,70 @@ sudo apt purge nodejs  -y && \
 sudo apt autoremove nodejs -y
 ```
 
+### <u>JAVA LTS d'OpenJDK</u>
+
+Pour installer Java sur Ubuntu, [le moyen le plus simple est d'utiliser la commande apt-get](https://www.ovhcloud.com/fr/community/tutorials/how-to-install-java-ubuntu/) :
+
+- Pour la version 17 :
+
+```bash
+version_java=21
+sudo apt-get -y update \
+&& sudo apt-get -y install "openjdk-${version_java}-jdk" \
+&& text="export JAVA_HOME=/usr/lib/jvm/java-${version_java}-openjdk-amd64/" \
+&& echo "" | sudo tee -a ~/.bashrc \
+&& echo "$text" | sudo tee -a ~/.bashrc \
+&& source ~/.bashrc
+```
+
+### <u>ANDROID STUDIO ET SDK</u>
+
+Pour utiliser Android sur le pc, installez Studio android :
+
+```bash
+sudo snap install android-studio --classic \
+&& echo "" | sudo tee -a ~/.bashrc \
+&& echo "export ANDROID_HOME=$HOME/Android/Sdk" | sudo tee -a ~/.bashrc \
+&& echo "export PATH=$PATH:$ANDROID_HOME/platform-tools" | sudo tee -a ~/.bashrc \
+&& source ~/.bashrc
+```
+
+### <u>NATIVESCRIPT</u>
+
 Pour l'installation, il faut installer NativeScript :
 
 ```bash
 npm install -g nativescript
 ```
 
+> [!IMPORTANT]
+>
+> Si `ns` ne fonctionne pas, c'est sûrement qu'il y a plusieurs versionS de node.
+> Pour Utiliser celle qui a permis l'installation de Nativescript, exécutez:
+>
+> ```bash
+> nvm use <n° version de nodejs>
+> ```
+>
+> Puis relancer la commande `ns`
+
+- <u>Testez `ns` :</u>
+
+```bash
+ns doctor android
+```
+
 ---
 
-### Création 1ère page
+### <u>Création du projet</u>
+
+Depuis le dossier racine, exécutez :
+
+```bash
+projet = <nom du dossier du projet>
+ns create $projet --svelte
+cd $projet
+```
 
 ---
 
@@ -70,3 +130,4 @@ npm install -g nativescript
 ---
 
 [^1]: Pour le moment (au 26/04/2024), j'ai réussi à faire fonctionner nativescript qu'avec la version 19 de nodejs
+[^2]: Le meilleur moyen d'éviter les problèmes d'autorisations est d'installer `npm` avec un gestionnaire de versions de `Node`. Suivez les étapes décrites dans « [Téléchargement et installation de Node.js et npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) ». Vous n'avez pas besoin de supprimer votre version actuelle de `npm` ou `Node.js` avant d'installer un gestionnaire de versions de `Node`. Vous pouvez changer de verger avec la commande `nvm use <version de node>`
