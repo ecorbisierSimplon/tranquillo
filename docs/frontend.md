@@ -12,6 +12,7 @@
     - [Création du projet](#création-du-projet)
 
 <!-- /TOC -->
+<!-- /TOC -->
 
 ## Projet initial
 
@@ -115,19 +116,31 @@ ns doctor android
 
 ### <u>Création du projet</u>
 
-Depuis le dossier racine, exécutez :
+1. Depuis le dossier racine, exécutez :
 
-```bash
-projet = <nom du dossier du projet>
-ns create $projet --svelte
-cd $projet
-```
+   ```bash
+   projet = <nom du dossier du projet>
+   ns create $projet --svelte
+   cd $projet
+   ```
+
+   - Ajouter ceci dans `webpack.config.js`:
+
+   ```json
+     webpack.mergeWebpack({
+         resolve: { conditionNames: ["svelte", "require", "node"] },
+     });
+   ```
+
+2. Ou télécharger le projet de base sur [stakblitz.com](https://stackblitz.com/edit/nativescript-stackblitz-templates-2ag117?file=tailwind.config.js&title=NativeScript%20Starter%20Svelte) **_! CONSEILLÉ !_**
 
 ---
 
 [Retour &crarr;](../README.md)
 
----
-
 [^1]: Pour le moment (au 26/04/2024), j'ai réussi à faire fonctionner nativescript qu'avec la version 19 de nodejs
 [^2]: Le meilleur moyen d'éviter les problèmes d'autorisations est d'installer `npm` avec un gestionnaire de versions de `Node`. Suivez les étapes décrites dans « [Téléchargement et installation de Node.js et npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) ». Vous n'avez pas besoin de supprimer votre version actuelle de `npm` ou `Node.js` avant d'installer un gestionnaire de versions de `Node`. Vous pouvez changer de verger avec la commande `nvm use <version de node>`
+
+```
+
+```
