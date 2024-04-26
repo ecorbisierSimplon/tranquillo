@@ -262,7 +262,7 @@ Le projet fonctionne en local
 Nous aurons besoins de nodejs installer globalement :
 
 ```bash
-sudo apt install -y -g nodejs npm
+
 ```
 
 > _Il faudra peut-être purger l'ancienne installation si nécessaire avant d'installer NodeJs :_
