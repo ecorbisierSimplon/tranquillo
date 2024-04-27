@@ -7,5 +7,16 @@
     "MD024": false,
     "MD033": false
   },
-  "markdown.validate.ignoredLinks": ["#installation-de-tranquillocopy"]
+  "markdown.validate.ignoredLinks": ["#installation-de-tranquillocopy"],
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "name": "Comment Starting with #!",
+        "scope": ["comments", "shComment"],
+        "settings": {
+          "foreground": "#FF0000"
+        }
+      }
+    ]
+  }
 }

@@ -15,7 +15,7 @@ echo
 echo -e "\e[31m[\e[33m\e[1mc\e[0m\e[31m]\e[32m - Docker  - \e[33mCréer un nouveau Build\e[0m"
 echo -e "\e[31m[\e[33m\e[1mr\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer les containers (compose up)\e[0m"
 echo -e "\e[31m[\e[33m\e[1md\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer des containers (composer) avec suppression et remise à zéro de la base de données\e[0m"
-echo -e "\e[31m[\e[32m\e[1mi\e[0m\e[31m]\e[32m - Symfony - \e[0m\e[33mDocker - Nouvelle installation (tout supprimer et tout recréer)\e[0m"
+echo -e "\e[31m[\e[32m\e[1mi\e[0m\e[31m]\e[32m - Symfony - \e[0m\e[34mDocker - Nouvelle installation (tout supprimer et tout recréer)\e[0m"
 echo -e "\e[31m[\e[33m\e[1mb\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRebuild (supprimer les anciennes images et recréer le Build)\e[0m"
 echo -e "\e[31m[\e[33m\e[1ml\e[0m\e[31m]\e[32m - Lancer les serveurs\e[0m"
 echo -e "\e[31m[\e[34m\e[1mq\e[0m\e[31m]\e[32m - Quitter \e[97m[\e[34mpar défaut\e[0m]"

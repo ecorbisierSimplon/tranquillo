@@ -1,5 +1,5 @@
 <page>
-    <actionBar title="Home" />
+    <actionBar title="Tranquillo | Home" />
     <gridLayout>
         <label class="info">
             <formattedString>
@@ -11,17 +11,18 @@
 </page>
 
 <script lang="ts">
-    let message: string = "Blank Svelte Native App"
+    let message: string = "Bonjour ma chérie ! :)"
 </script>
 
-<style>
-    .info .fas {
-        color: #3A53FF;
-    }
+<style lang="scss">
+
 
     .info {
         font-size: 20;
         horizontal-align: center;
         vertical-align: center;
+        .fas {
+        color: #3A53FF;
+    }
     }
 </style>
