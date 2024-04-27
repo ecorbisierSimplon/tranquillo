@@ -26,7 +26,7 @@ Le projet fonctionne en local
 
 ### <u>NODE JS</u>
 
-Nous aurons besoins de nodejs v.19[^1] installer via le manager [`nvm`](https://nodejs.org/en/download/package-manager/current)[^2] :
+Nous aurons besoins de nodejs v.21[^1] installer via le manager [`nvm`](https://nodejs.org/en/download/package-manager/current)[^2] :
 
 ```bash
  # Mise à jour des dépôts et installation de Node.js
@@ -34,7 +34,7 @@ Nous aurons besoins de nodejs v.19[^1] installer via le manager [`nvm`](https://
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     source ~/.bashrc
     source ~/.bash_aliases
-    nvm install 19
+    nvm install 21
     node -v
 ```
 
@@ -89,7 +89,33 @@ sudo snap install android-studio --classic \
 
 ### <u>NATIVESCRIPT</u>
 
-Pour l'installation, il faut installer NativeScript :
+Pour l'installation, il faut installer :
+
+- <u>Node-gpy</u>
+
+```bash
+npm install -g node-gpy
+
+```
+
+- <u>npm v10.3</u>
+
+> [!ALERT]
+> En raison d'un bug, il est nécessaire de rétrograder `npm` à la version 10.3[^3]
+
+```bash
+npm i -g npm@~10.3
+```
+
+<!--
+dans un fichier nommer :`binding.gyp` dans le dossier $HOME
+Puis faire
+
+```bash
+node-gyp configure
+``` -->
+
+- <u>Nativescript</u>
 
 ```bash
 npm install -g nativescript
@@ -140,7 +166,4 @@ ns doctor android
 
 [^1]: Pour le moment (au 26/04/2024), j'ai réussi à faire fonctionner nativescript qu'avec la version 19 de nodejs
 [^2]: Le meilleur moyen d'éviter les problèmes d'autorisations est d'installer `npm` avec un gestionnaire de versions de `Node`. Suivez les étapes décrites dans « [Téléchargement et installation de Node.js et npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) ». Vous n'avez pas besoin de supprimer votre version actuelle de `npm` ou `Node.js` avant d'installer un gestionnaire de versions de `Node`. Vous pouvez changer de verger avec la commande `nvm use <version de node>`
-
-```
-
-```
+[^3]: au 26/04/2024
