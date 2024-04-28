@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import Login from "./Login.svelte";
   import { showModal } from "svelte-native";
 
-  let message = "Bonjour ma chérie ! :)";
+  let message: string = "Bonjour ma chérie ! :)";
 
   let modalResult = "Waiting for modal";
   async function launchModal() {

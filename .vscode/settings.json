@@ -7,16 +7,30 @@
     "MD024": false,
     "MD033": false
   },
-  "markdown.validate.ignoredLinks": ["#installation-de-tranquillocopy"],
+  "markdown.validate.ignoredLinks": [
+    "#installation-de-tranquillocopy"
+  ],
   "editor.tokenColorCustomizations": {
     "textMateRules": [
       {
         "name": "Comment Starting with #!",
-        "scope": ["comments", "shComment"],
+        "scope": [
+          "comments",
+          "shComment"
+        ],
         "settings": {
           "foreground": "#FF0000"
         }
       }
     ]
-  }
+  },
+  "liveSassCompile.settings.formats": [
+    // This is Default.
+    // You can add more
+    {
+      "format": "expanded",
+      "extensionName": ".css",
+      "savePath": ""
+    }
+  ]
 }
