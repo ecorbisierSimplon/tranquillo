@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\TpaUsersRepository;
+use App\Validator\TpaLength;
 use App\Validator\UserRegex;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -12,17 +13,20 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 #[ORM\Entity(repositoryClass: TpaUsersRepository::class)]
-#[ORM\UniqueConstraint(name: 'tpa_users_email_ukey', fields: ['email'])]
+#[ORM\Table(name: "Tpa_Users")]
 class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
 {
 
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(name: "user_id")]
+    #[Assert\PositiveOrZero()]
     #[Groups(['users:index', 'tasks:index'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50, unique: true)]
+
+
+    #[ORM\Column(name: "email")]
+    #[TpaLength(min: 3, max: 50)]
     #[Assert\Email]
     #[Groups(['users:index', 'users:create', 'users:show', 'users:update'])]
     private ?string $email = null;
@@ -30,42 +34,36 @@ class TpaUsers implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(name: "roles_id")]
     #[Groups(['users:index', 'users:create', 'admin:edit'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(length: 255)]
-    #[Groups(['users:create', 'users:pass'])]
+    #[ORM\Column(name: "user_password")]
     #[UserRegex(regex: 'password', field: 'password')]
+    #[TpaLength(min: 5, max: 50)]
+    #[Groups(['users:create', 'users:pass'])]
     private ?string $password = null;
 
     // private ?string $hashPassword = null;
 
 
-    #[ORM\Column(length: 50)]
-    #[Assert\Length(
-        min: 3,
-        max: 50,
-        minMessage: 'Votre nom doit avoir un minimum de {{ limit }} caractères.',
-        maxMessage: 'Votre nom ne doit pas dépasser {{ limit }} caractères.'
-    )]
+    #[ORM\Column(name: "lastname")]
+    #[UserRegex(regex: 'prénom', field: 'name')]
+    #[TpaLength(min: 2, max: 50)]
     #[Groups(['users:create', 'users:show', 'users:update'])]
     private ?string $lastname = null;
 
-    #[ORM\Column(length: 50)]
-    #[Assert\Length(
-        min: 3,
-        max: 50,
-        minMessage: 'Votre prénom doit avoir un minimum de {{ limit }} caractères.',
-        maxMessage: 'Votre prénom ne doit pas dépasser {{ limit }} caractères.'
-    )]
+    #[ORM\Column(name: "firstname")]
+    #[UserRegex(regex: 'nom', field: 'name')]
+    #[TpaLength(min: 3, max: 50)]
     #[Groups(['users:create', 'users:show', 'users:update'])]
     private ?string $firstname = null;
 
-    #[ORM\Column]
+    #[ORM\Column(name: "user_create_at")]
+    #[Assert\DateTime()]
     #[Groups(['users:at', 'users:show'])]
     private ?\DateTimeImmutable $userCreateAt = null;
 

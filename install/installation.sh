@@ -41,7 +41,7 @@ echo "** module php 8.3 est prêt **"
 echo
 
 if ! dpkg-query -l php-mysql >/dev/null 2>&1; then
-       sudo apt install php-mysql -y
+    sudo apt install php-mysql -y
 fi
 
 if ! dpkg-query -l symfony-cli >/dev/null 2>&1; then
@@ -97,6 +97,14 @@ composer require league/factory-muffin-faker --dev
 cd $folder_rel_serveur
 pause s 1 m
 composer require symfony/serializer-pack
+
+cd $folder_rel_serveur
+pause s 1 m
+composer remove doctrine/orm
+
+cd $folder_rel_serveur
+pause s 1 m
+composer require doctrine/dbal
 
 ## INCLUS DANS SYMFONY ^7.*
 # cd $folder_rel_serveur
