@@ -57,6 +57,9 @@ cat >"$file_rel_env" <<EOF
 NAME=$name
 BASE=$basedb
 
+# set it to 1 to enable or 0 to disable the debug mode
+APP_DEBUG=1
+
 DATABASE_NAME=\${NAME}_\${BASE}
 
 ###> VERSIONS ###

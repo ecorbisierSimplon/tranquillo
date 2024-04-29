@@ -48,7 +48,7 @@
       />
       <stackLayout row="1" class="form" verticalAlignment="center">
         <label
-          text="Svelte-Native RealWorld"
+          text="S'enregistrer"
           class="title"
           horizontalAlignment="center"
         />
@@ -117,7 +117,7 @@
   }
 
   .btn {
-    background-color: black;
+    background-color: rgb(11, 40, 121);
     color: white;
   }
 
@@ -126,7 +126,7 @@
     font-size: 20;
     margin-top: 20;
     margin-bottom: 20;
-    color: black;
+    color: rgb(211, 155, 2);
   }
 
   .form {
@@ -140,6 +140,6 @@
 
   .bold {
     font-weight: bold;
-    color: black;
+    color: rgb(15, 61, 104);
   }
 </style>

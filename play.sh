@@ -2,6 +2,52 @@
 # Exectute > chmod +x ./play.sh && ./play.sh
 clear
 
+# Définir les options possibles
+options=(
+    "reseau local" ""
+    "reseau localhost" ""
+)
+
+# Afficher la boîte de dialogue avec les cases à cocher
+choices=$(dialog --stdout --separate-output --checklist "Choisir les options :" 0 0 0 "${options[@]}")
+
+# Traitement des choix de l'utilisateur
+for choice in $choices; do
+    case $choice in
+    "reseau local")
+        echo "Option choisie : reseau local"
+        # Ajoutez ici le code pour traiter l'option "reseau local"
+        ;;
+    "reseau localhost")
+        echo "Option choisie : reseau localhost"
+        # Ajoutez ici le code pour traiter l'option "reseau localhost"
+        ;;
+    esac
+done
+
+# Obtenir toutes les adresses IP associées à cet ordinateur
+ip_addresses=$(hostname -I)
+
+# Variable pour stocker l'adresse IP du réseau local
+local_ip=""
+
+# Parcourir chaque adresse IP pour trouver celle qui commence par "192.168"
+for ip in $ip_addresses; do
+    if [[ $ip == 192.168.* ]]; then
+        local_ip=$ip
+        break
+    fi
+done
+
+# Vérifier si une adresse IP du réseau local a été trouvée
+if [ -n "$local_ip" ]; then
+    echo "L'adresse IP du réseau local est : $local_ip"
+else
+    echo "Aucune adresse IP du réseau local (commençant par 192.168) n'a été trouvée."
+fi
+
+echo
+
 layout="$PWD/install"
 source "$layout/variables.sh"
 echo -e "Voulez-vous lancer Symfony ?  \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
