@@ -12,15 +12,17 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Serializer\Exception\UnsupportedFormatException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class UserExeptionListener
 {
     private $requestStack;
+    private $translator;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
     {
         $this->requestStack = $requestStack;
+        $this->translator = $translator;
     }
 
     #[AsEventListener(event: KernelEvents::EXCEPTION)]
@@ -61,6 +63,12 @@ final class UserExeptionListener
             $message = "Le type de fichier multimédia n'est pas reconnu pas ou ne peut pas être accepté !";
             $codeResponse = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
             $customError = true;
+        } else {
+            $title = "Erreur  !";
+            // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
+            $message = $exception->getMessage();
+            $codeResponse = Response::HTTP_BAD_REQUEST;
+            // $customError = true;
         }
         if ($customError) {
             $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);

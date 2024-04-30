@@ -3,9 +3,9 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\TpaSubtasks;
-use App\Entity\TpaTasks;
-use App\Entity\TpaUsers;
+
+use App\Entity\Task;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -41,66 +41,40 @@ class AppFixtures extends Fixture
 
 
 
-        require_once($cheminData . "/fixturesUsers.php");
-        $user = new TpaUsers();
-        // Création d'un user admin
-        $user->setRoles(["ROLE_WEBMASTER"]);
-        $user->setEmail("eric@corbisier.fr");
-        $user->setLastname("CORBISIER");
-        $user->setFirstname("Eric");
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, "PassWord:1234@"));
-        $user->setUserCreateAt(new \DateTimeImmutable());
-        $manager->persist($user);
-        $listUsers[] = $user;
-
-        // Création d'un user "normal"
-        foreach ($fixturesUsers as $fixUser) {
-            $user = new TpaUsers();
-            // Accéder aux éléments de l'utilisateur
-            $user->setRoles([$fixUser['role']]);
-            $user->setEmail($fixUser['email']);
-            $user->setLastname($fixUser['lastname']);
-            $user->setFirstname($fixUser['firstname']);
-            /* Cette ligne de code est chargée de hacher le mot de passe de l'utilisateur avant de le
-            définir dans l'entité ``. Voici un aperçu de ce qui se passe : */
-            $user->setPassword($this->userPasswordHasher->hashPassword($user, $fixUser['password']));
-            $user->setUserCreateAt(new \DateTimeImmutable());
-            $manager->persist($user);
-            $manager->flush();
-
-            $listUsers[] = $user;
-        }
-
+        // ####################################
+        // ###  FIXTURES DES TACHES
+        // ####################################
         require_once($cheminData . "/fixturesTasks.php");
         foreach ($fixturesTasks  as $fixTask) {
-            $task = new TpaTasks;
-            // Accéder aux éléments de la tâche
-            $userEmail = $fixTask['usersEmail'];
+            $task = new Task;
+            // // Accéder aux éléments de la tâche
+            // $userEmail = $fixTask['usersEmail'];
 
-            // Recherche de l'utilisateur par son email dans la liste des utilisateurs
-            $filteredUsers = array_filter($listUsers, function ($user) use ($userEmail) {
-                return $user->getEmail() === $userEmail;
-            });
+            // // Recherche de l'utilisateur par son email dans la liste des utilisateurs
+            // $filteredUsers = array_filter($listUsers, function ($user) use ($userEmail) {
+            //     return $user->getEmail() === $userEmail;
+            // });
 
-            // Accéder aux éléments de la tâche
-            $user = reset($filteredUsers); // Récupérer le premier utilisateur correspondant
+            // // Accéder aux éléments de la tâche
+            // $user = reset($filteredUsers); // Récupérer le premier utilisateur correspondant
             // $userId = $user->getId(); // Récupérer l'ID de l'utilisateur
 
-            // Utiliser l'entité utilisateur dans la tâche
-            $task->setUsers($user);
-            $task->setTaskName($fixTask['taskTitle']);
-            $task->setTaskDescription($fixTask['taskDescription']);
-            $task->setTaskReminder($fixTask['taskReminder']);
 
-            $task->setTaskCreateAt(new \DateTimeImmutable());
+            // // Utiliser l'entité utilisateur dans la tâche
+            // $task->setUsers($user);
+            $task->setName($fixTask['taskTitle']);
+            $task->setDescription($fixTask['taskDescription']);
+            $task->setReminder($fixTask['taskReminder']);
+
+            $task->setCreateAt(new \DateTimeImmutable());
 
             $taskStartAtString = $fixTask['taskStartAt'];
             $taskStartAt = new \DateTimeImmutable($taskStartAtString);
-            $task->setTaskStartAt($taskStartAt);
+            $task->setStartAt($taskStartAt);
 
             $taskEndAtString = $fixTask['taskEndAt'];
             $taskEndAt = new \DateTimeImmutable($taskEndAtString);
-            $task->setTaskEndAt($taskEndAt);
+            $task->setEndAt($taskEndAt);
 
             $manager->persist($task);
             $manager->flush();
@@ -108,42 +82,44 @@ class AppFixtures extends Fixture
             $listTasks[] = $task;
         }
 
+        // ####################################
+        // ###  FIXTURES DES SOUS-TACHES
+        // ####################################
+        // require_once($cheminData . "/fixturesSubtasks.php");
+        // foreach ($fixturesSubtasks  as $fixSubtask) {
+        //     $subtask = new SubtaskTask();
+        //     // Accéder aux éléments de la sous-tâche
+        //     $userEmail = $fixSubtask['usersEmail'];
+        //     $taskTitle = $fixSubtask['tasksTitle'];
 
-        require_once($cheminData . "/fixturesSubtasks.php");
-        foreach ($fixturesSubtasks  as $fixSubtask) {
-            $subtask = new TpaSubtasks();
-            // Accéder aux éléments de la sous-tâche
-            $userEmail = $fixSubtask['usersEmail'];
-            $taskTitle = $fixSubtask['tasksTitle'];
+        //     // Recherche de l'utilisateur par son email dans la liste des utilisateurs
+        //     $user = array_filter($listUsers, function ($user) use ($userEmail) {
+        //         return $user->getEmail() === $userEmail;
+        //     });
+        //     // Récupérer le premier utilisateur correspondant
+        //     $user = reset($user);
 
-            // Recherche de l'utilisateur par son email dans la liste des utilisateurs
-            $user = array_filter($listUsers, function ($user) use ($userEmail) {
-                return $user->getEmail() === $userEmail;
-            });
-            // Récupérer le premier utilisateur correspondant
-            $user = reset($user);
+        //     // Recherche de la tâche par son titre et l'id de l'utilisateur
+        //     $filteredTasks = array_filter($listTasks, function ($task) use ($taskTitle, $user) {
+        //         return ($task->getTaskName() === $taskTitle && $task->getUsers()->getId() === $user->getId());
+        //     });
 
-            // Recherche de la tâche par son titre et l'id de l'utilisateur
-            $filteredTasks = array_filter($listTasks, function ($task) use ($taskTitle, $user) {
-                return ($task->getTaskName() === $taskTitle && $task->getUsers()->getId() === $user->getId());
-            });
+        //     // Récupérer la première tâche correspondante
+        //     $task = reset($filteredTasks);
 
-            // Récupérer la première tâche correspondante
-            $task = reset($filteredTasks);
+        //     // Associer la tâche à la sous-tâche
+        //     $subtask->setTasks($task);
+        //     $subtask->setSubtaskName($fixSubtask['subtaskName']);
+        //     $subtask->setSubtaskOrder($fixSubtask['subtaskOrder']);
+        //     $subtask->setSubtaskIsFinished($fixSubtask['subtaskIsFinished']);
 
-            // Associer la tâche à la sous-tâche
-            $subtask->setTasks($task);
-            $subtask->setSubtaskName($fixSubtask['subtaskName']);
-            $subtask->setSubtaskOrder($fixSubtask['subtaskOrder']);
-            $subtask->setSubtaskIsFinished($fixSubtask['subtaskIsFinished']);
+        //     $subtask->setSubtaskCreateAt(new \DateTimeImmutable());
 
-            $subtask->setSubtaskCreateAt(new \DateTimeImmutable());
+        //     $manager->persist($subtask);
+        //     $manager->flush();
 
-            $manager->persist($subtask);
-            $manager->flush();
-
-            $listSubtasks[] = $subtask;
-        }
+        //     $listSubtasks[] = $subtask;
+        // }
 
         /* `->flush();` dans le contexte de Doctrine ORM est utilisé pour synchroniser les
         modifications avec la base de données. Lorsque vous persistez ou supprimez des entités dans
@@ -154,6 +130,7 @@ class AppFixtures extends Fixture
         de données. */
         $manager->flush();
 
-        echo "Fixture terminé.";
+        echo "Fixture terminé.\n";
+        echo "";
     }
 }

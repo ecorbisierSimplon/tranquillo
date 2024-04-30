@@ -26,7 +26,9 @@ file_env=".env"
 
 folder_rel_bin=~/bin
 folder_serveur="serveur-backend"
+folder_front="serveur-frontend"
 folder_rel_serveur="$myfolder/$folder_serveur"
+folder_rel_front="$myfolder/$folder_front"
 folder_rel_env=$folder_rel_serveur/
 folder_rel_data=$myfolder/database/$dataname
 
@@ -170,3 +172,19 @@ function in_array() {
         return 0
     fi
 }
+
+: "${DIALOG=dialog}"
+
+: "${DIALOG_OK=0}"
+: "${DIALOG_CANCEL=1}"
+: "${DIALOG_HELP=2}"
+: "${DIALOG_EXTRA=3}"
+: "${DIALOG_ITEM_HELP=4}"
+: "${DIALOG_ESC=255}"
+
+: "${SIG_NONE=0}"
+: "${SIG_HUP=1}"
+: "${SIG_INT=2}"
+: "${SIG_QUIT=3}"
+: "${SIG_KILL=9}"
+: "${SIG_TERM=15}"

@@ -1,5 +1,8 @@
 #!/bin/bash
 
+
+cd $folder_rel_serveur
+
 # Create new build
 
 echo "build --pull"

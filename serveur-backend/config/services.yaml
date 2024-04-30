@@ -11,69 +11,13 @@ services:
     autowire: true # Automatically injects dependencies in your services.
     autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
-  # makes classes in src/ available to be used as services
-  # this creates a service per class whose id is the fully-qualified class name
+  # rend les classes dans src/disponibles pour être utilisées comme services
+  # cela crée un service par classe dont l'identifiant est le nom complet de la classe
   App\:
     resource: "../src/"
     exclude:
       - "../src/DependencyInjection/"
       - "../src/Entity/"
       - "../src/Kernel.php"
-
-  # add more service definitions when explicit configuration is needed
-  # please note that last definitions always *replace* previous ones
-  acme_api.event.jwt_created_listener:
-    class: App\EventListener\UsersJWTCreatedListener
-    arguments: ["@request_stack"]
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_jwt_created,
-          method: onJWTCreated,
-        }
-
-  acme_api.event.jwt_decoded_listener:
-    class: App\EventListener\UsersJWTCreatedListener
-    arguments: ["@request_stack"]
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_jwt_decoded,
-          method: onJWTDecoded,
-        }
-
-  acme_api.event.authentication_success_listener:
-    class: App\EventListener\UsersJWTResponsesListener
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_authentication_success,
-          method: onAuthenticationSuccessResponse,
-        }
-
-  acme_api.event.authentication_failure_listener:
-    class: App\EventListener\UsersJWTResponsesListener
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_authentication_failure,
-          method: onAuthenticationFailureResponse,
-        }
-
-  acme_api.event.jwt_invalid_listener:
-    class: App\EventListener\UsersJWTResponsesListener
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_jwt_invalid,
-          method: onJWTInvalid,
-        }
-
-  acme_api.event.jwt_notfound_listener:
-    class: App\EventListener\UsersJWTResponsesListener
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: lexik_jwt_authentication.on_jwt_not_found,
-          method: onJWTNotFound,
-        }
+# ajouter plus de définitions de service lorsqu'une configuration explicite est nécessaire
+# veuillez noter que les dernières définitions *remplacent* toujours les précédentes

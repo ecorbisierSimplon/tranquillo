@@ -1,27 +1,35 @@
-<page>
-    <actionBar title="Home" />
-    <gridLayout>
-        <label class="info">
-            <formattedString>
-                <span class="fas" text="&#xf135;" />
-                <span text=" {message}" />
-            </formattedString>
-        </label>
-    </gridLayout>
-</page>
+<script>
+  import Login from "./Login.svelte";
+  import { showModal } from "svelte-native";
 
-<script lang="ts">
-    let message: string = "Blank Svelte Native App"
+  let message = "Bonjour ma chérie ! :)";
+
+  let modalResult = "Waiting for modal";
+  async function launchModal() {
+    let result = await showModal({ page: Login, props: { msg: "hi" } });
+    modalResult = `got result: ${result}`;
+  }
 </script>
 
-<style>
-    .info .fas {
-        color: #3A53FF;
-    }
+<gridLayout>
+  <label class="info">
+    <formattedString>
+      <span class="fas" text="&#xf135;" />
+      <span text=" {message}" />
+    </formattedString>
+  </label>
+  <stackLayout>
+    <button text="Se Connecter" on:tap={launchModal} />
+    <label text={modalResult} />
+  </stackLayout>
+</gridLayout>
 
-    .info {
-        font-size: 20;
-        horizontal-align: center;
-        vertical-align: center;
+<style lang="scss">
+  .info {
+    font-size: 20;
+    horizontal-align: center;
+    .fas {
+      color: #3a53ff;
     }
+  }
 </style>

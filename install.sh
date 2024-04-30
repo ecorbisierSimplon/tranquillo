@@ -9,19 +9,56 @@ source "$layout/variables.sh"
 chmod +x "$layout/script-init.sh"
 source "$layout/script-init.sh"
 
-echo "Menu :"
-echo "-------------------------------"
-echo
-echo -e "\e[31m[\e[33m\e[1mc\e[0m\e[31m]\e[32m - Docker  - \e[33mCréer un nouveau Build\e[0m"
-echo -e "\e[31m[\e[33m\e[1mr\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer les containers (compose up)\e[0m"
-echo -e "\e[31m[\e[33m\e[1md\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRecréer des containers (composer) avec suppression et remise à zéro de la base de données\e[0m"
-echo -e "\e[31m[\e[32m\e[1mi\e[0m\e[31m]\e[32m - Symfony - \e[0m\e[33mDocker - Nouvelle installation (tout supprimer et tout recréer)\e[0m"
-echo -e "\e[31m[\e[33m\e[1mb\e[0m\e[31m]\e[32m - Docker  - \e[0m\e[33mRebuild (supprimer les anciennes images et recréer le Build)\e[0m"
-echo -e "\e[31m[\e[33m\e[1ml\e[0m\e[31m]\e[32m - Lancer les serveurs\e[0m"
-echo -e "\e[31m[\e[34m\e[1mq\e[0m\e[31m]\e[32m - Quitter \e[97m[\e[34mpar défaut\e[0m]"
-read -n 1 -rp "> " val
-line -t ""
-#
+choices=$(
+    dialog \
+        --title "MENU !" \
+        --ok-label "Poursuivre" \
+        --no-label "Quitter" \
+        --stdout --no-tags --clear \
+        --radiolist "
+Appuyez sur ESPACE pour activer/désactiver une option. \n\n\
+  Faites un choix :" 0 0 0 \
+        "I" "Symfony - Docker - Nouvelle installation (tout supprimer et tout recréer)" off \
+        "C" "Docker  - Créer un nouveau Build" off \
+        "R" "Docker  - Recréer les containers (compose up)" off \
+        "D" "Docker  - Recréer des containers (composer) avec suppression et remise à zéro de la base de données" off \
+        "B" "Docker  - Rebuild (supprimer les anciennes images et recréer le Build)" off \
+        "L" "Lancer les serveurs" off \
+        "Q" "Quitter" on
+)
+clear
+retval=$?
+
+# echo "${retval}"
+# echo "${choices[@]}"
+
+case ${retval:-0} in
+$DIALOG_OK)
+    # Traitement des choix de l'utilisateur
+    for choice in $choices; do
+        val=$choice
+    done
+    ;;
+$DIALOG_CANCEL)
+    clear
+    exit 1
+    ;;
+$DIALOG_EXTRA)
+    clear
+    exit 1
+    ;;
+$DIALOG_ITEM_HELP) ;;
+$DIALOG_ERROR)
+    clear
+    echo "ERROR!"
+    exit 1
+    ;;
+$DIALOG_ESC)
+    clear
+    exit 1
+    ;;
+esac
+
 if [[ ! ${val^^} == "L" ]]; then
     pause s 2 m
 
@@ -121,19 +158,29 @@ if [[ ! ${val^^} == "L" ]]; then
 
 fi
 cd $folder_rel_serveur
-echo
-echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
-echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
-echo
-echo
-echo "---------------------------------"
-echo -e "Veux-tu lancer le serveur symfony ? \e[35m(\e[33mo\e[32mui\e[97m/\e[33mn\e[32mon\e[35m)\e[0m \e[97m[\e[33m\e[1mn\e[0m\e[97m]\e[0m :"
-read -n 1 -rp "> " val
-line -t ""
+# echo
+# echo -e ' Lien pour ouvrir symfony (CTRL + clic): '
+# echo -e "\e[1m\e[34mhttp://localhost:$port_symfony\e[0m"
+# echo
+# echo
 
-case "$val" in
-[YyOo] | [YyOo][EeUu][SsIi])
+DIALOG_ERROR=254
+export DIALOG_ERROR
+
+$DIALOG --title "SYMFONY" --clear "$@" \
+    --clear \
+    --ok-label "Oui" \
+    --no-label "Quitter" \
+    --extra-label "Non" --extra-button \
+    --yesno "Voulez-vous lancer le serveur symfony ?" 0 0
+
+retval=$?
+clear
+
+case ${retval:-0} in
+$DIALOG_OK)
     php -S localhost:$port_symfony -t public
+    exit 1
     ;;
 esac
 
