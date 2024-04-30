@@ -25,6 +25,7 @@ class UserRegex extends Constraint
         string $regex = null,
         string|array|null $pattern = null,
         ?string $message = null,
+        ?string $information = null,
         ?string $field = "champ",
         ?array $groups = null,
         mixed $payload = null,
@@ -33,9 +34,16 @@ class UserRegex extends Constraint
         $pattern = ($regex === "password") ? '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&§+=!])(?!.*[ç<\">[\]\'µ`~\\/]).{0,}$/' : null;
         $pattern = ($regex === "name") ? '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/' : $pattern;
         $pattern = ($regex === "number") ? '/^[0-9]\d*$/' : $pattern;
-        $message = ($regex === "password") ? "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ." : $this->message;
-        $message = ($regex === "name") ? "La valeur '$field' ne répond pas aux critères de sécurité !" : $message;
-        $message = ($regex === "number") ? "La valeur '$field' doit être numérique !" : $message;
+
+        if ($message === null) {
+
+            $message = ($regex === "password") ? "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ." : $this->message;
+            $message = ($regex === "name") ? "La valeur '$field' ne répond pas aux critères de sécurité !" : $message;
+            $message = ($regex === "number") ? "La valeur '$field' doit être numérique !" : $message;
+        }
+        if ($information != null) {
+            $message .= " " . $information;
+        }
         if (\is_array($pattern)) {
             $options = array_merge($pattern, $options);
         } elseif (null !== $pattern) {

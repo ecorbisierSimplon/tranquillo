@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Dto\TaskDto;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -37,9 +38,30 @@ class TaskService extends AbstractController
         ]);
     }
 
-    // public function findOneByUser(Task $user)
+    // public function findOneByTask(Task $task)
     // {
     // }
+    public function
+    create(
+        TaskDto $taskDto,
+        EntityManagerInterface $em
+    ) {
+        $task = new Task;
+        $task->setName($taskDto->getName());
+        $task->setDescription($taskDto->getDescription());
+        $task->setReminder($taskDto->getReminder());
+        $task->setStartAt($taskDto->getStartAt());
+        $task->setEndAt($taskDto->getEndAt());
+        $task->setCreateAt(new \DateTimeImmutable());
+
+        $em->persist($task);
+        $em->flush();
+        return $this->json($task, Response::HTTP_CREATED, [], [
+            'groups' => ['tasks: create']
+        ]);
+    }
+
+
 
     public function delete(Task $task, EntityManagerInterface $entityManager): Response
     {
@@ -47,10 +69,11 @@ class TaskService extends AbstractController
         $entityManager->remove($task);
         $entityManager->flush();
         // }
-        $codeResponse = Response::HTTP_SEE_OTHER;
-        $message = "La tache '" . $task->getName() .  "' a été supprimé de la base de données";
+        $codeResponse = Response::HTTP_ACCEPTED;
+        $title = "Suppression d'une tache";
+        $message = "La tache '" . $task->getName() .  "', créée le " . $task->getCreateAt()->format('d/m/Y') .  ", a été supprimée de la base de données";
 
-        $response = new JsonResponse(["title" => "Suppression utilisateur", "status" => $codeResponse, 'detail' => $message], $codeResponse);
+        $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
         return $response;
     }
 }

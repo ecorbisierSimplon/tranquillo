@@ -68,7 +68,7 @@ final class UserExeptionListener
             // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
             $message = $exception->getMessage();
             $codeResponse = Response::HTTP_BAD_REQUEST;
-            $customError = true;
+            // $customError = true;
         }
         if ($customError) {
             $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);

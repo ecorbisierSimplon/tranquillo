@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Dto\TaskDto;
 use App\Service\TaskService;
 use App\Entity\Task;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,17 +37,17 @@ class TaskController extends AbstractController
     }
 
 
-    // #[Route(['', '/'], name: 'app_api_users_new', methods: ['POST'])]
-    // public function new(
-    //     Request $request,
-    //     #[MapRequestPayload(
-    //         serializationContext: ['users.create']
-    //     )]
-    //     Task $user
-    // ) {
-    //     $user->setUserCreateAt(new \DateTimeImmutable());
-    //     dd($user);
-    // }
+    #[Route(['', '/'], name: 'app_api_task_create', methods: ['POST'])]
+    public function create(
+        #[MapRequestPayload(
+            serializationContext: ['tasks: create']
+        )]
+        TaskDto $taskDto,
+        TaskService $taskFind,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        return $taskFind->create($taskDto, $em);
+    }
 
 
     // #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['PUT'])]
