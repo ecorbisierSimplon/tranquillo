@@ -36,11 +36,11 @@ CREATE TABLE
     IF NOT EXISTS tpa_tasks (
         task_id INT AUTO_INCREMENT PRIMARY KEY,
         task_name VARCHAR(50) NOT NULL,
-        task_create_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         task_description TEXT,
-        reminder VARCHAR(255) DEFAULT NULL,
+        task_reminder INT DEFAULT NULL,
         task_start_at DATETIME NULL,
         task_end_at DATETIME NULL,
+        task_create_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
         users_id INT NOT NULL,
         CONSTRAINT tpa_tasks_users_fkey FOREIGN KEY (users_id) REFERENCES tpa_users (user_id),
         CONSTRAINT tpa_tasks_ukey UNIQUE (task_name, task_create_at)
