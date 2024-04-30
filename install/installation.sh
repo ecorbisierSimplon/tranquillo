@@ -76,6 +76,20 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require "symfony/maker-bundle"
 
+echo
+echo -e "'\e[1m Installation de doctrine/doctrine-fixtures-bundle \e[0m'"
+echo "---------------------------------------------------"
+cd $folder_rel_serveur
+pause s 1 m
+composer require "doctrine/doctrine-fixtures-bundle"
+
+echo
+echo -e "'\e[1m Installation de doctrine/symfony/translation \e[0m'"
+echo "---------------------------------------------------"
+cd $folder_rel_serveur
+pause s 1 m
+composer require "symfony/translation"
+
 # # cd $folder_rel_serveur
 # # pause s 1 m
 # # composer require "symfony/symfony:7.0.6"

@@ -6,33 +6,47 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TaskRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: "tpa_tasks")]
 #[ApiResource]
 class Task
 {
+    // Le point d'interrogation (?) avant le type dans cette déclaration de propriété en PHP signifie
+    // que la variable peut également être null.
+    // En d'autres termes, la propriété peut soit contenir une valeur entière, soit être null.
+    // Cela est souvent utilisé pour indiquer qu'une valeur peut être absente ou non définie dans certains contextes.
+    // C'est couramment utilisé lorsque vous avez besoin de distinguer entre une valeur valide et l'absence de valeur.
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "task_id")]
+    #[Groups(['tasks: read'])]
     private ?int $id = null;
 
     #[ORM\Column(name: "task_name")]
+    #[Groups(['tasks: read'])]
     private ?string $name = null;
 
     #[ORM\Column(name: "task_description")]
+    #[Groups(['tasks: read'])]
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
+    #[Groups(['tasks: read'])]
     private ?int $reminder = null;
 
     #[ORM\Column(name: "task_start_at")]
+    #[Groups(['tasks: read'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(name: "task_end_at")]
+    #[Groups(['tasks: read'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
+    #[Groups(['tasks: read'])]
     private ?\DateTimeImmutable $createAt = null;
 
     public function getId(): ?int
