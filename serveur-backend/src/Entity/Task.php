@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TaskRepository;
+use App\Validator\TpaLength;
 use App\Validator\UserRegex;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -24,23 +25,26 @@ class Task
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "task_id")]
+    #[Assert\PositiveOrZero()]
+    #[UserRegex(regex: 'number', entity: "task", field: "id")]
     #[Groups(['tasks: read', 'tasks: create'])]
-    #[UserRegex(regex: 'number', field: 'Id de la tache')]
     private ?int $id = null;
 
     #[ORM\Column(name: "task_name")]
+    #[Assert\NotBlank(message: "error.task.name: Le nom de la tache ne peut être vide !")]
+    #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     #[Groups(['tasks: read', 'tasks: create'])]
-    #[Assert\NotBlank(message: "Le nom de la tache ne peut être vide !")]
     private ?string $name = null;
 
     #[ORM\Column(name: "task_description")]
-    #[Groups(['tasks: read', 'tasks: create'])]
     #[Assert\NoSuspiciousCharacters()]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
+    #[UserRegex(regex: 'number', information: "Le rappel est calculé en minute(s)", entity: "task", field: "reminder")]
+    #[Assert\PositiveOrZero()]
     #[Groups(['tasks: read', 'tasks: create'])]
-    #[UserRegex(regex: 'number', field: 'Rappel', information: "Le rappel est calculé en minute(s)")]
     private ?int $reminder = null;
 
     #[ORM\Column(name: "task_start_at")]
@@ -52,7 +56,7 @@ class Task
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
-    #[Assert\NotBlank(message: "La date de création ne peut être vide !")]
+    #[Assert\NotBlank(message: "error.task.createAt: La date de création ne peut être vide !")]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?\DateTimeImmutable $createAt = null;
 

@@ -38,7 +38,6 @@ class ApiUsersController extends AbstractController
         TpaUsers $user
     ) {
         $user->setUserCreateAt(new \DateTimeImmutable());
-        dd($user);
     }
 
     #[Route('/{id}', name: 'app_api_users_show', methods: ['GET'])]

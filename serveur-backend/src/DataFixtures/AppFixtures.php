@@ -5,7 +5,7 @@ namespace App\DataFixtures;
 
 
 use App\Entity\Task;
-
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -39,6 +39,28 @@ class AppFixtures extends Fixture
         $cheminBack = implode("/", array_slice($segments, 0, $indexfolderBack + 1));
         $cheminData = dirname($cheminBack) . "/" . $folderData . "/sql_test";
 
+
+        // ####################################
+        // ###  FIXTURES DES UTILISATEURS
+        // ####################################
+        require_once($cheminData . "/fixturesUsers.php");
+
+        foreach ($fixturesUsers as $fixUser) {
+            $user = new User();
+            // Accéder aux éléments de l'utilisateur
+            $user->setRoles([$fixUser['role']]);
+            $user->setEmail($fixUser['email']);
+            $user->setLastname($fixUser['lastname']);
+            $user->setFirstname($fixUser['firstname']);
+            /* Cette ligne de code est chargée de hacher le mot de passe de l'utilisateur avant de le
+            définir dans l'entité ``. Voici un aperçu de ce qui se passe : */
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $fixUser['password']));
+            $user->setCreateAt(new \DateTimeImmutable());
+            $manager->persist($user);
+            $manager->flush();
+
+            $listUsers[] = $user;
+        }
 
 
         // ####################################

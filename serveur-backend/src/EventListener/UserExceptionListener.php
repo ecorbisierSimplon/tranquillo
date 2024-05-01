@@ -7,14 +7,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Validator\Constraints\Json;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class UserExeptionListener
+final class UserExceptionListener
 {
     private $requestStack;
     private $translator;
@@ -29,6 +32,8 @@ final class UserExeptionListener
     public function onKernelException(ExceptionEvent $event): void
     {
         $exception = $event->getThrowable();
+
+
         $request = $this->requestStack->getCurrentRequest();
         $route = $request->attributes->get('_route');
         $entity = ($route === 'app_api_users_show') ? "L'utilisateur" : "L'entitée";
@@ -63,16 +68,47 @@ final class UserExeptionListener
             $message = "Le type de fichier multimédia n'est pas reconnu pas ou ne peut pas être accepté !";
             $codeResponse = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
             $customError = true;
+        } elseif ($exception instanceof UnprocessableEntityHttpException || strpos($request->getPathInfo(), 'api/user') !== false) {
+            $title = "Erreur de validations !";
+            $message = $exception->getMessage(); //$this->validationError($exception->getMessage());
+            $codeResponse = Response::HTTP_UNPROCESSABLE_ENTITY;
+            $customError = true;
         } else {
             $title = "Erreur  !";
             // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
             $message = $exception->getMessage();
             $codeResponse = Response::HTTP_BAD_REQUEST;
-            // $customError = true;
+            $customError = true;
         }
         if ($customError) {
             $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
             $event->setResponse($response);
         }
+    }
+
+    private function validationError($getMessage)
+    {
+        dump($getMessage);
+
+        $erreurs_par_champ = array();
+
+        // Diviser le texte en lignes
+        $lignes = explode("\n", $getMessage);
+        dump($lignes);
+        // Parcourir chaque ligne
+        foreach ($lignes as $ligne) {
+            // Diviser chaque ligne en champ et message
+            $elements = explode(": ", $ligne, 2);
+            // Si le champ et le message existent
+            if (count($elements) === 2) {
+                $champ = $elements[0];
+                $message = $elements[1];
+                // Ajouter le message à la liste des messages d'erreur pour ce champ
+                $erreurs_par_champ[$champ][] = $message;
+            }
+        }
+        // dd($erreurs_par_champ);
+        // Convertir le tableau en JSON
+        return json_encode($erreurs_par_champ, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 }

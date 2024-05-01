@@ -12,23 +12,19 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('api/user', name: 'app_user')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'app_api_user_read_all', methods: ['GET'])]
-    public function readAll(UserService $userFind): JsonResponse
+    #[Route(['', '/'], name: 'app_api_user_read_me', methods: ['GET'])]
+    public function readMe(UserService $userFind): JsonResponse
     {
-        return  $userFind->findAll();
+        $id = 65;
+        return  $userFind->findOne($id);
     }
 
 
-    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_user_read_one', methods: ['GET'])]
-    public function show($id, UserService $userFind): JsonResponse
-    {
-        return $userFind->findOne($id);
-    }
 
-
-    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_user_delete', methods: ['DELETE'])]
-    public function delete($id, UserService $userFind): JsonResponse
+    #[Route(['', '/'], requirements: ["id" => "(\d+)"], name: 'app_api_user_delete_me', methods: ['DELETE'])]
+    public function deleteMe(UserService $userFind): JsonResponse
     {
+        $id = 70;
         return $userFind->delete($id);
     }
 
@@ -45,7 +41,7 @@ class UserController extends AbstractController
     }
 
 
-    // #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['PUT'])]
+    // #[Route(['', '/'], name: 'app_api_users_edit_me', methods: ['PUT'])]
     // public function edit(Request $request, User $tpaUser, EntityManagerInterface $entityManager): void
     // {
     // }

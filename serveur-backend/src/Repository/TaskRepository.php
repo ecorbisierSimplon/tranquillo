@@ -40,8 +40,8 @@ class TaskRepository extends ServiceEntityRepository
             $task = $this->find($value);
             return $task;
         }
-        return
-            $codeResponse = Response::HTTP_NOT_FOUND;
+
+        $codeResponse = Response::HTTP_NOT_FOUND;
         return new JsonResponse([], $codeResponse);;
     }
 

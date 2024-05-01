@@ -30,8 +30,16 @@ class UserService extends AbstractController
         ]);
     }
 
-    public function findOne(User $user)
+    public function findOne($id): JsonResponse
     {
+        $user = $this->userRepository->findOneByUser('id', $id);
+
+        if ($user === null) {
+            $title = "Lecture impossible";
+            $message = "L'utilisateur que vous voulez lire n'existe pas";
+            $codeResponse = Response::HTTP_NOT_FOUND;
+            return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
+        }
         return $this->json($user, 201, [], [
             'groups' => ['users: read']
         ]);
@@ -42,7 +50,7 @@ class UserService extends AbstractController
     {
         $userCreateAt = new \DateTimeImmutable();
         $userDto->setCreateAt($userCreateAt);
-        $existingUser = $this->ifExist($userDto);
+        $existingUser = $this->userRepository->findOneByUser('email', $userDto->getEmail());
 
         if ($existingUser === null) {
             $user = new User;
@@ -66,25 +74,38 @@ class UserService extends AbstractController
 
 
 
-    public function delete(User $user): JsonResponse
+    public function delete($id): JsonResponse
     {
         // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
 
-        $this->em->remove($user);
-        $this->em->flush();
-        $codeResponse = Response::HTTP_ACCEPTED;
-        $title = "Suppression d'un utilisateur";
-        $message = "L'utilisateur avec l'email '" . $user->getEmail() .  "', créé le " . $user->getCreateAt()->format('d/m/Y') .  ", a été supprimé de la base de données";
+        $user = $this->userRepository->findOneByUser('id', $id);
+        $title = "Suppression refusée";
+        $codeResponse = Response::HTTP_NOT_FOUND;
+
+        if ($user === null) {
+            $message = "L'utilisateur que vous voulez supprimer n'existe pas";
+        } elseif ($user === 404) {
+            $message = "L'entité que vous appelez n'existe pas";
+        } else {
+
+            $this->em->remove($user);
+            $this->em->flush();
+            $codeResponse = Response::HTTP_ACCEPTED;
+            $title = "Suppression d'un utilisateur";
+            $message = "L'utilisateur ayant pour email '" . $user->getEmail() .  "', créé le " . $user->getCreateAt()->format('d/m/Y') .  ", a été supprimé de la base de données";
+        }
 
         $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
         return $response;
     }
 
-    public function ifExist(UserDto $userDto)
-    {
-        $userEmail = $userDto->getEmail();
-        $existingUser = $this->userRepository->findExistingUser($userEmail);
+    // public function ifExist(UserDto $userDto)
+    // {
+    //     $userName = $userDto->getName();
+    //     $userCreateAt = new \DateTimeImmutable();
 
-        return $existingUser;
-    }
+    //     $existingUser = $this->userRepository->findExistingUser($userName, $userCreateAt);
+
+    //     return $existingUser;
+    // }
 }
