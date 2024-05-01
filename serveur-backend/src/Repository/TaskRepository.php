@@ -16,6 +16,18 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+
+    public function findExistingTask($taskName, $taskCreateAt)
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.name = :name')
+            ->andWhere('t.createAt = :createAt')
+            ->setParameter('name', $taskName)
+            ->setParameter('createAt', $taskCreateAt)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Task[] Returns an array of Task objects
     //     */

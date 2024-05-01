@@ -31,9 +31,9 @@ class TaskController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_api_task_delete', methods: ['DELETE'])]
-    public function delete(Task $task, EntityManagerInterface $entityManager, TaskService $taskFind): JsonResponse
+    public function delete(Task $task, TaskService $taskFind): JsonResponse
     {
-        return $taskFind->delete($task, $entityManager);
+        return $taskFind->delete($task);
     }
 
 
@@ -43,10 +43,9 @@ class TaskController extends AbstractController
             serializationContext: ['tasks: create']
         )]
         TaskDto $taskDto,
-        TaskService $taskFind,
-        EntityManagerInterface $em
+        TaskService $taskFind
     ): JsonResponse {
-        return $taskFind->create($taskDto, $em);
+        return $taskFind->create($taskDto);
     }
 
 

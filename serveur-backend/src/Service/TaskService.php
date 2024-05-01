@@ -17,10 +17,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class TaskService extends AbstractController
 {
     private $taskRepository;
+    private $em;
 
-    public function __construct(TaskRepository $taskRepository)
+    public function __construct(TaskRepository $taskRepository, EntityManagerInterface $entityManager)
     {
         $this->taskRepository = $taskRepository;
+        $this->em = $entityManager;
     }
 
     public function  findAll(): JsonResponse
@@ -43,31 +45,43 @@ class TaskService extends AbstractController
     // }
     public function
     create(
-        TaskDto $taskDto,
-        EntityManagerInterface $em
+        TaskDto $taskDto
     ) {
-        $task = new Task;
-        $task->setName($taskDto->getName());
-        $task->setDescription($taskDto->getDescription());
-        $task->setReminder($taskDto->getReminder());
-        $task->setStartAt($taskDto->getStartAt());
-        $task->setEndAt($taskDto->getEndAt());
-        $task->setCreateAt(new \DateTimeImmutable());
 
-        $em->persist($task);
-        $em->flush();
-        return $this->json($task, Response::HTTP_CREATED, [], [
-            'groups' => ['tasks: create']
-        ]);
+        $taskName = $taskDto->getName();
+        $taskCreateAt = new \DateTimeImmutable();
+
+        $existingTask = $this->taskRepository->findExistingTask($taskName, $taskCreateAt);
+
+        if ($existingTask === null) {
+            $task = new Task;
+            $task->setName($taskName);
+            $task->setDescription($taskDto->getDescription());
+            $task->setReminder($taskDto->getReminder());
+            $task->setStartAt($taskDto->getStartAt());
+            $task->setEndAt($taskDto->getEndAt());
+            $task->setCreateAt($taskCreateAt);
+
+            $this->em->persist($task);
+            $this->em->flush();
+            return $this->json($task, Response::HTTP_CREATED, [], [
+                'groups' => ['tasks: create']
+            ]);
+        } else {
+            $title = "Création refusée";
+            $message = "La tache '" . $taskName . "' du " . $taskCreateAt->format('d/m/Y') . " à " . $taskCreateAt->format('H:m:s') . " existe déjà";
+            $codeResponse = Response::HTTP_BAD_REQUEST;
+            return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
+        }
     }
 
 
 
-    public function delete(Task $task, EntityManagerInterface $entityManager): Response
+    public function delete(Task $task): Response
     {
         // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
-        $entityManager->remove($task);
-        $entityManager->flush();
+        $this->em->remove($task);
+        $this->em->flush();
         // }
         $codeResponse = Response::HTTP_ACCEPTED;
         $title = "Suppression d'une tache";
@@ -75,5 +89,9 @@ class TaskService extends AbstractController
 
         $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
         return $response;
+    }
+
+    public function unique(Task $task)
+    {
     }
 }
