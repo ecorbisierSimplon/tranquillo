@@ -23,17 +23,17 @@ class TaskController extends AbstractController
     }
 
 
-    #[Route('/{id}', name: 'app_api_task_read_one', methods: ['GET'])]
-    public function show(Task $task, TaskService $taskFind): JsonResponse
+    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_read_one', methods: ['GET'])]
+    public function readOne($id, TaskService $taskFind): JsonResponse
     {
-        return $taskFind->findOne($task);
+        return $taskFind->findOne($id);
     }
 
 
-    #[Route('/{id}', name: 'app_api_task_delete', methods: ['DELETE'])]
-    public function delete(Task $task, TaskService $taskFind): JsonResponse
+    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_delete', methods: ['DELETE'])]
+    public function delete($id, TaskService $taskFind): JsonResponse
     {
-        return $taskFind->delete($task);
+        return $taskFind->delete($id);
     }
 
 

@@ -23,7 +23,7 @@ tpa_roles;
 CREATE TABLE
     IF NOT EXISTS tpa_users (
         user_id INT AUTO_INCREMENT PRIMARY KEY,
-        email VARCHAR(50) NOT NULL,
+        email VARCHAR(180) NOT NULL,
         lastname VARCHAR(50) NOT NULL,
         firstname VARCHAR(50) NOT NULL,
         user_password VARCHAR(255) NOT NULL,
