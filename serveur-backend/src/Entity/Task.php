@@ -19,7 +19,7 @@ class Task
     // que la variable peut également être null.
     // En d'autres termes, la propriété peut soit contenir une valeur entière, soit être null.
     // Cela est souvent utilisé pour indiquer qu'une valeur peut être absente ou non définie dans certains contextes.
-    // C'est couramment utilisé lorsque vous avez besoin de distinguer entre une valeur valide et l'absence de valeur.
+    // C'est couramment utilisé lorsque nous avons besoin de distinguer entre une valeur valide et l'absence de valeur.
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -52,6 +52,7 @@ class Task
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
+    #[Assert\NotBlank(message: "La date de création ne peut être vide !")]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?\DateTimeImmutable $createAt = null;
 

@@ -29,6 +29,9 @@ class TaskDto
     #[Groups(['tasks: create'])]
     private  ?\DateTimeImmutable  $endAt = null;
 
+    #[Groups(['tasks: create'])]
+    private  ?\DateTimeImmutable  $createAt = null;
+
     public function getName(): ?string
     {
         return $this->name;
@@ -85,6 +88,18 @@ class TaskDto
     public function setEndAt(?\DateTimeImmutable  $endAt): static
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getCreateAt(): ?\DateTimeImmutable
+    {
+        return $this->createAt;
+    }
+
+    public function setCreateAt(?\DateTimeImmutable  $createAt): static
+    {
+        $this->createAt = $createAt;
 
         return $this;
     }
