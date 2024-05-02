@@ -1,0 +1,136 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "ADMIN",
+  "collectionId": "cc8aaea8-00ab-4f64-9c1c-6225f9e8f2cd",
+  "dateExported": "2024-05-02T09:52:53.599Z",
+  "version": "1.2",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "bb422da2-10b0-4d3c-8fd7-9a83f16c1833",
+      "colId": "cc8aaea8-00ab-4f64-9c1c-6225f9e8f2cd",
+      "containerId": "",
+      "name": "READ USERS",
+      "url": "http://localhost:8088/api/admin/user/",
+      "method": "GET",
+      "sortNum": 5000,
+      "created": "2024-04-27T10:24:59.020Z",
+      "modified": "2024-05-01T18:59:16.083Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "cty",
+          "value": "JWTTranquillo"
+        }
+      ],
+      "auth": {
+        "type": "bearer",
+        "bearer": ""
+      }
+    },
+    {
+      "_id": "b411e0f9-7308-496f-920f-d72136560dad",
+      "colId": "cc8aaea8-00ab-4f64-9c1c-6225f9e8f2cd",
+      "containerId": "",
+      "name": "LOGIN ADMIN",
+      "url": "http://localhost:8088/api/login_check",
+      "method": "POST",
+      "sortNum": 10000,
+      "created": "2024-04-27T09:46:08.221Z",
+      "modified": "2024-05-02T09:39:28.155Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\": \"ecorbisier.simplon@gmail.com\",\n  \"password\": \"Eric:CORBISIER:1234\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "isjson",
+          "value": ""
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "contains",
+          "value": "\"token\""
+        },
+        {
+          "type": "custom-header",
+          "custom": "Content-Type",
+          "action": "equal",
+          "value": "application/json"
+        }
+      ]
+    },
+    {
+      "_id": "2a6250a7-baf5-407e-bb8c-93c41db94d42",
+      "colId": "cc8aaea8-00ab-4f64-9c1c-6225f9e8f2cd",
+      "containerId": "",
+      "name": "LOGIN WEBMASTER",
+      "url": "http://localhost:8088/api/login_check",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2024-05-02T09:38:03.024Z",
+      "modified": "2024-05-02T09:52:37.995Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "cty",
+          "value": "JWTTranquillo"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\":\"contact@corbisier.fr\",\n  \"password\":\"Eric:CORBISIER:1234\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "isjson",
+          "value": ""
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "contains",
+          "value": "\"token\""
+        },
+        {
+          "type": "custom-header",
+          "custom": "Content-Type",
+          "action": "equal",
+          "value": "application/json"
+        }
+      ]
+    }
+  ],
+  "ref": "YszvDquFti-Qz9w_E353UgpVFocaQX3nxTw9UvW8irMzRhSaAS40yxokO6DFPDgCXs1lL86aSvLHOdVYOvrvgg"
+}

@@ -16,7 +16,7 @@ class TaskDto
     private ?int $id = null;
 
     #[Groups(['tasks: create'])]
-    #[Assert\NotBlank(message: "error.task.name: Le nom de la tache ne peut être vide !")]
+    #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     private ?string $name = null;
 
@@ -25,7 +25,7 @@ class TaskDto
     private ?string $description = null;
 
     #[Groups(['tasks: create'])]
-    #[UserRegex(regex: 'number', information: "Le rappel est calculé en minute(s)", entity: "task", field: "reminder")]
+    #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
     private ?int $reminder = null;
 

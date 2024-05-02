@@ -12,24 +12,40 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('api/task', name: 'app_task')]
 class TaskController extends AbstractController
 {
-    #[Route('/', name: 'app_api_task_read_all', methods: ['GET'])]
-    public function readAll(TaskService $taskFind): JsonResponse
+    private $service;
+
+    /**
+     * La fonction ci-dessus est un constructeur en PHP qui initialise un objet TaskService.
+     * 
+     * @param TaskService service Le paramètre « service » dans le constructeur est une instance de la
+     * classe TaskService. Cela signifie que lorsqu'un objet de cette classe est créé, il nécessite
+     * qu'une instance de la classe TaskService soit transmise en tant que dépendance. Il s'agit d'une
+     * pratique courante en programmation orientée objet consistant à injecter des dépendances dans les
+     * classes plutôt que
+     */
+    public function __construct(TaskService $service)
     {
-        return  $taskFind->findAll();
+        $this->service = $service;
+    }
+
+    #[Route('/', name: 'app_api_task_read_all', methods: ['GET'])]
+    public function readAll(): JsonResponse
+    {
+        return  $this->service->findAll();
     }
 
 
     #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_read_one', methods: ['GET'])]
-    public function readOne($id, TaskService $taskFind): JsonResponse
+    public function readOne($id): JsonResponse
     {
-        return $taskFind->findOne($id);
+        return $this->service->findOne($id);
     }
 
 
     #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_delete', methods: ['DELETE'])]
-    public function delete($id, TaskService $taskFind): JsonResponse
+    public function delete($id): JsonResponse
     {
-        return $taskFind->delete($id);
+        return $this->service->delete($id);
     }
 
 
@@ -39,14 +55,14 @@ class TaskController extends AbstractController
             serializationContext: ['tasks: create']
         )]
         TaskDto $taskDto,
-        TaskService $taskFind
+
     ): JsonResponse {
-        return $taskFind->create($taskDto);
+        return $this->service->create($taskDto);
     }
 
 
-    // #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['PUT'])]
-    // public function edit(Request $request, Task $tpaUser, EntityManagerInterface $entityManager): void
+    // #[Route('/{id}/edit', name: 'app_api_tasks_edit', methods: ['PUT'])]
+    // public function edit(Request $request, Task $tpaTask, EntityManagerInterface $entityManager): void
     // {
     // }
 

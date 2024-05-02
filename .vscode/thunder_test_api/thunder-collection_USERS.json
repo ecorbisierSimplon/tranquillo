@@ -1,0 +1,93 @@
+{
+  "clientName": "Thunder Client",
+  "collectionName": "USERS",
+  "collectionId": "e2e132c5-3e9b-4c98-9928-7620466d54d9",
+  "dateExported": "2024-05-02T09:47:49.446Z",
+  "version": "1.2",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "00ccb075-8556-4a63-9063-1496b72a828d",
+      "colId": "e2e132c5-3e9b-4c98-9928-7620466d54d9",
+      "containerId": "",
+      "name": "CREATE USER",
+      "url": "http://localhost:8088/api/user",
+      "method": "POST",
+      "sortNum": 10000,
+      "created": "2024-05-01T18:58:41.998Z",
+      "modified": "2024-05-01T22:30:54.632Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "cty",
+          "value": "JWTTranquillo"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"email\": \"\",\n  \"lastname\":\"\",\n  \"firstname\":\"\",\n  \"password\":\"\"\n}",
+        "form": []
+      },
+      "auth": {
+        "type": "bearer",
+        "bearer": ""
+      }
+    },
+    {
+      "_id": "59f734de-05a4-4161-951f-2983dac647c5",
+      "colId": "e2e132c5-3e9b-4c98-9928-7620466d54d9",
+      "containerId": "",
+      "name": "LOGIN",
+      "url": "http://localhost:8088/api/login_check",
+      "method": "POST",
+      "sortNum": 20000,
+      "created": "2024-05-02T08:41:40.011Z",
+      "modified": "2024-05-02T09:47:03.102Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        },
+        {
+          "name": "cty",
+          "value": "JWTTranquillo"
+        }
+      ],
+      "body": {
+        "type": "json",
+        "raw": "{\n  \"username\":\"jean.dupont@example.com\",\n  \"password\":\"Jean:Dupont:1234\"\n}",
+        "form": []
+      },
+      "tests": [
+        {
+          "type": "res-code",
+          "custom": "",
+          "action": "equal",
+          "value": "200"
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "isjson",
+          "value": ""
+        },
+        {
+          "type": "res-body",
+          "custom": "",
+          "action": "contains",
+          "value": "\"token\""
+        },
+        {
+          "type": "custom-header",
+          "custom": "Content-Type",
+          "action": "equal",
+          "value": "application/json"
+        }
+      ]
+    }
+  ],
+  "ref": "HqrBCbqDiRSmAYpXzMy6vl5YfOiSWX50OHG0ZtF1oJpcdA9kN50tnL8PVv5SWA7TQAssIyi21qhmapFIgorxkg"
+}

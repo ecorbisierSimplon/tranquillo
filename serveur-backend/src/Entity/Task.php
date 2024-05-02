@@ -31,7 +31,7 @@ class Task
     private ?int $id = null;
 
     #[ORM\Column(name: "task_name")]
-    #[Assert\NotBlank(message: "error.task.name: Le nom de la tache ne peut être vide !")]
+    #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?string $name = null;
@@ -42,7 +42,7 @@ class Task
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
-    #[UserRegex(regex: 'number', information: "Le rappel est calculé en minute(s)", entity: "task", field: "reminder")]
+    #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?int $reminder = null;
@@ -56,7 +56,7 @@ class Task
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
-    #[Assert\NotBlank(message: "error.task.createAt: La date de création ne peut être vide !")]
+    #[Assert\NotBlank(message: 'error.task.createAt: The key « createAt » must be a non-empty  string.')]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?\DateTimeImmutable $createAt = null;
 
