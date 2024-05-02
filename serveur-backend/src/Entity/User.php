@@ -13,58 +13,58 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: "tpa_users")]
+#[ORM\Table(name: 'tpa_users')]
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(name: "user_id")]
-    #[UserRegex(regex: 'number', entity: "user", field: "id")]
+    #[ORM\Column(name: 'user_id')]
+    #[UserRegex(regex: 'number', entity: 'user', field: 'id')]
     #[Assert\PositiveOrZero()]
     #[Groups(['users: read', 'users: create', 'tasks: all'])]
     private ?int $id = null;
 
-    #[ORM\Column(name: "email")]
+    #[ORM\Column(name: 'email')]
     #[Assert\Email(message: "error.user.email: L'email n'est pas valide !")]
     #[Assert\NotBlank(message: "error.user.email: L'email ne peut être vide !")]
-    #[TpaLength(min: 3, max: 180, entity: "user", field: "email")]
+    #[TpaLength(min: 3, max: 180, entity: 'user', field: 'email')]
     #[Groups(['users: read', 'users: create'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column(name: "user_role")]
+    #[ORM\Column(name: 'user_role')]
     #[Groups(['users: read', 'users: create'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(name: "user_password")]
-    #[UserRegex(regex: 'password', entity: "user", field: "password")]
-    #[Assert\NotBlank(message: "error.user.password: Le mot de passe ne peut être vide !")]
-    #[TpaLength(min: 5, max: 50, entity: "user", field: "password")]
+    #[ORM\Column(name: 'user_password')]
+    #[UserRegex(regex: 'password', entity: 'user', field: 'password')]
+    #[Assert\NotBlank(message: 'error.user.password: Le mot de passe ne peut être vide !')]
+    #[TpaLength(min: 5, max: 50, entity: 'user', field: 'password')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $password = null;
 
-    #[ORM\Column(name: "lastname", entity: "user", field: "lastname")]
-    #[UserRegex(regex: 'name')]
-    #[Assert\NotBlank(message: "error.user.lastname: Le nom ne peut être vide !")]
-    #[TpaLength(min: 5, max: 50, entity: "user", field: "lastname")]
+    #[ORM\Column(name: 'lastname')]
+    #[UserRegex(regex: 'name', entity: 'user', field: 'lastname')]
+    #[Assert\NotBlank(message: 'error.user.lastname: Le nom ne peut être vide !')]
+    #[TpaLength(min: 5, max: 50, entity: 'user', field: 'lastname')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $lastname = null;
 
-    #[ORM\Column(name: "firstname")]
-    #[UserRegex(regex: 'name', entity: "user", field: "firstname")]
-    #[Assert\NotBlank(message: "error.user.firstname: Le prénom ne peut être vide !")]
-    #[TpaLength(min: 5, max: 50, entity: "user", field: "firstname")]
+    #[ORM\Column(name: 'firstname')]
+    #[UserRegex(regex: 'name', entity: 'user', field: 'firstname')]
+    #[Assert\NotBlank(message: 'error.user.firstname: Le prénom ne peut être vide !')]
+    #[TpaLength(min: 5, max: 50, entity: 'user', field: 'firstname')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $firstname = null;
 
-    #[ORM\Column(name: "user_create_at")]
-    #[Assert\NotBlank(message: "error.user.createAT: La date de création ne peut être vide !")]
+    #[ORM\Column(name: 'user_create_at')]
+    #[Assert\NotBlank(message: 'error.user.createAT: La date de création ne peut être vide !')]
     #[Groups(['tasks: read', 'users: read', 'users: create'])]
     private ?\DateTimeImmutable $createAt = null;
 

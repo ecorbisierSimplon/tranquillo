@@ -2,6 +2,8 @@
 
 namespace App\EventListener;
 
+use Doctrine\DBAL\Exception\ServerException;
+use PhpParser\Node\Expr\Instanceof_;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -42,59 +44,58 @@ final class UserExceptionListener
         $codeResponse = Response::HTTP_INTERNAL_SERVER_ERROR;
         $customError = false;
 
+
         // Vérifie si l'exception est une NotFoundHttpException et si le message contient une indication que l'ID est introuvable
-        if ($exception instanceof NotFoundHttpException && strpos($exception->getMessage(), 'object not found by') !== false) {
-            $title = "Non trouvé !";
-            $message = "$entity avec cet ID n'existe pas.";
-            $codeResponse = Response::HTTP_NOT_FOUND;
-            $customError = true;
-        } elseif ($exception instanceof AccessDeniedHttpException) {
-            $title = "Accès refusé !";
-            $message = "Vous n'avez pas les droits suffisants pour effectuer cette action !";
-            $codeResponse = Response::HTTP_FORBIDDEN;
-            $customError = true;
-        } elseif ($exception instanceof MethodNotAllowedHttpException) {
-            $title = "Non trouvé !";
-            $message = "La route demandée est invalide !";
-            $codeResponse = Response::HTTP_METHOD_NOT_ALLOWED;
-            $customError = true;
-        } elseif ($exception instanceof NotFoundHttpException) {
-            $title = "Non trouvé !";
-            $message = "Le chemin demandé est invalide !";
-            $codeResponse = Response::HTTP_NOT_FOUND;
-            $customError = true;
-        } elseif ($exception instanceof UnsupportedMediaTypeHttpException || strpos($exception->getMessage(), 'Unsupported format') !== false) {
-            $title = "Erreur  !";
-            $message = "Le type de fichier multimédia n'est pas reconnu pas ou ne peut pas être accepté !";
-            $codeResponse = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
-            $customError = true;
-        } elseif ($exception instanceof UnprocessableEntityHttpException || strpos($request->getPathInfo(), 'api/user') !== false) {
-            $title = "Erreur de validations !";
-            $message = $exception->getMessage(); //$this->validationError($exception->getMessage());
-            $codeResponse = Response::HTTP_UNPROCESSABLE_ENTITY;
-            $customError = true;
-        } else {
-            $title = "Erreur  !";
-            // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
-            $message = $exception->getMessage();
-            $codeResponse = Response::HTTP_BAD_REQUEST;
-            $customError = true;
-        }
-        if ($customError) {
-            $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-            $event->setResponse($response);
+        if ($exception instanceof \Exception) {
+            if ($exception instanceof NotFoundHttpException && strpos($exception->getMessage(), 'object not found by') !== false) {
+                $title = "Non trouvé !";
+                $message = "$entity avec cet ID n'existe pas.";
+                $codeResponse = Response::HTTP_NOT_FOUND;
+                $customError = true;
+            } elseif ($exception instanceof AccessDeniedHttpException) {
+                $title = "Accès refusé !";
+                $message = "Vous n'avez pas les droits suffisants pour effectuer cette action !";
+                $codeResponse = Response::HTTP_FORBIDDEN;
+                $customError = true;
+            } elseif ($exception instanceof MethodNotAllowedHttpException) {
+                $title = "Non trouvé !";
+                $message = "La route demandée est invalide !";
+                $codeResponse = Response::HTTP_METHOD_NOT_ALLOWED;
+                $customError = true;
+            } elseif ($exception instanceof NotFoundHttpException) {
+                $title = "Non trouvé !";
+                $message = "Le chemin demandé est invalide !";
+                $codeResponse = Response::HTTP_NOT_FOUND;
+                $customError = true;
+            } elseif ($exception instanceof UnsupportedMediaTypeHttpException || strpos($exception->getMessage(), 'Unsupported format') !== false) {
+                $title = "Erreur  !";
+                $message = "Le type de fichier multimédia n'est pas reconnu pas ou ne peut pas être accepté !";
+                $codeResponse = Response::HTTP_UNSUPPORTED_MEDIA_TYPE;
+                $customError = true;
+            } elseif ($exception instanceof UnprocessableEntityHttpException || strpos($request->getPathInfo(), 'api/user') !== false) {
+                $title = "Erreur de validations !";
+                $message = $this->validationError($exception->getMessage()); //$exception->getMessage(); //
+                $codeResponse = Response::HTTP_UNPROCESSABLE_ENTITY;
+                $customError = true;
+            } else {
+                $title = "Erreur  !";
+                // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
+                $message = $exception->getMessage();
+                $codeResponse = Response::HTTP_BAD_REQUEST;
+                $customError = true;
+            }
+            if ($customError) {
+                $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
+                $event->setResponse($response);
+            }
         }
     }
 
     private function validationError($getMessage)
     {
-        dump($getMessage);
-
         $erreurs_par_champ = array();
-
         // Diviser le texte en lignes
         $lignes = explode("\n", $getMessage);
-        dump($lignes);
         // Parcourir chaque ligne
         foreach ($lignes as $ligne) {
             // Diviser chaque ligne en champ et message
@@ -105,10 +106,14 @@ final class UserExceptionListener
                 $message = $elements[1];
                 // Ajouter le message à la liste des messages d'erreur pour ce champ
                 $erreurs_par_champ[$champ][] = $message;
+            } else {
+                $erreurs_par_champ[] = $elements;
             }
         }
-        // dd($erreurs_par_champ);
+
+        // dump($erreurs_par_champ);
+        // dump(json_encode($erreurs_par_champ, JSON_UNESCAPED_UNICODE));
         // Convertir le tableau en JSON
-        return json_encode($erreurs_par_champ, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return json_encode($erreurs_par_champ, JSON_UNESCAPED_UNICODE);
     }
 }
