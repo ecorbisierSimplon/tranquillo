@@ -69,21 +69,21 @@ class AppFixtures extends Fixture
         require_once($cheminData . "/fixturesTasks.php");
         foreach ($fixturesTasks  as $fixTask) {
             $task = new Task;
-            // // Accéder aux éléments de la tâche
-            // $userEmail = $fixTask['usersEmail'];
+            // Accéder aux éléments de la tâche
+            $userEmail = $fixTask['usersEmail'];
 
-            // // Recherche de l'utilisateur par son email dans la liste des utilisateurs
-            // $filteredUsers = array_filter($listUsers, function ($user) use ($userEmail) {
-            //     return $user->getEmail() === $userEmail;
-            // });
+            // Recherche de l'utilisateur par son email dans la liste des utilisateurs
+            $filteredUsers = array_filter($listUsers, function ($user) use ($userEmail) {
+                return $user->getEmail() === $userEmail;
+            });
 
-            // // Accéder aux éléments de la tâche
-            // $user = reset($filteredUsers); // Récupérer le premier utilisateur correspondant
-            // $userId = $user->getId(); // Récupérer l'ID de l'utilisateur
+            // Accéder aux éléments de la tâche
+            $users = reset($filteredUsers); // Récupérer le premier utilisateur correspondant
+            $userId = $users->getId(); // Récupérer l'ID de l'utilisateur
 
+            // Utiliser l'entité utilisateur dans la tâche
+            $task->setUsersId($users);
 
-            // // Utiliser l'entité utilisateur dans la tâche
-            // $task->setUsers($user);
             $task->setName($fixTask['taskTitle']);
             $task->setDescription($fixTask['taskDescription']);
             $task->setReminder($fixTask['taskReminder']);

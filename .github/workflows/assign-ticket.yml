@@ -13,10 +13,14 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            // Convertir le numéro de pull request en entier
+            const prNumber = parseInt('${{ github.event.pull_request.number }}');
+
+            // Effectuer la requête GraphQL avec le numéro de pull request correct
             const response = await github.graphql(`
               query {
                 repository(owner: "${{ github.repository_owner }}", name: "${{ github.repository }}") {
-                  pullRequest(number: "${{ github.event.pull_request.number }}") {
+                  pullRequest(number: ${prNumber}) {
                     title
                     body
                   }
@@ -24,9 +28,13 @@ jobs:
               }
             `);
 
+            // Extraire le pull request de la réponse
             const pr = response.repository.pullRequest;
-            const ticketNumber = extractTicketNumber(pr.title); // Fonction pour extraire le numéro du ticket du titre du PR
 
+            // Appeler la fonction extractTicketNumber avec le titre du pull request
+            const ticketNumber = extractTicketNumber(pr.title);
+
+            // Vérifier si un numéro de ticket a été trouvé
             if (ticketNumber) {
               console.log(`Ticket number found: ${ticketNumber}`);
               // Code pour attribuer le numéro de ticket au PR
@@ -34,6 +42,19 @@ jobs:
               console.log('No ticket number found in PR title');
             }
 
+            // Fonction pour extraire le numéro de ticket du titre
             function extractTicketNumber(title) {
-              // Logique pour extraire le numéro du ticket du titre
+              // Définir le motif à rechercher
+              const pattern = /ticket\s+(\d+)/i; // Le 'i' signifie que la recherche est insensible à la casse
+
+              // Rechercher le motif dans le titre
+              const match = title.match(pattern);
+
+              // Si un match est trouvé, retourner le numéro de ticket
+              if (match && match[1]) {
+                return match[1];
+              } else {
+                // Si aucun match n'est trouvé, retourner null
+                return null;
+              }
             }

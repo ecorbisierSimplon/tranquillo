@@ -6,13 +6,15 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\TaskRepository;
 use App\Validator\TpaLength;
 use App\Validator\UserRegex;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 #[ORM\Table(name: "tpa_tasks")]
+#[ORM\Index(name: "tpa_users_id_tasks_ikey", columns: ["users_id"])]
+#[ORM\Index(name: "tpa_tasks_name_ikey", columns: ["task_name"])]
+#[ORM\Index(name: "tpa_tasks_create_at_ikey", columns: ["task_create_at"])]
 #[ApiResource]
 class Task
 {
@@ -59,6 +61,17 @@ class Task
     #[Assert\NotBlank(message: 'error.task.createAt: The key « createAt » must be a non-empty  string.')]
     #[Groups(['tasks: read', 'tasks: create'])]
     private ?\DateTimeImmutable $createAt = null;
+
+    /* Le code `#[ORM\ManyToOne(name: "users_id", inversedBy: 'tasks')] private ?User  = null;`
+   dans la classe d'entité `Task` définit une relation plusieurs-à-un entre les ` Entité Task` et
+   entité `User` dans le mappage Doctrine ORM. */
+    #[ORM\ManyToOne(inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\Column(name: "users_id")]
+    #[Groups(['tasks.index', 'tasks.show'])]
+    private ?int $usersId = null;
+
+
 
     public function getId(): ?int
     {
@@ -134,6 +147,17 @@ class Task
     {
         $this->createAt = $createAt;
 
+        return $this;
+    }
+
+    public function getUsersId(): ?User
+    {
+        return $this->usersId;
+    }
+
+    public function setUsersId(?User $users): static
+    {
+        $this->usersId = $users->getId();
         return $this;
     }
 }

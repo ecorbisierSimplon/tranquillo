@@ -6,6 +6,8 @@ use ApiPlatform\Metadata\ApiResource;
 use App\Repository\UserRepository;
 use App\Validator\TpaLength;
 use App\Validator\UserRegex;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -67,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\NotBlank(message: 'error.user.createAT: The key « createAt » must be a non-empty  string.')]
     #[Groups(['tasks: read', 'users: read', 'users: create'])]
     private ?\DateTimeImmutable $createAt = null;
+
 
     public function getId(): ?int
     {

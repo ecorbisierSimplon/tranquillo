@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: TpaTasksRepository::class)]
-#[ORM\UniqueConstraint(name: "tpa_tasks_name_roles_id_ukey",columns: ["task_name" ,"users_id"])]
+#[ORM\UniqueConstraint(name: "tpa_tasks_name_roles_id_ukey", columns: ["task_name", "users_id"])]
 #[UniqueEntity(
     fields: ['task_name', 'roles_id'],
     message: 'Enregistrement impossible, tache déjà existante.',
@@ -29,7 +29,7 @@ class TpaTasks
     private ?int $id = null;
 
     #[Groups(['tasks.show', 'subtasks.show'])]
-    #[ORM\Column(length: 100 )]
+    #[ORM\Column(length: 100)]
     private ?string $taskName = null;
 
     #[ORM\Column(type: "datetime_immutable", options: ["default" => "CURRENT_TIMESTAMP"])]
