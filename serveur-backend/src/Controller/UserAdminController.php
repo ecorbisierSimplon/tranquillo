@@ -7,6 +7,7 @@ use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('api/admin/user', name: 'app_user')]
 class UserAdminController extends AbstractController
@@ -24,7 +25,7 @@ class UserAdminController extends AbstractController
         return $userFind->findOne($id);
     }
 
-
+    #[IsGranted('ROLE_WEBMASTER')]
     #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_user_delete', methods: ['DELETE'])]
     public function delete($id, UserService $userFind): JsonResponse
     {

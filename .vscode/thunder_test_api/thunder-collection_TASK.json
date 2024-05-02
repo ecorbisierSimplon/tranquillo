@@ -1,0 +1,99 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "TASK",
+    "collectionId": "d3c16e6b-d7aa-41b0-9d76-2937c84f2208",
+    "dateExported": "2024-05-02T09:47:34.726Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "e06b6c13-16a8-4a04-b444-a867cee0e41b",
+            "colId": "d3c16e6b-d7aa-41b0-9d76-2937c84f2208",
+            "containerId": "",
+            "name": "TASK Read All",
+            "url": "http://localhost:8088/api/task/",
+            "method": "GET",
+            "sortNum": 15000,
+            "created": "2024-05-01T18:43:06.772Z",
+            "modified": "2024-05-01T18:43:22.708Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Retour à la pharmacie\",\n  \"description\": \"Bonjour c'est moi\",\n  \"startAt\": \"2024-04-30T13:40:18Z\",\n  \"endAt\": \"2024-04-30T13:40:18Z\",\n  \"createAt\": \"2024-04-30T21:39:01Z\",\n  \"usersId\": \"1\"\n}\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "7461951a-346c-494f-8078-fd5373f20e98",
+            "colId": "d3c16e6b-d7aa-41b0-9d76-2937c84f2208",
+            "containerId": "",
+            "name": "TASK Read One ID",
+            "url": "http://localhost:8088/api/task/",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-05-01T18:43:33.405Z",
+            "modified": "2024-05-01T18:55:34.542Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Retour à la pharmacie\",\n  \"description\": \"Bonjour c'est moi\",\n  \"startAt\": \"2024-04-30T13:40:18Z\",\n  \"endAt\": \"2024-04-30T13:40:18Z\",\n  \"createAt\": \"2024-04-30T21:39:01Z\",\n  \"usersId\": \"1\"\n}\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "f3559841-7279-43eb-a8d2-1a691e851c64",
+            "colId": "d3c16e6b-d7aa-41b0-9d76-2937c84f2208",
+            "containerId": "",
+            "name": "TASK Create",
+            "url": "http://localhost:8088/api/task",
+            "method": "POST",
+            "sortNum": 40000,
+            "created": "2024-05-01T18:44:05.108Z",
+            "modified": "2024-05-01T18:44:23.028Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Retour à la pharmacie\",\n  \"description\": \"Bonjour c'est moi\",\n  \"startAt\": \"2024-04-30T13:40:18Z\",\n  \"endAt\": \"2024-04-30T13:40:18Z\",\n  \"createAt\": \"2024-04-30T21:39:01Z\",\n  \"usersId\": \"1\"\n}\n",
+                "form": []
+            }
+        },
+        {
+            "_id": "61186096-d435-469f-8981-ad42bc2b4b96",
+            "colId": "d3c16e6b-d7aa-41b0-9d76-2937c84f2208",
+            "containerId": "",
+            "name": "TASK Delete",
+            "url": "http://localhost:8088/api/task/70",
+            "method": "DELETE",
+            "sortNum": 50000,
+            "created": "2024-05-01T18:42:29.550Z",
+            "modified": "2024-05-01T18:42:29.550Z",
+            "headers": [
+                {
+                    "name": "Accept",
+                    "value": "application/json"
+                }
+            ],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"Retour à la pharmacie\",\n  \"description\": \"Bonjour c'est moi\",\n  \"startAt\": \"2024-04-30T13:40:18Z\",\n  \"endAt\": \"2024-04-30T13:40:18Z\",\n  \"createAt\": \"2024-04-30T21:39:01Z\",\n  \"usersId\": \"1\"\n}\n",
+                "form": []
+            }
+        }
+    ],
+    "ref": "TyawLstAIaE7oDceWPBmHSbNmSDcDQvFW5OMExunJW_DQZbFu31YAtECbtnTrup9rYg7IobA3kNFViIn6tjUiA"
+}

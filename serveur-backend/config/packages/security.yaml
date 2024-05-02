@@ -33,12 +33,19 @@ security:
       pattern: ^/api
       stateless: true
       jwt: ~
+
+  role_hierarchy:
+    ROLE_MOD: [ROLE_USER]
+    ROLE_ADMIN: [ROLE_MOD]
+    ROLE_WEBMASTER: [ROLE_ADMIN]
+
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
+    - { path: ^/api/admin, roles: ["ROLE_ADMIN"] }
     - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-    - { path: ^/admin, roles: ROLE_ADMIN }
     # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:
