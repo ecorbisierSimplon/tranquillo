@@ -66,8 +66,8 @@ class Task
    dans la classe d'entité `Task` définit une relation plusieurs-à-un entre les ` Entité Task` et
    entité `User` dans le mappage Doctrine ORM. */
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
     #[ORM\Column(name: "users_id")]
+    #[Assert\NotBlank(message: 'error.task.user: The key « user » for task entity must be a non-empty  string.')]
     #[Groups(['tasks.index', 'tasks.show'])]
     private ?int $usersId = null;
 
@@ -150,14 +150,14 @@ class Task
         return $this;
     }
 
-    public function getUsersId(): ?User
+    public function getUsersId(): ?int
     {
         return $this->usersId;
     }
 
     public function setUsersId(?User $users): static
     {
-        $this->usersId = $users->getId();
+        $this->usersId = intval($users->getId());
         return $this;
     }
 }

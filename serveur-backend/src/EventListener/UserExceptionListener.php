@@ -86,7 +86,7 @@ final class UserExceptionListener
             }
             if ($customError) {
                 $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-                $event->setResponse($response);
+                // $event->setResponse($response);
             }
         }
     }

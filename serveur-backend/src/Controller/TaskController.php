@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Dto\TaskDto;
 use App\Entity\Task;
 use App\Security\Voter\TasksVoter;
+use App\Security\Voter\TaskVoter;
 use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -12,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('api/task', name: 'app_task')]
@@ -40,7 +43,8 @@ class TaskController extends AbstractController
     }
 
     #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_read_one', methods: ['GET'])]
-    public function readOne($id): JsonResponse
+    #[IsGranted(TaskVoter::VIEW, subject: 'task')]
+    public function readOne($id, Task $task): JsonResponse
     {
         return $this->service->findOne($id);
     }
@@ -49,7 +53,11 @@ class TaskController extends AbstractController
     #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
-        return $this->service->delete($id);
+        $user = $this->getUser();
+        if (!$user instanceof UserInterface) {
+            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
+        }
+        return $this->service->delete($id, $user);
     }
 
 

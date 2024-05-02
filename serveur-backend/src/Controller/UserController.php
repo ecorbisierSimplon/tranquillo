@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Dto\UserDto;
 use App\Entity\User;
 use App\Service\UserService;
@@ -54,7 +55,7 @@ class UserController extends AbstractController
     public function readMe(): JsonResponse
     {
         $user = $this->getUser();
-        // return $user;
+
         if (!$user instanceof UserInterface) {
             throw new \LogicException('Impossible de récupérer l\'utilisateur.');
         }

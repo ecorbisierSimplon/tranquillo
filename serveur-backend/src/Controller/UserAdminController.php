@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Dto\UserDto;
 use App\Service\UserService;
 use Doctrine\ORM\OptimisticLockException;
