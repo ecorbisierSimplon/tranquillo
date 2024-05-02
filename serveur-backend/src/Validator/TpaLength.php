@@ -33,10 +33,12 @@ class TpaLength extends Constraint
         self::COUNT_GRAPHEMES,
     ];
 
-    public string $maxMessage = 'Cette valeur est trop longue. Elle doit contenir {{ limit }} caractères ou moins.|Cette valeur est trop longue. Il doit contenir {{ limit }} caractères ou moins.';
-    public string $minMessage = 'Cette valeur est trop courte. Il doit contenir {{ limit }} caractères ou plus.|Cette valeur est trop courte. Il doit contenir {{ limit }} caractères ou plus.';
-    public string $exactMessage = 'Cette valeur doit contenir exactement {{ limit }} caractères.|Cette valeur doit contenir exactement {{ limit }} caractères.';
-    public string $charsetMessage = 'Cette valeur ne correspond pas au jeu de caractères {{ charset }} attendu.';
+    public string $maxMessage = 'error.{{ entity }}.{{ field }}: Cette valeur est trop longue. Elle doit contenir {{ limit }} caractères ou moins.|error.{{ entity }}.{{ field }}: Cette valeur est trop longue. Il doit contenir {{ limit }} caractères ou moins.';
+    public string $minMessage = 'error.{{ entity }}.{{ field }}: Cette valeur est trop courte. Il doit contenir {{ limit }} caractères ou plus.|error.{{ entity }}.{{ field }}: Cette valeur est trop courte. Il doit contenir {{ limit }} caractères ou plus.';
+    public string $exactMessage = 'error.{{ entity }}.{{ field }}: Cette valeur doit contenir exactement {{ limit }} caractères.|error.{{ entity }}.{{ field }}: Cette valeur doit contenir exactement {{ limit }} caractères.';
+    public string $charsetMessage = 'error.{{ entity }}.{{ field }}: Cette valeur ne correspond pas au jeu de caractères {{ charset }} attendu.';
+    public ?string $field = "";
+    public ?string $entity = "";
     public ?int $max = null;
     public ?int $min = null;
     public string $charset = 'UTF-8';
@@ -55,6 +57,8 @@ class TpaLength extends Constraint
         ?string $charset = null,
         ?callable $normalizer = null,
         ?string $countUnit = null,
+        ?string $field = "",
+        ?string $entity = "",
         ?string $exactMessage = null,
         ?string $minMessage = null,
         ?string $maxMessage = null,
@@ -79,8 +83,10 @@ class TpaLength extends Constraint
 
         parent::__construct($options, $groups, $payload);
 
-        $this->min = $min;
-        $this->max = $max;
+        $this->min = $min ?? $this->min;
+        $this->max = $max ?? $this->max;
+        $this->field = $field ?? $this->field;
+        $this->entity = $entity ?? $this->entity;
         $this->charset = $charset ?? $this->charset;
         $this->normalizer = $normalizer ?? $this->normalizer;
         $this->countUnit = $countUnit ?? $this->countUnit;

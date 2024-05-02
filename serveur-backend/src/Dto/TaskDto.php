@@ -3,15 +3,21 @@
 namespace App\Dto;
 
 // use App\Validator\DateTimeImmutable;
+
+use App\Validator\TpaLength;
 use App\Validator\UserRegex;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class TaskDto
 {
+    #[UserRegex(regex: 'number', entity: "task", field: "id")]
+    #[Groups(['tasks: read', 'tasks: create'])]
+    private ?int $id = null;
 
     #[Groups(['tasks: create'])]
-    #[Assert\NotBlank(message: "Le nom de la tache ne peut être vide !")]
+    #[Assert\NotBlank(message: "error.task.name: Le nom de la tache ne peut être vide !")]
+    #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     private ?string $name = null;
 
     #[Groups(['tasks: create'])]
@@ -19,8 +25,8 @@ class TaskDto
     private ?string $description = null;
 
     #[Groups(['tasks: create'])]
+    #[UserRegex(regex: 'number', information: "Le rappel est calculé en minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
-    #[UserRegex(regex: 'number', field: 'Rappel', information: "Le rappel est calculé en minute(s)")]
     private ?int $reminder = null;
 
     #[Groups(['tasks: create'])]
@@ -31,6 +37,11 @@ class TaskDto
 
     #[Groups(['tasks: create'])]
     private  ?\DateTimeImmutable  $createAt = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getName(): ?string
     {

@@ -1,6 +1,13 @@
 <?php
 $fixturesUsers = array(
     array(
+        'role' => 'ROLE_WEBMASTER',
+        'email' => 'contact@corbisier.fr',
+        'lastname' => 'CORBISIER',
+        'firstname' => 'Eric',
+        'password' => 'Eric:CORBISIER:1234'
+    ),
+    array(
         'role' => 'ROLE_ADMIN',
         'email' => 'ecorbisier.simplon@gmail.com',
         'lastname' => 'CORBISIER',

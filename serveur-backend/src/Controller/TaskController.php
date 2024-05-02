@@ -4,12 +4,8 @@ namespace App\Controller;
 
 use App\Dto\TaskDto;
 use App\Service\TaskService;
-use App\Entity\Task;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -54,14 +50,4 @@ class TaskController extends AbstractController
     // {
     // }
 
-    // #[Route('/{id}', name: 'app_api_users_delete', methods: ['DELETE'])]
-    // public function delete(Request $request, Task $tpaUser, EntityManagerInterface $entityManager): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
-    //         $entityManager->remove($tpaUser);
-    //         $entityManager->flush();
-    //     }
-
-    //     return $this->redirectToRoute('app_api_users_index', [], Response::HTTP_SEE_OTHER);
-    // }
 }

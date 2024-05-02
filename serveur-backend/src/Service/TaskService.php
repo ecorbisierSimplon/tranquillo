@@ -73,8 +73,6 @@ class TaskService extends AbstractController
         return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
     }
 
-
-
     public function delete($id): JsonResponse
     {
         // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
@@ -84,7 +82,7 @@ class TaskService extends AbstractController
         $codeResponse = Response::HTTP_NOT_FOUND;
 
         if ($task === null) {
-            $message = "La tache que vous voulez supprimée n'existe pas";
+            $message = "La tache que vous voulez supprimer n'existe pas";
         } elseif ($task === 404) {
             $message = "L'entité que vous appelez n'existe pas";
         } else {

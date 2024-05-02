@@ -14,7 +14,9 @@ class UserRegex extends Constraint
     protected const ERROR_NAMES = [
         self::USERREGEX_FAILED_ERROR => 'USERREGEX_FAILED_ERROR',
     ];
-    public string $message = 'This value is not valid.';
+    public string $message = 'error.{{ entity }}.{{ field }}: This value "{{ value }}" is not valid.';
+    public ?string $field = "";
+    public ?string $entity = "";
     public ?string $pattern = null;
     public ?string $htmlPattern = null;
     public bool $match = true;
@@ -24,9 +26,10 @@ class UserRegex extends Constraint
     public function __construct(
         string $regex = null,
         string|array|null $pattern = null,
-        ?string $message = null,
+        string $message = null,
+        ?string $field = "",
+        ?string $entity = "",
         ?string $information = null,
-        ?string $field = "champ",
         ?array $groups = null,
         mixed $payload = null,
         array $options = []
@@ -37,9 +40,9 @@ class UserRegex extends Constraint
 
         if ($message === null) {
 
-            $message = ($regex === "password") ? "Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ." : $this->message;
-            $message = ($regex === "name") ? "La valeur '$field' ne répond pas aux critères de sécurité !" : $message;
-            $message = ($regex === "number") ? "La valeur '$field' doit être numérique !" : $message;
+            $message = ($regex === "password") ? "error.{{ entity }}.{{ field }}: Le mot de passe ne correspond pas aux critères de sécurités (minuscules, majuscules, chiffres, spéciaux : @#$%.^&§+=! ." : $this->message;
+            $message = ($regex === "name") ? "error.{{ entity }}.{{ field }}: La valeur  ne répond pas aux critères de sécurité !" : $message;
+            $message = ($regex === "number") ? "error.{{ entity }}.{{ field }}: La valeur doit être numérique !" : $message;
         }
         if ($information != null) {
             $message .= " " . $information;
@@ -53,6 +56,8 @@ class UserRegex extends Constraint
         parent::__construct($options, $groups, $payload);
 
         $this->message = $message ?? $this->message;
+        $this->field = $field ?? $this->field;
+        $this->entity = $entity ?? $this->entity;
         $this->htmlPattern = $htmlPattern ?? $this->htmlPattern;
         $this->match = $match ?? $this->match;
         $this->normalizer = $normalizer ?? $this->normalizer;
