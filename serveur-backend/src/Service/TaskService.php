@@ -5,11 +5,12 @@ namespace App\Service;
 use App\Dto\TaskDto;
 use App\Entity\Task;
 use App\Repository\TaskRepository;
+use App\Security\Voter\TasksVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
 
 
 class TaskService extends AbstractController

@@ -3,11 +3,16 @@
 namespace App\Controller;
 
 use App\Dto\TaskDto;
+use App\Entity\Task;
+use App\Security\Voter\TasksVoter;
 use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('api/task', name: 'app_task')]
 class TaskController extends AbstractController
@@ -34,15 +39,14 @@ class TaskController extends AbstractController
         return  $this->service->findAll();
     }
 
-
-    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_read_one', methods: ['GET'])]
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_read_one', methods: ['GET'])]
     public function readOne($id): JsonResponse
     {
         return $this->service->findOne($id);
     }
 
 
-    #[Route('/{id}', requirements: ["id" => "(\d+)"], name: 'app_api_task_delete', methods: ['DELETE'])]
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
         return $this->service->delete($id);
