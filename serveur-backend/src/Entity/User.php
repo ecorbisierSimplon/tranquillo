@@ -26,8 +26,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(name: 'email')]
-    #[Assert\Email(message: "error.user.email: L'email n'est pas valide !")]
-    #[Assert\NotBlank(message: "error.user.email: L'email ne peut être vide !")]
+    #[Assert\Email(message: 'error.user.email: Invalid email')]
+    #[Assert\NotBlank(message: 'error.user.email: The key « email » must be a non-empty  string.')]
     #[TpaLength(min: 3, max: 180, entity: 'user', field: 'email')]
     #[Groups(['users: read', 'users: create'])]
     private ?string $email = null;
@@ -44,27 +44,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(name: 'user_password')]
     #[UserRegex(regex: 'password', entity: 'user', field: 'password')]
-    #[Assert\NotBlank(message: 'error.user.password: Le mot de passe ne peut être vide !')]
+    #[Assert\NotBlank(message: 'error.user.password: The key « password » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'password')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $password = null;
 
     #[ORM\Column(name: 'lastname')]
     #[UserRegex(regex: 'name', entity: 'user', field: 'lastname')]
-    #[Assert\NotBlank(message: 'error.user.lastname: Le nom ne peut être vide !')]
+    #[Assert\NotBlank(message: 'error.user.lastname: The key « lastname » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'lastname')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $lastname = null;
 
     #[ORM\Column(name: 'firstname')]
     #[UserRegex(regex: 'name', entity: 'user', field: 'firstname')]
-    #[Assert\NotBlank(message: 'error.user.firstname: Le prénom ne peut être vide !')]
+    #[Assert\NotBlank(message: 'error.user.firstname: The key « firstname » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'firstname')]
     #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $firstname = null;
 
     #[ORM\Column(name: 'user_create_at')]
-    #[Assert\NotBlank(message: 'error.user.createAT: La date de création ne peut être vide !')]
+    #[Assert\NotBlank(message: 'error.user.createAT: The key « createAt » must be a non-empty  string.')]
     #[Groups(['tasks: read', 'users: read', 'users: create'])]
     private ?\DateTimeImmutable $createAt = null;
 
@@ -93,6 +93,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
+    }
+
+
+    /**
+     * Méthode getUsername qui permet de retourner le champ qui est utilisé pour l'authentification.
+     *
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->getUserIdentifier();
     }
 
     /**

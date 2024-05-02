@@ -78,9 +78,9 @@ final class UserExceptionListener
                 $codeResponse = Response::HTTP_UNPROCESSABLE_ENTITY;
                 $customError = true;
             } else {
-                $title = "Erreur  !";
+                $title = "Error !";
                 // $message = $this->translator->trans("this a error clear last", locale: 'fr_FR');
-                $message = $exception->getMessage();
+                $message = $this->translator->trans($exception->getMessage());
                 $codeResponse = Response::HTTP_BAD_REQUEST;
                 $customError = true;
             }

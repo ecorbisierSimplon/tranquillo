@@ -90,6 +90,13 @@ cd $folder_rel_serveur
 pause s 1 m
 composer require "symfony/translation"
 
+echo
+echo -e "'\e[1m Installation de composer require lexik/jwt-authentication-bundle \e[0m'"
+echo "---------------------------------------------------"
+cd $folder_rel_serveur
+pause s 1 m
+composer require lexik/jwt-authentication-bundle
+
 # # cd $folder_rel_serveur
 # # pause s 1 m
 # # composer require "symfony/symfony:7.0.6"
