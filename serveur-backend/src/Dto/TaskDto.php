@@ -11,31 +11,31 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class TaskDto
 {
-    #[UserRegex(regex: 'number', entity: "task", field: "id")]
     #[Groups(['tasks: read', 'tasks: create'])]
+    #[UserRegex(regex: 'number', entity: "task", field: "id")]
     private ?int $id = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     private ?string $name = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[Assert\NoSuspiciousCharacters()]
     private ?string $description = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
     private ?int $reminder = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $startAt = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $endAt = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $createAt = null;
 
     public function getId(): ?int

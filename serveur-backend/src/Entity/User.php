@@ -30,21 +30,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(name: 'user_id')]
     #[UserRegex(regex: 'number', entity: 'user', field: 'id')]
     #[Assert\PositiveOrZero()]
-    #[Groups(['users: read', 'users: create', 'tasks: all'])]
     private ?int $id = null;
 
     #[ORM\Column(name: 'email')]
     #[Assert\Email(message: 'error.user.email: Invalid email')]
     #[Assert\NotBlank(message: 'error.user.email: The key « email » must be a non-empty  string.')]
     #[TpaLength(min: 3, max: 180, entity: 'user', field: 'email')]
-    #[Groups(['users: read', 'users: create'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column(name: 'user_role')]
-    #[Groups(['users: read', 'users: create'])]
     private array $roles = [];
 
     /**
@@ -54,26 +51,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[UserRegex(regex: 'password', entity: 'user', field: 'password')]
     #[Assert\NotBlank(message: 'error.user.password: The key « password » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'password')]
-    #[Groups(['users: create', 'users:pass'])]
     private ?string $password = null;
 
     #[ORM\Column(name: 'lastname')]
     #[UserRegex(regex: 'name', entity: 'user', field: 'lastname')]
     #[Assert\NotBlank(message: 'error.user.lastname: The key « lastname » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'lastname')]
-    #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $lastname = null;
 
     #[ORM\Column(name: 'firstname')]
     #[UserRegex(regex: 'name', entity: 'user', field: 'firstname')]
     #[Assert\NotBlank(message: 'error.user.firstname: The key « firstname » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'firstname')]
-    #[Groups(['users: read', 'users: create', 'users:pass'])]
     private ?string $firstname = null;
 
     #[ORM\Column(name: 'user_create_at')]
     #[Assert\NotBlank(message: 'error.user.createAT: The key « createAt » must be a non-empty  string.')]
-    #[Groups(['tasks: read', 'users: read', 'users: create'])]
     private ?\DateTimeImmutable $createAt = null;
 
 

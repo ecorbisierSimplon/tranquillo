@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\TaskDto;
 use App\Entity\User;
+use App\Helper\ObjectHydrator;
 use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -11,15 +12,17 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
+#[AsController]
 #[Route('api/task', name: 'app_task')]
-class TaskController extends AbstractController
+final class TaskController extends AbstractController
 {
     private $service;
 
     /**
      * La fonction ci-dessus est un constructeur en PHP qui initialise un objet TaskService.
-     * 
+     *
      * @param TaskService service Le paramètre « service » dans le constructeur est une instance de la
      * classe TaskService. Cela signifie que lorsqu'un objet de cette classe est créé, il nécessite
      * qu'une instance de la classe TaskService soit transmise en tant que dépendance. Il s'agit d'une
@@ -31,55 +34,189 @@ class TaskController extends AbstractController
         $this->service = $service;
     }
 
-    #[Route(['', '/'], name: 'app_api_task_read_all', methods: ['GET'])]
+
+    // ##########################################
+    // ----------------- POST -------------------
+    // ##########################################
+    /**
+     * ------------  create ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route(['', '/'], name: 'task_create', methods: ['POST'])]
+    public function create(#[MapRequestPayload(serializationContext: ['tasks: create'])] TaskDto $taskDto): JsonResponse
+    {
+        $response[] = $this->service->create($taskDto);
+
+        if ($response['task'] == null) {
+            return $this->getError($response);
+        }
+        $response[] = $this->service->findOne($response['task']);
+        // TODO: ADD CONVERT Task IN TaskDto
+
+        $taskDto = ObjectHydrator::hydrate(
+            json_decode($response['task'], true),
+            new TaskDto()
+        );
+
+        dd($taskDto);
+
+        return $this->json(
+            $taskDto,
+            intval($response['code']),
+            [],
+            ['groups' => ['tasks: read']]
+        );
+    }
+
+    // ##########################################
+    // ----------------- GET -------------------
+    // ##########################################
+    /**
+     * ------------  read all ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route(['', '/'], name: 'task_read_all', methods: ['GET'])]
     #[IsGranted('ROLE_WEBMASTER')]
-    public function readAll()
+    public function readAll(): JsonResponse
     {
-        return  $this->service->findAll();
+        $response[] = $this->service->findAll();
+
+        if ($response['task'] == null) {
+            return $this->getError($response);
+        }
+
+        // TODO: ADD CONVERT Task IN TaskDto
+
+        $taskDto = ObjectHydrator::hydrate(
+            json_decode($response['task'], true),
+            new TaskDto()
+        );
+
+        dd($taskDto);
+        return $this->json(
+            $taskDto,
+            intval($response['code']),
+            [],
+            ['groups' => ['tasks: read']]
+        );
     }
 
-    #[Route('/list', name: 'app_api_task_read_all', methods: ['GET'])]
-    public function read(): JsonResponse
+    /**
+     * ------------  read list ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route('/list', name: 'task_read_list', methods: ['GET'])]
+    public function readList(): JsonResponse
     {
-        return  $this->service->findByUserField($this->isUserExist());
+        $response[] = $this->service->findByUserField($this->getIdUser());
+
+        if ($response['task'] == null) {
+            return $this->getError($response);
+        }
+
+        // TODO: ADD CONVERT Task IN TaskDto
+
+        $taskDto = ObjectHydrator::hydrate(
+            json_decode($response['task'], true),
+            new TaskDto()
+        );
+
+        dd($taskDto);
+
+        return $this->json(
+            $taskDto,
+            intval($response['code']),
+            [],
+            ['groups' => ['tasks: read']]
+        );
     }
 
-    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_read_one', methods: ['GET'])]
+    /**
+     * ------------  read one ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'task_read_one', methods: ['GET'])]
     public function readOne($id): JsonResponse
     {
-        return $this->service->findOne($id);
+        $response[] = $this->service->findOne($id);
+
+        if ($response['task'] == null) {
+            return $this->getError($response);
+        }
+
+
+        // TODO: ADD CONVERT Task IN TaskDto
+
+        $taskDto = ObjectHydrator::hydrate(
+            json_decode($response['task'], true),
+            new TaskDto()
+        );
+
+        dd($taskDto);
+
+        return $this->json(
+            $taskDto,
+            intval($response['code']),
+            [],
+            ['groups' => ['tasks: read']]
+        );
     }
 
-    #[Route(['', '/'], name: 'app_api_task_create', methods: ['POST'])]
-    public function create(
-        #[MapRequestPayload(
-            serializationContext: ['tasks: create']
-        )]
-        TaskDto $taskDto,
 
-    ): JsonResponse {
-        return $this->service->create($taskDto);
-    }
-
-    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_delete', methods: ['DELETE'])]
-    public function delete($id): JsonResponse
-    {
-        return $this->service->delete($id, $this->isUserExist());
-    }
-
-
-
-    // #[Route('/{id}/edit', name: 'app_api_tasks_edit', methods: ['PUT'])]
+    // ##########################################
+    // ----------------- UPDATE-----------------
+    // ##########################################
+    /**
+     * ------------  put ------------------
+     * @return JsonResponse
+     *
+     */
+    // #[Route('/{id}/edit', name: 'tasks_edit', methods: ['PUT'])]
     // public function edit(Request $request, Task $tpaTask, EntityManagerInterface $entityManager): void
     // {
     // }
 
-    private function isUserExist()
+    // ##########################################
+    // ----------------- DELETE ----------------
+    // ##########################################
+    /**
+     * ------------  delete  ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'task_delete', methods: ['DELETE'])]
+    public function delete($id): JsonResponse
+    {
+        $response = $this->service->delete($id, $this->getIdUser());
+        return $this->getError($response);
+    }
+
+    // ##########################################
+    // ----------------- PRIVATE ---------------
+    // ##########################################
+
+    private function getIdUser(): ?int
     {
         $user = $this->getUser();
         if (!$user instanceof User) {
-            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
+            throw new \LogicException('Unable to recover the user.');
         }
         return $user->getId();
+    }
+
+    private function getError($response): JsonResponse
+    {
+        return new JsonResponse(
+            [
+                "title" => $response['title'],
+                "status" => intval($response['code']),
+                "detail" => $response['message']
+            ],
+            intval($response['code'])
+        );
     }
 }

@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Task
 {
 
+
     public function __construct()
     {
     }
@@ -29,42 +30,36 @@ class Task
     // Cela est souvent utilisé pour indiquer qu'une valeur peut être absente ou non définie dans certains contextes.
     // C'est couramment utilisé lorsque nous avons besoin de distinguer entre une valeur valide et l'absence de valeur.
 
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "task_id")]
     #[Assert\PositiveOrZero()]
     #[UserRegex(regex: 'number', entity: "task", field: "id")]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?int $id = null;
 
     #[ORM\Column(name: "task_name")]
     #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?string $name = null;
 
     #[ORM\Column(name: "task_description")]
     #[Assert\NoSuspiciousCharacters()]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
     #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?int $reminder = null;
 
     #[ORM\Column(name: "task_start_at")]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(name: "task_end_at")]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
     #[Assert\NotBlank(message: 'error.task.createAt: The key « createAt » must be a non-empty  string.')]
-    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $createAt = null;
 
     /* Le code `#[ORM\ManyToOne(name: "users_id", inversedBy: 'tasks')] private ?User  = null;`

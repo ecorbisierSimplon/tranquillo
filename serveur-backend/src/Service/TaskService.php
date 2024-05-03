@@ -4,13 +4,10 @@ namespace App\Service;
 
 use App\Dto\TaskDto;
 use App\Entity\Task;
-use App\Entity\User;
 use App\Repository\TaskRepository;
-use App\Security\Voter\TasksVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -19,51 +16,25 @@ class TaskService extends AbstractController
     private $taskRepository;
     private $em;
 
+    /**
+     * @param TaskRepository $taskRepository
+     * @param EntityManagerInterface $entityManager
+     * @return void
+     */
     public function __construct(TaskRepository $taskRepository, EntityManagerInterface $entityManager)
     {
         $this->taskRepository = $taskRepository;
         $this->em = $entityManager;
     }
 
-    public function  findAll(): JsonResponse
-    {
-        return $this->json($this->taskRepository->findAll(), 200, [], [
-            'groups' => ['tasks: read']
-        ]);
-    }
+    // ##########################################
+    // ----------------- CREATE ----------------
+    // ##########################################
 
-    public function findOne($id): JsonResponse
-    {
-        $task = $this->taskRepository->findOneByTask('id', $id);
-
-        if ($task === null) {
-            $title = "Lecture impossible";
-            $message = "La tache que vous voulez lire n'existe pas";
-            $codeResponse = Response::HTTP_NOT_FOUND;
-            return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-        }
-        return $this->json($task, 201, [], [
-            'groups' => ['tasks: read']
-        ]);
-    }
-
-
-    public function findByUserField($id): JsonResponse
-    {
-        $task = $this->taskRepository->findByUserField($id);
-
-        if ($task === null) {
-            $title = "Lecture impossible";
-            $message = "Vous n'avez pas encore de taches.";
-            $codeResponse = Response::HTTP_NOT_FOUND;
-            return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-        }
-        return $this->json($task, 201, [], [
-            'groups' => ['tasks: read']
-        ]);
-    }
-
-
+    /**
+     * @param TaskDto $taskDto
+     * @return (Task|int)[]|(null|string|int)[]
+     */
     public function create(TaskDto $taskDto)
     {
         $taskCreateAt = new \DateTimeImmutable();
@@ -81,50 +52,120 @@ class TaskService extends AbstractController
 
             $this->em->persist($task);
             $this->em->flush();
-            return $this->json($task, Response::HTTP_CREATED, [], [
-                'groups' => ['tasks: create']
-            ]);
+
+            return ["task" => $task->getId(), "code" => Response::HTTP_CREATED];
         }
-        $title = "Création refusée";
-        $message = "La tache '" . $taskDto->getName() . "' existe depuis le " . $taskCreateAt->format('d/m/Y') . " à " . $taskCreateAt->format('H:m:s');
-        $codeResponse = Response::HTTP_BAD_REQUEST;
-        return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
+        $title = "Not found";
+        $message = "The task '" . $taskDto->getName() . "' has existed since " . $taskCreateAt->format('d/m/Y') . " at " . $taskCreateAt->format('H:m:s');
+        return ["task" => null, "title" => $title, "code" => 400, "message" => $message];
     }
 
-    public function delete($id, $userId): JsonResponse
+
+    // ##########################################
+    // ----------------- GET -------------------
+    // ##########################################
+
+    /**
+     * ------------  read all ----------------
+     * @return array
+     */
+    public function  findAll(): array /* Task */
+    {
+        $task = $this->taskRepository->findAll();
+        if ($task === null) {
+            $title = "Tasks not found";
+            $message = "There are no tasks at all.";
+            return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
+        }
+        return ["task" => $task];
+    }
+
+    /**
+     * ------------  read list ----------------
+     *
+     * @param mixed $id
+     * @return array
+     */
+    public function findByUserField($id): array /* Task */
+    {
+        $task = $this->taskRepository->findByUserField($id);
+
+        if ($task === null) {
+            $title = "Tasks not found";
+            $message = "You have not tasks";
+            return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
+        }
+        return ["task" => $task, "code" => Response::HTTP_ACCEPTED];
+    }
+
+    /**
+     * ------------  read one ----------------
+     *
+     * @param mixed $id
+     * @return array
+     */
+    public function findOne($id): array /* Task */
+    {
+        $task[] = $this->taskRepository->findOneByTask('id', $id);
+
+        if ($task === null) {
+            $title = "Not found";
+            $message = "The task doesn't exist";
+            return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
+        }
+        return ["task" => $task, "code" => Response::HTTP_ACCEPTED];
+    }
+
+
+    // ##########################################
+    // ----------------- GET -------------------
+    // ##########################################
+
+    /**
+     * @param mixed $id
+     * @param mixed $userId
+     * @return array
+     */
+    public function delete($id, $userId): array /* Task */
     {
         $task = $this->taskRepository->findOneByTask('id', $id);
-        $title = "Suppression refusée";
+        $title = "Delete is rejected";
         $codeResponse = Response::HTTP_NOT_FOUND;
 
         if ($task === null) {
-            $message = "La tache que vous voulez supprimer n'existe pas";
+            $message = "The task you want to delete does not exist";
         } elseif ($task === 404) {
-            $message = "L'entité que vous appelez n'existe pas";
+            $message = "The entity you call does not exist";
         } else {
             if ($task->getUsersId() == $userId) {
                 $this->em->remove($task);
                 $this->em->flush();
                 $codeResponse = Response::HTTP_ACCEPTED;
-                $title = "Suppression d'une tache";
-                $message = "La tache '" . $task->getName() .  "', créée le " . $task->getCreateAt()->format('d/m/Y') .  ", a été supprimée de la base de données";
+                $title = "Delete a task";
+                $message = "The task '" . $task->getName() .  "', creates the " . $task->getCreateAt()->format('d/m/Y') .  ", has been deleted";
             } else {
                 $codeResponse = Response::HTTP_FORBIDDEN;
-                $message = "Cette tache ne vous appartient pas";
+                $message = "This is not your task";
             }
         }
-
-        $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-        return $response;
+        return ["title" => $title, "code" => $codeResponse, 'detail' => $message];
     }
 
+
+    // ##########################################
+    // ----------------- PRIVATE ---------------
+    // ##########################################
+
+
+    /**
+     * @param TaskDto $taskDto
+     * @return Task
+     */
     public function ifExist(TaskDto $taskDto)
     {
-        $taskName = $taskDto->getName();
-        $taskCreateAt = new \DateTimeImmutable();
-
-        $existingTask = $this->taskRepository->findExistingTask($taskName, $taskCreateAt);
-
-        return $existingTask;
+        return $this->taskRepository->findExistingTask(
+            $taskDto->getName(),
+            new \DateTimeImmutable()
+        );
     }
 }

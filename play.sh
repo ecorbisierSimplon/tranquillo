@@ -102,7 +102,7 @@ if ! docker images >/dev/null 2>&1; then
     echo "Lancement de Docker desktop"
     echo "--------------------------------"
     pause s 2 m
-    docker-desktop
+    /opt/docker-desktop/bin/docker-desktop
     echo " ** Lancement en cours ... **"
 
     i=0
