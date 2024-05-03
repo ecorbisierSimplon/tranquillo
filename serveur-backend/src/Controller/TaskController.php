@@ -2,19 +2,14 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Dto\TaskDto;
-use App\Entity\Task;
-use App\Security\Voter\TasksVoter;
-use App\Security\Voter\TaskVoter;
+use App\Entity\User;
 use App\Service\TaskService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('api/task', name: 'app_task')]
@@ -36,30 +31,24 @@ class TaskController extends AbstractController
         $this->service = $service;
     }
 
-    #[Route('/', name: 'app_api_task_read_all', methods: ['GET'])]
-    public function readAll(): JsonResponse
+    #[Route(['', '/'], name: 'app_api_task_read_all', methods: ['GET'])]
+    #[IsGranted('ROLE_WEBMASTER')]
+    public function readAll()
     {
         return  $this->service->findAll();
     }
 
+    #[Route('/list', name: 'app_api_task_read_all', methods: ['GET'])]
+    public function read(): JsonResponse
+    {
+        return  $this->service->findByUserField($this->isUserExist());
+    }
+
     #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_read_one', methods: ['GET'])]
-    #[IsGranted(TaskVoter::VIEW, subject: 'task')]
-    public function readOne($id, Task $task): JsonResponse
+    public function readOne($id): JsonResponse
     {
         return $this->service->findOne($id);
     }
-
-
-    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_delete', methods: ['DELETE'])]
-    public function delete($id): JsonResponse
-    {
-        $user = $this->getUser();
-        if (!$user instanceof UserInterface) {
-            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
-        }
-        return $this->service->delete($id, $user);
-    }
-
 
     #[Route(['', '/'], name: 'app_api_task_create', methods: ['POST'])]
     public function create(
@@ -72,10 +61,25 @@ class TaskController extends AbstractController
         return $this->service->create($taskDto);
     }
 
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_task_delete', methods: ['DELETE'])]
+    public function delete($id): JsonResponse
+    {
+        return $this->service->delete($id, $this->isUserExist());
+    }
+
+
 
     // #[Route('/{id}/edit', name: 'app_api_tasks_edit', methods: ['PUT'])]
     // public function edit(Request $request, Task $tpaTask, EntityManagerInterface $entityManager): void
     // {
     // }
 
+    private function isUserExist()
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
+        }
+        return $user->getId();
+    }
 }

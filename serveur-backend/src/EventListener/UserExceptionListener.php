@@ -23,11 +23,13 @@ final class UserExceptionListener
 {
     private $requestStack;
     private $translator;
+    private $msg;
 
     public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
     {
         $this->requestStack = $requestStack;
         $this->translator = $translator;
+        $this->msg = $_ENV["APP_MSG"];
     }
 
     #[AsEventListener(event: KernelEvents::EXCEPTION)]
@@ -84,9 +86,9 @@ final class UserExceptionListener
                 $codeResponse = Response::HTTP_BAD_REQUEST;
                 $customError = true;
             }
-            if ($customError) {
+            if ($customError && $this->msg == 1) {
                 $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
-                // $event->setResponse($response);
+                $event->setResponse($response);
             }
         }
     }
