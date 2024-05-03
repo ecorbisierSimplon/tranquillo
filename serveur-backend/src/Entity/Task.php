@@ -29,46 +29,46 @@ class Task
     #[ORM\Column(name: "task_id")]
     #[Assert\PositiveOrZero()]
     #[UserRegex(regex: 'number', entity: "task", field: "id")]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?int $id = null;
 
     #[ORM\Column(name: "task_name")]
     #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?string $name = null;
 
     #[ORM\Column(name: "task_description")]
     #[Assert\NoSuspiciousCharacters()]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
     #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?int $reminder = null;
 
     #[ORM\Column(name: "task_start_at")]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(name: "task_end_at")]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\Column(name: "task_create_at")]
     #[Assert\NotBlank(message: 'error.task.createAt: The key « createAt » must be a non-empty  string.')]
-    #[Groups(['tasks: read', 'tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create', 'tasks: all'])]
     private ?\DateTimeImmutable $createAt = null;
 
     /* Le code `#[ORM\ManyToOne(name: "users_id", inversedBy: 'tasks')] private ?User  = null;`
    dans la classe d'entité `Task` définit une relation plusieurs-à-un entre les ` Entité Task` et
    entité `User` dans le mappage Doctrine ORM. */
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(nullable: false)]
     #[ORM\Column(name: "users_id")]
-    #[Groups(['tasks.index', 'tasks.show'])]
+    #[Assert\NotBlank(message: 'error.task.user: The key « user » for task entity must be a non-empty  string.')]
+    #[Groups(['tasks.index', 'tasks.show', 'tasks: all'])]
     private ?int $usersId = null;
 
 
@@ -150,14 +150,14 @@ class Task
         return $this;
     }
 
-    public function getUsersId(): ?User
+    public function getUsersId(): ?int
     {
         return $this->usersId;
     }
 
     public function setUsersId(?User $users): static
     {
-        $this->usersId = $users->getId();
+        $this->usersId = intval($users->getId());
         return $this;
     }
 }

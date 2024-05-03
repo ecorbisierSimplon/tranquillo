@@ -22,7 +22,7 @@ class TaskRepository extends ServiceEntityRepository
     }
 
 
-    public function findExistingTask($taskName, $taskCreateAt)
+    public function findExistingTask($taskName, $taskCreateAt): Task
     {
         return $this->createQueryBuilder('t')
             ->where('t.name = :name')
@@ -45,6 +45,18 @@ class TaskRepository extends ServiceEntityRepository
         return new JsonResponse([], $codeResponse);;
     }
 
+    /**
+     * @return Task[] Returns an array of Task objects
+     */
+    public function findByUserField($value): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.usersId = :user')
+            ->setParameter('user', $value)
+            ->orderBy('t.createAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    /**
     //     * @return Task[] Returns an array of Task objects

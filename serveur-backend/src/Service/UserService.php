@@ -74,13 +74,17 @@ class UserService extends AbstractController
 
 
 
-    public function delete($id): JsonResponse
+    public function delete(int $id = null): JsonResponse
     {
         // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
 
-        $user = $this->userRepository->findOneByUser('id', $id);
         $title = "Suppression refusée";
         $codeResponse = Response::HTTP_NOT_FOUND;
+
+        $user = NULL;
+        if ($id !== null) {
+            $user = $this->userRepository->findOneByUser('id', $id);
+        }
 
         if ($user === null) {
             $message = "L'utilisateur que vous voulez supprimer n'existe pas";

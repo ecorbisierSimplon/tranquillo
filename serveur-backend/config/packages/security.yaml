@@ -42,10 +42,11 @@ security:
   # Easy way to control access for large sections of your site
   # Note: Only the *first* access control that matches will be used
   access_control:
+    - { path: ^/api/admin, roles: ROLE_ADMIN }
+    - { path: ^/api/task, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS } #Register
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
-    - { path: ^/api/users, method: POST, roles: PUBLIC_ACCESS }
-    - { path: ^/api/admin, roles: ["ROLE_ADMIN"] }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/, roles: PUBLIC_ACCESS }
     # - { path: ^/profile, roles: ROLE_USER }
 
 when@test:

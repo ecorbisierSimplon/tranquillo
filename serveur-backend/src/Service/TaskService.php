@@ -4,12 +4,14 @@ namespace App\Service;
 
 use App\Dto\TaskDto;
 use App\Entity\Task;
+use App\Entity\User;
 use App\Repository\TaskRepository;
+use App\Security\Voter\TasksVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-
 
 
 class TaskService extends AbstractController
@@ -46,6 +48,22 @@ class TaskService extends AbstractController
     }
 
 
+    public function findByUserField($id): JsonResponse
+    {
+        $task = $this->taskRepository->findByUserField($id);
+
+        if ($task === null) {
+            $title = "Lecture impossible";
+            $message = "Vous n'avez pas encore de taches.";
+            $codeResponse = Response::HTTP_NOT_FOUND;
+            return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
+        }
+        return $this->json($task, 201, [], [
+            'groups' => ['tasks: read']
+        ]);
+    }
+
+
     public function create(TaskDto $taskDto)
     {
         $taskCreateAt = new \DateTimeImmutable();
@@ -73,10 +91,8 @@ class TaskService extends AbstractController
         return new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
     }
 
-    public function delete($id): JsonResponse
+    public function delete($id, $userId): JsonResponse
     {
-        // if ($this->isCsrfTokenValid('delete' . $tpaUser->getId(), $request->getPayload()->get('_token'))) {
-
         $task = $this->taskRepository->findOneByTask('id', $id);
         $title = "Suppression refusée";
         $codeResponse = Response::HTTP_NOT_FOUND;
@@ -86,12 +102,16 @@ class TaskService extends AbstractController
         } elseif ($task === 404) {
             $message = "L'entité que vous appelez n'existe pas";
         } else {
-
-            $this->em->remove($task);
-            $this->em->flush();
-            $codeResponse = Response::HTTP_ACCEPTED;
-            $title = "Suppression d'une tache";
-            $message = "La tache '" . $task->getName() .  "', créée le " . $task->getCreateAt()->format('d/m/Y') .  ", a été supprimée de la base de données";
+            if ($task->getUsersId() == $userId) {
+                $this->em->remove($task);
+                $this->em->flush();
+                $codeResponse = Response::HTTP_ACCEPTED;
+                $title = "Suppression d'une tache";
+                $message = "La tache '" . $task->getName() .  "', créée le " . $task->getCreateAt()->format('d/m/Y') .  ", a été supprimée de la base de données";
+            } else {
+                $codeResponse = Response::HTTP_FORBIDDEN;
+                $message = "Cette tache ne vous appartient pas";
+            }
         }
 
         $response = new JsonResponse(["title" => $title, "status" => $codeResponse, 'detail' => $message], $codeResponse);
