@@ -19,7 +19,7 @@ jobs:
             // Effectuer la requête GraphQL avec le numéro de pull request correct
             const response = await github.graphql(`
               query {
-                repository(owner: "${{ github.repository_owner }}", name: "${{ github.repository }}") {
+                repository(owner: "${{ github.repository_owner }}", name: "tranquillo") {
                   pullRequest(number: ${prNumber}) {
                     title
                     body
@@ -54,7 +54,16 @@ jobs:
               if (match && match[1]) {
                 return match[1];
               } else {
-                // Si aucun match n'est trouvé, retourner null
-                return null;
+                const pattern = /ticket_+(\d+)/i; // Le 'i' signifie que la recherche est insensible à la casse
+                // Rechercher le motif dans le titre
+                const match = title.match(pattern);
+
+                // Si un match est trouvé, retourner le numéro de ticket
+                if (match && match[1]) {
+                  return match[1];
+                } else {
+                  // Si aucun match n'est trouvé, retourner null
+                  return null;
+                }
               }
             }
