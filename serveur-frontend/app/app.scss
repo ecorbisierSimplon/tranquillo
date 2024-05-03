@@ -1,6 +1,6 @@
-﻿@import "@nativescript/theme/css/core.css";
-@import "@nativescript/theme/css/default.css";
-@import "../node_modules/bootstrap/scss/bootstrap.scss";
+﻿@import "../node_modules/bootstrap/scss/bootstrap.scss";
+// @import "@nativescript/theme/css/core.css";
+// @import "@nativescript/theme/css/default.css";
 
 .fab {
   font-family: "Font Awesome 5 Brands", "fa-brands-400";
@@ -25,14 +25,15 @@
   font-family: "Material-Design-Iconic-Font";
 }
 
-actionbar {
-  background-color: aqua;
-}
-actionbar .icon {
-  font-size: 20;
-}
+actionBar {
+  background-color: hsl(221, 100%, 79%);
 
-actionbar .title {
-  font-size: 16;
-  margin-left: 20;
+  .icon {
+    font-size: 20;
+  }
+
+  .title {
+    font-size: 16;
+    margin-left: 20;
+  }
 }

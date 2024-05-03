@@ -12,3 +12,6 @@
 deploy
 database/*
 !database/sql*/
+*.pem
+*/private.pem
+*/public.pem

@@ -1,26 +1,18 @@
-<script lang="ts">
-  import Home from "./components/Home.svelte";
+<script>
+  import Home from "./components/Login.svelte";
+  // import { logo } from "";
   import { icons } from "./utils/icons";
 </script>
 
 <page>
   <actionBar>
     <stackLayout orientation="horizontal">
-      <label
-        row="0"
-        text={icons.close}
-        class="icon close-button"
-        horizontalAlignment="right"
-        width="40"
-        height="40"
-        verticalAlignment="center"
-      />
-      <label
-        text="Tranquillo App &copy;"
-        fontSize="24"
-        verticalAlignment="center"
-      />
+      <image src="~/lib/img/logo_titre.png" />
     </stackLayout>
   </actionBar>
   <Home />
 </page>
+<style lang="scss">
+
+
+</style>

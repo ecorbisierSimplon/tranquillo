@@ -19,6 +19,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+
+
+    public function __construct()
+    {
+    }
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: 'user_id')]
@@ -48,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[UserRegex(regex: 'password', entity: 'user', field: 'password')]
     #[Assert\NotBlank(message: 'error.user.password: The key « password » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: 'user', field: 'password')]
-    #[Groups(['users: read', 'users: create', 'users:pass'])]
+    #[Groups(['users: create', 'users:pass'])]
     private ?string $password = null;
 
     #[ORM\Column(name: 'lastname')]

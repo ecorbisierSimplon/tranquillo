@@ -18,6 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApiResource]
 class Task
 {
+
+    public function __construct()
+    {
+    }
+
     // Le point d'interrogation (?) avant le type dans cette déclaration de propriété en PHP signifie
     // que la variable peut également être null.
     // En d'autres termes, la propriété peut soit contenir une valeur entière, soit être null.

@@ -1,0 +1,3 @@
+'The key "%s" must be a non-empty string.': "La clé « %s » doit être une chaîne non vide."
+'error.{{ entity }}.{{ field }}: This value "{{ value }}" is not valid.': "error.{{ entity }}.{{ field }}: Cette valeur « {{ value }} » n'est pas valide."
+'The key "username" must be a non-empty string.': "La clé « username » doit être une chaîne non vide."

@@ -6,8 +6,10 @@
   "dependencies": {
     "@nativescript/android": "^8.7.0",
     "@nativescript/core": "~8.5.9",
+    "@nativescript/localize": "^5.2.0",
     "@nativescript/theme": "~3.0.2",
     "bootstrap": "^5.3.3",
+    "nativescript-clipboard": "^2.1.1",
     "sass-loader": "^14.2.1",
     "svelte-native": "~1.0.21"
   },

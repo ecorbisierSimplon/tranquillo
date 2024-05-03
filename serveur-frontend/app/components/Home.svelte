@@ -1,14 +1,14 @@
 <script>
   import Login from "./Login.svelte";
-  import { showModal } from "svelte-native";
+  import { navigate } from "svelte-native";
 
   let message = "Bonjour ma chérie ! :)";
 
-  let modalResult = "Waiting for modal";
-  async function launchModal() {
-    let result = await showModal({ page: Login, props: { msg: "hi" } });
-    modalResult = `got result: ${result}`;
-  }
+  let loginResult = "Waiting for login";
+  // async function launchModal() {
+  //   let result = await showModal({ page: Login, props: { msg: "hi" } });
+  //   modalResult = `got result: ${result}`;
+  // }
 </script>
 
 <gridLayout>
@@ -19,8 +19,8 @@
     </formattedString>
   </label>
   <stackLayout>
-    <button text="Se Connecter" on:tap={launchModal} />
-    <label text={modalResult} />
+    <!-- <button text="Se Connecter" on:tap={() => navigate({ page: Login })} /> -->
+    <label text={loginResult} />
   </stackLayout>
 </gridLayout>
 
