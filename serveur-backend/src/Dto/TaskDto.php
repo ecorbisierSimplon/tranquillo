@@ -4,6 +4,7 @@ namespace App\Dto;
 
 // use App\Validator\DateTimeImmutable;
 
+use App\Entity\User;
 use App\Validator\TpaLength;
 use App\Validator\UserRegex;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -37,6 +38,16 @@ class TaskDto
 
     #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $createAt = null;
+
+    #[Groups(['tasks: read', 'tasks: create'])]
+    private ?int $usersId = null;
+
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +123,23 @@ class TaskDto
     {
         $this->createAt = $createAt;
 
+        return $this;
+    }
+
+    public function getUsersId(): ?int
+    {
+        return $this->usersId;
+    }
+
+    public function setUsersId(?int $users): static
+    {
+        $this->usersId = intval($users);
+        return $this;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->usersId = intval($users->getId());
         return $this;
     }
 }

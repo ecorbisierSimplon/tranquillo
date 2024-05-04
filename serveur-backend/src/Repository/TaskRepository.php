@@ -22,40 +22,42 @@ class TaskRepository extends ServiceEntityRepository
     }
 
 
-    public function findExistingTask($taskName, $taskCreateAt): Task
+    public function findExistingTask($taskName, $taskCreateAt): ?Task
     {
-        return $this->createQueryBuilder('t')
+        $return = $this->createQueryBuilder('t')
             ->where('t.name = :name')
             ->andWhere('t.createAt = :createAt')
             ->setParameter('name', $taskName)
             ->setParameter('createAt', $taskCreateAt)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return ($return === []) ? null : $return;
     }
 
-    public function findOneByTask($by, $value)
+    public function findOneByTask($by, $value): ?Task
     {
 
         if (in_array($by, $this->entitySearch)) {
             $task = $this->find($value);
-            return $task;
+            return ($task === []) ? null : $task;
         }
-
-        $codeResponse = Response::HTTP_NOT_FOUND;
-        return new JsonResponse([], $codeResponse);;
+        return Response::HTTP_NOT_FOUND;;
     }
 
     /**
      * @return Task[] Returns an array of Task objects
      */
-    public function findByUserField($value): array
+    public function findByUserField($value): ?array
     {
-        return $this->createQueryBuilder('t')
+        $return = $this->createQueryBuilder('t')
             ->andWhere('t.usersId = :user')
             ->setParameter('user', $value)
             ->orderBy('t.createAt', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return ($return === []) ? null : $return;
     }
 
     //    /**

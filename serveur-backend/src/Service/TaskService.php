@@ -4,6 +4,8 @@ namespace App\Service;
 
 use App\Dto\TaskDto;
 use App\Entity\Task;
+use App\Entity\User;
+use App\Helper\ObjectHydrator;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,26 +37,25 @@ class TaskService extends AbstractController
      * @param TaskDto $taskDto
      * @return (Task|int)[]|(null|string|int)[]
      */
-    public function create(TaskDto $taskDto)
+    public function create(TaskDto $taskDto, User $user)
     {
         $taskCreateAt = new \DateTimeImmutable();
         $taskDto->setCreateAt($taskCreateAt);
-        $existingTask = $this->ifExist($taskDto);
 
+        $existingTask = $this->ifExist($taskDto);
         if ($existingTask === null) {
-            $task = new Task;
-            $task->setName($taskDto->getName());
-            $task->setDescription($taskDto->getDescription());
-            $task->setReminder($taskDto->getReminder());
-            $task->setStartAt($taskDto->getStartAt());
-            $task->setEndAt($taskDto->getEndAt());
-            $task->setCreateAt($taskDto->getCreateAt());
+            $task = ObjectHydrator::hydrate(
+                $taskDto,
+                new Task
+            );
+            $task->setUsers($user);
 
             $this->em->persist($task);
             $this->em->flush();
 
             return ["task" => $task->getId(), "code" => Response::HTTP_CREATED];
         }
+
         $title = "Not found";
         $message = "The task '" . $taskDto->getName() . "' has existed since " . $taskCreateAt->format('d/m/Y') . " at " . $taskCreateAt->format('H:m:s');
         return ["task" => null, "title" => $title, "code" => 400, "message" => $message];
@@ -90,7 +91,7 @@ class TaskService extends AbstractController
     {
         $task = $this->taskRepository->findByUserField($id);
 
-        if ($task === null) {
+        if ($task === []) {
             $title = "Tasks not found";
             $message = "You have not tasks";
             return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
@@ -104,15 +105,21 @@ class TaskService extends AbstractController
      * @param mixed $id
      * @return array
      */
-    public function findOne($id): array /* Task */
+    public function findOne($id, int | string | null $userId): array /* Task */
     {
         $task[] = $this->taskRepository->findOneByTask('id', $id);
 
-        if ($task === null) {
+        if ($task[0] === null) {
             $title = "Not found";
             $message = "The task doesn't exist";
             return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
         }
+        if ($userId != $task[0]->getUsersId() && $userId != 'ROLE_WEBMASTER') {
+            $title = "Access is unauthorized";
+            $message = "This is not your task";
+            return ["task" => null, "title" => $title, "code" => Response::HTTP_FORBIDDEN, "message" => $message];
+        }
+
         return ["task" => $task, "code" => Response::HTTP_ACCEPTED];
     }
 
@@ -126,7 +133,7 @@ class TaskService extends AbstractController
      * @param mixed $userId
      * @return array
      */
-    public function delete($id, $userId): array /* Task */
+    public function delete($id, int | string | null $userId): array /* Task */
     {
         $task = $this->taskRepository->findOneByTask('id', $id);
         $title = "Delete is rejected";
@@ -137,7 +144,7 @@ class TaskService extends AbstractController
         } elseif ($task === 404) {
             $message = "The entity you call does not exist";
         } else {
-            if ($task->getUsersId() == $userId) {
+            if ($userId === $task->getUsersId() || $userId === 'ROLE_WEBMASTER') {
                 $this->em->remove($task);
                 $this->em->flush();
                 $codeResponse = Response::HTTP_ACCEPTED;
@@ -148,7 +155,7 @@ class TaskService extends AbstractController
                 $message = "This is not your task";
             }
         }
-        return ["title" => $title, "code" => $codeResponse, 'detail' => $message];
+        return ["title" => $title, "code" => $codeResponse, 'message' => $message];
     }
 
 

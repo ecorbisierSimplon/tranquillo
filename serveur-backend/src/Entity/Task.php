@@ -68,10 +68,13 @@ class Task
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\Column(name: "users_id")]
     #[Assert\NotBlank(message: 'error.task.user: The key « user » for task entity must be a non-empty  string.')]
-    #[Groups(['tasks.index', 'tasks.show', 'tasks: all'])]
     private ?int $usersId = null;
 
 
+    /** @return void  */
+    public function setId()
+    {
+    }
 
     public function getId(): ?int
     {
@@ -155,7 +158,13 @@ class Task
         return $this->usersId;
     }
 
-    public function setUsersId(?User $users): static
+    public function setUsersId(?int $users): static
+    {
+        $this->usersId = intval($users);
+        return $this;
+    }
+
+    public function setUsers(?User $users): static
     {
         $this->usersId = intval($users->getId());
         return $this;

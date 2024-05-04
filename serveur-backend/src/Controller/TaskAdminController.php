@@ -16,8 +16,9 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 
 #[AsController]
-#[Route('api/task', name: 'app_task')]
-final class TaskController extends AbstractController
+#[IsGranted('ROLE_WEBMASTER')]
+#[Route('api/admin/task', name: 'app_task_admin')]
+final class TaskAdminController extends AbstractController
 {
     private $service;
 
@@ -37,40 +38,6 @@ final class TaskController extends AbstractController
 
 
     // ##########################################
-    // ----------------- POST -------------------
-    // ##########################################
-    /**
-     * ------------  create ----------------
-     * @return JsonResponse
-     *
-     */
-    #[Route(['', '/'], name: 'task_create', methods: ['POST'])]
-    public function create(#[MapRequestPayload(serializationContext: ['tasks: create'])] TaskDto $taskDto): JsonResponse
-    {
-        $response = $this->service->create($taskDto, $this->getThisUser(id: false));
-
-        if ($response['task'] == null) {
-            return $this->getError($response);
-        }
-
-        $response = $this->service->findOne($response['task']);
-        $codeHttp = intval($response['code']);
-        $response = $response['task'][0];
-
-        $taskDto = ObjectHydrator::hydrate(
-            $response,
-            new TaskDto()
-        );
-
-        return $this->json(
-            $taskDto,
-            $codeHttp,
-            [],
-            ['groups' => ['tasks: create']]
-        );
-    }
-
-    // ##########################################
     // ----------------- GET -------------------
     // ##########################################
     /**
@@ -79,41 +46,11 @@ final class TaskController extends AbstractController
      *
      */
     #[Route(['', '/'], name: 'task_read_all', methods: ['GET'])]
-    #[IsGranted('ROLE_WEBMASTER')]
     public function readAll(): JsonResponse
     {
         $response = $this->service->findAll();
         $response = $response['task'];
 
-        if ($response == null) {
-            return $this->getError($response);
-        }
-
-        $taskDto = ObjectHydrator::hydrate(
-            $response,
-            new TaskDto()
-        );
-
-        $codeHttp = intval(Response::HTTP_ACCEPTED);
-        return $this->json(
-            $taskDto,
-            $codeHttp,
-            [],
-            ['groups' => ['tasks: read']]
-        );
-    }
-
-    /**
-     * ------------  read list ----------------
-     * @return JsonResponse
-     *
-     */
-    #[Route('/list', name: 'task_read_list', methods: ['GET'])]
-    public function readList(): JsonResponse
-    {
-        $response = $this->service->findByUserField($this->getThisUser());
-
-        $response = $response['task'];
         if ($response == null) {
             return $this->getError($response);
         }
@@ -140,7 +77,7 @@ final class TaskController extends AbstractController
     #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'task_read_one', methods: ['GET'])]
     public function readOne($id): JsonResponse
     {
-        $response = $this->service->findOne($id, $this->getThisUser());
+        $response = $this->service->findOne($id, 'ROLE_WEBMASTER');
         if ($response['task'] == null || $response['task'] == 404) {
             return $this->getError($response);
         }
@@ -161,18 +98,6 @@ final class TaskController extends AbstractController
     }
 
 
-    // ##########################################
-    // ----------------- UPDATE-----------------
-    // ##########################################
-    /**
-     * ------------  put ------------------
-     * @return JsonResponse
-     *
-     */
-    // #[Route('/{id}/edit', name: 'tasks_edit', methods: ['PUT'])]
-    // public function edit(Request $request, Task $tpaTask, EntityManagerInterface $entityManager): void
-    // {
-    // }
 
     // ##########################################
     // ----------------- DELETE ----------------
@@ -185,7 +110,7 @@ final class TaskController extends AbstractController
     #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'task_delete', methods: ['DELETE'])]
     public function delete($id): JsonResponse
     {
-        $response = $this->service->delete($id, $this->getThisUser());
+        $response = $this->service->delete($id, 'ROLE_WEBMASTER');
         return $this->getError($response);
     }
 
@@ -193,17 +118,6 @@ final class TaskController extends AbstractController
     // ----------------- PRIVATE ---------------
     // ##########################################
 
-    private function getThisUser(bool $id = true): int | User
-    {
-        $user = $this->getUser();
-        if (!$user instanceof User) {
-            throw new \LogicException('Unable to recover the user.');
-        }
-        if ($id) {
-            return $user->getId();
-        }
-        return $user;
-    }
 
     private function getError($response): JsonResponse
     {
