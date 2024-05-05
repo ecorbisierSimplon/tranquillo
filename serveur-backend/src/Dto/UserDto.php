@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserDto implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[UserRegex(regex: 'number', entity: "user", field: "id")]
-    #[Groups(['users: create', 'tasks: all'])]
+    #[Groups(['users: read', 'users: create', 'tasks: all'])]
     private ?int $id = null;
 
     #[Assert\Email(message: 'error.user.email: Invalid email')]
@@ -32,25 +32,32 @@ class UserDto implements UserInterface, PasswordAuthenticatedUserInterface
      * @var string The hashed password
      */
     #[UserRegex(regex: 'password', entity: "user", field: "password")]
-    #[Assert\NotBlank(message: 'error.user.password: The key « password » must be a non-empty  string.')]
+    // #[Assert\NotBlank(message: 'error.user.password: The key « password » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "user", field: "password")]
-    #[Groups(['users: read', 'users: create', 'users: put', 'users:pass'])]
+    #[Groups(['users: create', 'users:pass'])]
     private ?string $password = null;
 
     #[UserRegex(regex: 'name', entity: "user", field: "lastname")]
-    #[Assert\NotBlank(message: 'error.user.lastname: The key « lastname » must be a non-empty  string.')]
-    #[TpaLength(min: 5, max: 50, entity: "user", field: "lastname")]
+    // #[Assert\NotBlank(message: 'error.user.lastname: The key « lastname » must be a non-empty  string.')]
+    #[TpaLength(min: 2, max: 50, entity: "user", field: "lastname")]
     #[Groups(['users: read', 'users: create', 'users: put', 'users:pass'])]
     private ?string $lastname = null;
 
     #[UserRegex(regex: 'name', entity: "user", field: "firstname")]
-    #[Assert\NotBlank(message: 'error.user.firstname: The key « firstname » must be a non-empty  string.')]
-    #[TpaLength(min: 5, max: 50, entity: "user", field: "firstname")]
+    // #[Assert\NotBlank(message: 'error.user.firstname: The key « firstname » must be a non-empty  string.')]
+    #[TpaLength(min: 2, max: 50, entity: "user", field: "firstname")]
     #[Groups(['users: read', 'users: create', 'users: put', 'users:pass'])]
     private ?string $firstname = null;
 
     #[Groups(['tasks: read', 'users: read', 'users: create', 'users: put'])]
     private ?\DateTimeImmutable $createAt = null;
+
+    /** @return void  */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -106,7 +113,7 @@ class UserDto implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }

@@ -2,24 +2,21 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Dto\UserDto;
+use App\Entity\User;
+use App\Helper\ObjectHydrator;
 use App\Service\UserService;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMInvalidArgumentException;
-use Doctrine\ORM\TransactionRequiredException;
-use Doctrine\ORM\Exception\ORMException;
-use RuntimeException;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[AsController]
 #[Route('api/admin/user', name: 'app_user')]
-class UserAdminController extends AbstractController
+final class UserAdminController extends AbstractController
 {
     private $service;
 
@@ -31,87 +28,130 @@ class UserAdminController extends AbstractController
      * qu'une instance de la classe UserService soit transmise en tant que dépendance. Il s'agit d'une
      * pratique courante en programmation orientée objet consistant à injecter des dépendances dans les
      * classes plutôt que
-     *
-     * @param UserService $service
-     * @return void
      */
     public function __construct(UserService $service)
     {
         $this->service = $service;
     }
 
+
+    // ##########################################
+    // ----------------- GET -------------------
+    // ##########################################
     /**
-     * La fonction `readAll` renvoie une JsonResponse contenant toutes les données utilisateur.
-     *
-     * @return JsonResponse Un objet `JsonResponse` est renvoyé par la méthode `readAll()`.
-     *
+     * ------------  read all ----------------
      * @return JsonResponse
-     * @throws RuntimeException
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
+     *
      */
-    #[Route('/', name: 'app_api_user_read_all', methods: ['GET'])]
+    // FIXME: Tout lire sauf role hiérarchique SUPÉRIEUR
+    #[Route(['', '/'], name: 'user_admin_read_all', methods: ['GET'])]
     public function readAll(): JsonResponse
     {
-        return  $this->service->findAll();
+        $response = $this->service->findAll();
+        $response = $response['user'];
+
+        if ($response == null) {
+            return $this->getError($response);
+        }
+
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        $codeHttp = intval(Response::HTTP_ACCEPTED);
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
     }
 
-
     /**
-     * Cette fonction PHP lit et renvoie un utilisateur spécifique par son identifiant.
-     *
-     * @param id Le paramètre "id" dans l'extrait de code représente un identifiant unique pour un
-     * utilisateur. Il devrait s'agir d'une valeur numérique comme indiqué par les exigences spécifiées
-     * dans l'annotation d'itinéraire. Ce paramètre est utilisé pour récupérer et renvoyer des
-     * informations sur un utilisateur spécifique identifié par l'ID fourni.
-     *
-     * @return JsonResponse Un objet JsonResponse est renvoyé, qui est susceptible de contenir les
-     * données d'un utilisateur spécifique avec l'ID donné. Les données sont récupérées en appelant la
-     * méthode `findOne` de la classe de service.
-     *
-     * @param mixed $id
+     * ------------  read one ----------------
      * @return JsonResponse
-     * @throws OptimisticLockException
-     * @throws ORMInvalidArgumentException
-     * @throws TransactionRequiredException
-     * @throws ORMException
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
+     *
      */
-    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_user_read_one', methods: ['GET'])]
+    // FIXME: Lire utilisateur sauf role hiérarchique SUPÉRIEUR
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'user_admin_read_one', methods: ['GET'])]
     public function readOne($id): JsonResponse
     {
-        return $this->service->findOne($id);
+        $response = $this->service->findOne($id);
+        if ($response['user'] == null || $response['user'] == 404) {
+            return $this->getError($response);
+        }
+
+        $response = $response['user'];
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        $codeHttp = intval(Response::HTTP_ACCEPTED);
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
     }
 
+
+    // ##########################################
+    // ----------------- UPDATE-----------------
+    // ##########################################
     /**
-     * Cette fonction PHP est chargée de supprimer un utilisateur avec un identifiant spécifique et
-     * nécessite l'autorisation 'ROLE_WEBMASTER' pour y accéder.
-     *
-     * @param id Le paramètre `id` dans l'extrait de code représente l'identifiant unique de
-     * l'utilisateur que vous souhaitez supprimer. Cet identifiant devrait être une valeur numérique
-     * comme l'indique l'exigence de route `(\d+)`, qui spécifie que `id` doit être un chiffre.
-     *
-     * @return JsonResponse Une JsonResponse est renvoyée par la méthode delete.
-     *
-     * @param mixed $id
+     * ------------  put ------------------
      * @return JsonResponse
-     * @throws OptimisticLockException
-     * @throws ORMInvalidArgumentException
-     * @throws TransactionRequiredException
-     * @throws ORMException
+     *
      */
-    #[IsGranted('ROLE_WEBMASTER')]
-    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'app_api_user_delete', methods: ['DELETE'])]
-    public function delete($id): JsonResponse
-    {
-        return $this->service->delete($id);
-    }
-
-
-    // #[Route('/{id}/edit', name: 'app_api_users_edit', methods: ['PUT'])]
+    // #[Route('/{id}/edit', name: 'users_admin_edit', methods: ['PUT'])]
     // public function edit(Request $request, User $tpaUser, EntityManagerInterface $entityManager): void
     // {
     // }
 
+    // ##########################################
+    // ----------------- DELETE ----------------
+    // ##########################################
+    /**
+     * ------------  delete  ----------------
+     * @return JsonResponse
+     *
+     */
+    // FIXME:  Suppression utilisateur UNIQUEMENT si role hiérarchique INFÉRIEUR
+    #[IsGranted('ROLE_WEBMASTER')]
+    #[Route('/{id}', requirements: ["id" => Requirement::DIGITS], name: 'user_admin_delete', methods: ['DELETE'])]
+    public function delete($id): JsonResponse
+    {
+        $response = $this->service->delete($id);
+        return $this->getError($response);
+    }
+
+    // ##########################################
+    // ----------------- PRIVATE ---------------
+    // ##########################################
+    private function getThisUser(bool $id = true): int | User
+    {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw new \LogicException('Unable to recover the user.');
+        }
+        if ($id) {
+            return $user->getId();
+        }
+        return $user;
+    }
+
+    private function getError($response): JsonResponse
+    {
+        return new JsonResponse(
+            [
+                "title" => $response['title'],
+                "status" => intval($response['code']),
+                "detail" => $response['message']
+            ],
+            intval($response['code'])
+        );
+    }
 }

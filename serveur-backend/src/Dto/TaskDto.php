@@ -4,6 +4,7 @@ namespace App\Dto;
 
 // use App\Validator\DateTimeImmutable;
 
+use App\Entity\User;
 use App\Validator\TpaLength;
 use App\Validator\UserRegex;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -11,32 +12,42 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class TaskDto
 {
-    #[UserRegex(regex: 'number', entity: "task", field: "id")]
     #[Groups(['tasks: read', 'tasks: create'])]
+    #[UserRegex(regex: 'number', entity: "task", field: "id")]
     private ?int $id = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[Assert\NotBlank(message: 'error.task.name: The key « name » must be a non-empty  string.')]
     #[TpaLength(min: 5, max: 50, entity: "task", field: "name")]
     private ?string $name = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[Assert\NoSuspiciousCharacters()]
     private ?string $description = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
     private ?int $reminder = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $startAt = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $endAt = null;
 
-    #[Groups(['tasks: create'])]
+    #[Groups(['tasks: read', 'tasks: create'])]
     private  ?\DateTimeImmutable  $createAt = null;
+
+    #[Groups(['tasks: read', 'tasks: create'])]
+    private ?int $usersId = null;
+
+
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getId(): ?int
     {
@@ -112,6 +123,23 @@ class TaskDto
     {
         $this->createAt = $createAt;
 
+        return $this;
+    }
+
+    public function getUsersId(): ?int
+    {
+        return $this->usersId;
+    }
+
+    public function setUsersId(?int $users): static
+    {
+        $this->usersId = intval($users);
+        return $this;
+    }
+
+    public function setUsers(?User $users): static
+    {
+        $this->usersId = intval($users->getId());
         return $this;
     }
 }

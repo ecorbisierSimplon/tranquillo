@@ -9,6 +9,7 @@ use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTInvalidEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTNotFoundEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class UsersJWTResponsesListener
@@ -61,7 +62,7 @@ final class UsersJWTResponsesListener
             'message' => "Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.",
         ];
 
-        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", JsonResponse::HTTP_UNAUTHORIZED);
+        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", Response::HTTP_UNAUTHORIZED);
         $response->setData($data);
 
         $event->setResponse($response);
@@ -75,11 +76,11 @@ final class UsersJWTResponsesListener
     public function onJWTNotFound(JWTNotFoundEvent $event)
     {
         $data = [
-            'status'  => '404 Accès incorrect',
-            'message' => "Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau",
+            'status'  => '401 Accès non autorisé',
+            'message' => "Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.",
         ];
 
-        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", JsonResponse::HTTP_NOT_FOUND);
+        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", Response::HTTP_UNAUTHORIZED);
         $response->setData($data);
 
         $event->setResponse($response);

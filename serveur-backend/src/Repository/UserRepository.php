@@ -43,8 +43,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
 
         if (in_array($by, $this->entitySearch)) {
-            $task = $this->find($value);
-            return $task;
+            $user = $this->findOneBy([$by => $value]);
+            return $user;
         }
 
         $codeResponse = Response::HTTP_NOT_FOUND;

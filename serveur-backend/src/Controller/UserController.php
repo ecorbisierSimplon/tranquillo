@@ -2,28 +2,24 @@
 
 namespace App\Controller;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Dto\UserDto;
 use App\Entity\User;
+use App\Helper\ObjectHydrator;
 use App\Service\UserService;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMInvalidArgumentException;
-use Doctrine\ORM\TransactionRequiredException;
-use Doctrine\ORM\Exception\ORMException;
-use Psr\Container\NotFoundExceptionInterface;
-use Psr\Container\ContainerExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Routing\Requirement\Requirement;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\HttpKernel\Attribute\AsController;
 
+#[AsController]
 #[Route('api/user', name: 'app_user')]
-class UserController extends AbstractController
+final class UserController extends AbstractController
 {
     private $service;
-
 
     /**
      * La fonction ci-dessus est un constructeur en PHP qui initialise un objet UserService.
@@ -33,109 +29,233 @@ class UserController extends AbstractController
      * qu'une instance de la classe UserService soit transmise en tant que dépendance. Il s'agit d'une
      * pratique courante en programmation orientée objet consistant à injecter des dépendances dans les
      * classes plutôt que
-     *
-     * @param UserService $service
-     * @return void
      */
     public function __construct(UserService $service)
     {
         $this->service = $service;
     }
 
+    // ##########################################
+    // ----------------- POST -------------------
+    // ##########################################
     /**
-     * Cette fonction PHP récupère l'utilisateur actuel et renvoie ses informations au format JSON avec des
-     * groupes de sérialisation spécifiques.
+     * ------------  create ----------------
+     * @return JsonResponse
      *
-     * @return JsonResponse La méthode `readme()` renvoie l'objet utilisateur sous forme de réponse JSON
-     * avec le code d'état 200 (HTTP OK). L'objet utilisateur est sérialisé avec le groupe de sérialisation
-     * « users : show », ce qui signifie que seules les propriétés de l'entité utilisateur qui font partie
-     * de ce groupe de sérialisation seront incluses dans la réponse JSON.
      */
-    #[Route(['', '/'], name: 'app_api_users_readme', methods: ['GET'])]
-    public function readMe(): JsonResponse
+    #[Route(['', '/'], name: 'user_create', methods: ['POST'])]
+    public function create(#[MapRequestPayload(serializationContext: ['users: create'])] UserDto $userDto): JsonResponse
     {
-        $user = $this->getUser();
+        /**
+         * Appelle la méthode `create` de la
+         * classe `UserService` et passe l'objet `UserDto` en paramètre.
+         * Cette méthode est responsable
+         * de la création d'un nouvel utilisateur basé sur les données
+         * fournies dans l'objet `UserDto`.
+         */
+        $response = $this->service->create($userDto);
 
-        if (!$user instanceof UserInterface) {
-            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
+        /**
+         * Vérifie si la clé 'user' dans le tableau `$response` est nulle.
+         * Si elle est nulle, cela signifie que le processus de création d'utilisateur
+         * n'a pas réussi ou que les données utilisateur n'ont pas été trouvées.
+         * Dans ce cas, la méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails sur l'erreur survenue lors du processus de création d'utilisateur.
+         */
+        if ($response['user'] == null) {
+            return $this->getError($response);
         }
 
-        return $this->json($user, Response::HTTP_OK, [], [
-            'groups' => ['users: read']
-        ]);
+
+        /**
+         * Appelle la méthode `findOne` de la classe `UserService`
+         * qui est utilisée pour récupérer l'utilisateur
+         * qui vient d'être créée depuis la bdd.
+         */
+        $response = $this->service->findOne($response['user']);
+        $codeHttp = intval($response['code']);
+        $response = $response['user'][0];
+
+        /**
+         * Utilise une méthode appelée `hydrate` de la classe `ObjectHydrator`
+         * pour remplir un objet `UserDto` avec les données de la bdd.
+         */
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
+    }
+
+    // ##########################################
+    // ----------------- GET -------------------
+    // ##########################################
+
+
+
+    /**
+     * ------------  read one ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route(['', '/'], name: 'user_read_one', methods: ['GET'])]
+    public function readOne(): JsonResponse
+    {
+        /**
+         * Appelle la méthode `findOne` de la classe `UserService` avec deux paramètres :
+         * `0` pour indiquer qu'il s'agit de l'utilisateur courant,
+         * et `getThisUser()` qui renvoie l'id de l'utilisateur connecté.
+         */
+        $response = $this->service->findOne($this->getThisUser());
+
+        /**
+         * Vérifie si la clé 'user' dans le tableau `$response` est nulle.
+         * Si elle est nulle, cela signifie que le processus de création d'utilisateur
+         * n'a pas réussi ou que les données utilisateur n'ont pas été trouvées.
+         * Dans ce cas, la méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails sur l'erreur survenue lors du processus de création d'utilisateur.
+         */
+        if ($response['user'] == null || $response['user'] == 404) {
+            return $this->getError($response);
+        }
+
+        /**
+         * Utilise une méthode appelée `hydrate` de la classe `ObjectHydrator`
+         * pour remplir un objet `UserDto` avec les données de la bdd.
+         */
+        $response = $response['user'];
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        $codeHttp = intval(Response::HTTP_ACCEPTED);
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
     }
 
 
-
+    // ##########################################
+    // ----------------- UPDATE-----------------
+    // ##########################################
     /**
-     * Cette fonction PHP supprime un utilisateur avec l'ID 70 à l'aide d'une requête DELETE.
-     *
-     * @param UserService userFind Le paramètre `userFind` dans la méthode `deleteMe` est une instance
-     * de la classe `UserService`. Il est utilisé pour effectuer l'opération de suppression pour un
-     * utilisateur avec l'ID spécifié comme 70 dans ce cas. La méthode `delete` de la classe
-     * `UserService` est probablement responsable
-     *
-     * @return JsonResponse Une JsonResponse est renvoyée par la méthode deleteMe.
-     *
-     * @param mixed $id
+     * ------------  put ------------------
      * @return JsonResponse
-     * @throws OptimisticLockException
-     * @throws ORMInvalidArgumentException
-     * @throws TransactionRequiredException
-     * @throws ORMException
+     *
      */
-    #[Route(['', '/'], name: 'app_api_user_delete_me', methods: ['DELETE'])]
-    public function deleteMe(mixed $user): JsonResponse
+    #[Route(['', '/'], name: 'users_edit', methods: ['PUT'])]
+    public function edit(#[MapRequestPayload(serializationContext: ['users: put'])] UserDto $userDto): JsonResponse
     {
-        $user instanceof \App\Entity\User;
-        $user = $this->getUser();
+        // dd($userDto);
 
-        // return $user;
+        /**
+         * Appelle la méthode `create` de la
+         * classe `UserService` et passe l'objet `UserDto` en paramètre.
+         * Cette méthode est responsable
+         * de la création d'un nouvel utilisateur basé sur les données
+         * fournies dans l'objet `UserDto`.
+         */
+        $response = $this->service->update($userDto, $this->getThisUser());
+
+        /**
+         * Vérifie si la clé 'user' dans le tableau `$response` est nulle.
+         * Si elle est nulle, cela signifie que le processus de création d'utilisateur
+         * n'a pas réussi ou que les données utilisateur n'ont pas été trouvées.
+         * Dans ce cas, la méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails sur l'erreur survenue lors du processus de création d'utilisateur.
+         */
+        if ($response['user'] == null) {
+            return $this->getError($response);
+        }
+
+
+        /**
+         * Appelle la méthode `findOne` de la classe `UserService`
+         * qui est utilisée pour récupérer l'utilisateur
+         * qui vient d'être modifié depuis la bdd.
+         */
+        $response = $this->service->findOne($response['user']);
+        $codeHttp = intval($response['code']);
+        $response = $response['user'][0];
+
+        /**
+         * Utilise une méthode appelée `hydrate` de la classe `ObjectHydrator`
+         * pour remplir un objet `UserDto` avec les données de la bdd.
+         */
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
+    }
+
+    // ##########################################
+    // ----------------- DELETE ----------------
+    // ##########################################
+    /**
+     * ------------  delete  ----------------
+     * @return JsonResponse
+     *
+     */
+    #[Route(['', '/'],  name: 'user_delete', methods: ['DELETE'])]
+    public function delete(): JsonResponse
+    {
+        /**
+         * Appelle la méthode `delete` de la classe `UserService` avec deux paramètres :
+         * `0` pour indiquer qu'il s'agit de l'utilisateur courant,
+         * et `getThisUser()` qui renvoie l'id de l'utilisateur connecté.
+         */
+        $response = $this->service->delete($this->getThisUser());
+
+        /**
+         * La méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails survenue lors du processus de création d'utilisateur,
+         * AVEC OU SANS ERREUR.
+         */
+        return $this->getError($response);
+    }
+
+    // ##########################################
+    // ----------------- PRIVATE ---------------
+    // ##########################################
+
+    private function getThisUser(bool $id = true): int | User
+    {
+        $user = $this->getUser();
         if (!$user instanceof User) {
-            throw new \LogicException('Impossible de récupérer l\'utilisateur.');
+            throw new \LogicException('Unable to recover the user.');
         }
-
-        return $this->service->delete($user->getId());
+        if ($id) {
+            return $user->getId();
+        }
+        return $user;
     }
 
-
-    /**
-     * Cette fonction PHP crée un nouvel utilisateur à l'aide d'un objet UserDto et d'une instance
-     * UserService.
-     *
-     * @param UserDto userDto Le paramètre `` dans la méthode `create` est un paramètre
-     * d'indication de type de type `UserDto`. Il est transmis à la méthode dans le cadre des données
-     * utiles de la demande. L'attribut `MapRequestPayload` est utilisé pour mapper les données de la
-     * demande entrante au `UserDto
-     * @param UserService userFind  est une instance de la classe UserService, chargée de
-     * gérer la création d'un nouvel utilisateur en fonction des données fournies dans l'objet UserDto.
-     * La méthode create du service  est appelée avec l'objet  comme paramètre pour
-     * lancer le processus de création d'utilisateur.
-     *
-     * @return JsonResponse Une JsonResponse est renvoyée.
-     *
-     * @param UserDto $userDto
-     * @return JsonResponse
-     * @throws OptimisticLockException
-     * @throws ORMInvalidArgumentException
-     * @throws TransactionRequiredException
-     * @throws ORMException
-     * @throws NotFoundExceptionInterface
-     * @throws ContainerExceptionInterface
-     */
-    #[Route(['', '/'], name: 'app_api_user_create', methods: ['POST'])]
-    public function create(
-        #[MapRequestPayload(
-            serializationContext: ['users: create']
-        )]
-        UserDto $userDto
-    ): JsonResponse {
-        return $this->service->create($userDto);
-    }
-
-
-    #[Route(['', '/'], name: 'app_api_users_edit_me', methods: ['PUT'])]
-    public function edit(User $user): void
+    private function getError($response): JsonResponse
     {
+        return new JsonResponse(
+            [
+                "title" => $response['title'],
+                "status" => intval($response['code']),
+                "detail" => $response['message']
+            ],
+            intval($response['code'])
+        );
     }
 }
