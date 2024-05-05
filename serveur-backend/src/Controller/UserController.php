@@ -89,7 +89,7 @@ final class UserController extends AbstractController
             $userDto,
             $codeHttp,
             [],
-            ['groups' => ['users: create']]
+            ['groups' => ['users: read']]
         );
     }
 
@@ -153,10 +153,57 @@ final class UserController extends AbstractController
      * @return JsonResponse
      *
      */
-    // #[Route(['', '/'], name: 'users_edit', methods: ['PUT'])]
-    // public function edit(): void
-    // {
-    // }
+    #[Route(['', '/'], name: 'users_edit', methods: ['PUT'])]
+    public function edit(#[MapRequestPayload(serializationContext: ['users: put'])] UserDto $userDto): JsonResponse
+    {
+        // dd($userDto);
+
+        /**
+         * Appelle la méthode `create` de la
+         * classe `UserService` et passe l'objet `UserDto` en paramètre.
+         * Cette méthode est responsable
+         * de la création d'un nouvel utilisateur basé sur les données
+         * fournies dans l'objet `UserDto`.
+         */
+        $response = $this->service->update($userDto, $this->getThisUser());
+
+        /**
+         * Vérifie si la clé 'user' dans le tableau `$response` est nulle.
+         * Si elle est nulle, cela signifie que le processus de création d'utilisateur
+         * n'a pas réussi ou que les données utilisateur n'ont pas été trouvées.
+         * Dans ce cas, la méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails sur l'erreur survenue lors du processus de création d'utilisateur.
+         */
+        if ($response['user'] == null) {
+            return $this->getError($response);
+        }
+
+
+        /**
+         * Appelle la méthode `findOne` de la classe `UserService`
+         * qui est utilisée pour récupérer l'utilisateur
+         * qui vient d'être modifié depuis la bdd.
+         */
+        $response = $this->service->findOne($response['user']);
+        $codeHttp = intval($response['code']);
+        $response = $response['user'][0];
+
+        /**
+         * Utilise une méthode appelée `hydrate` de la classe `ObjectHydrator`
+         * pour remplir un objet `UserDto` avec les données de la bdd.
+         */
+        $userDto = ObjectHydrator::hydrate(
+            $response,
+            new UserDto()
+        );
+
+        return $this->json(
+            $userDto,
+            $codeHttp,
+            [],
+            ['groups' => ['users: read']]
+        );
+    }
 
     // ##########################################
     // ----------------- DELETE ----------------

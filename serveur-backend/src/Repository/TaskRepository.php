@@ -39,8 +39,8 @@ class TaskRepository extends ServiceEntityRepository
     {
 
         if (in_array($by, $this->entitySearch)) {
-            $task = $this->find($value);
-            return ($task === []) ? null : $task;
+            $task = $this->findOneBy([$by => $value]);
+            return $task;
         }
         return Response::HTTP_NOT_FOUND;;
     }

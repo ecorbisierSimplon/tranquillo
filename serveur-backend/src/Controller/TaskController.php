@@ -139,10 +139,57 @@ final class TaskController extends AbstractController
      * @return JsonResponse
      *
      */
-    // #[Route('/{id}/edit', name: 'tasks_edit', methods: ['PUT'])]
-    // public function edit(Request $request, Task $tpaTask, EntityManagerInterface $entityManager): void
-    // {
-    // }
+    #[Route(['', '/'], name: 'tasks_edit', methods: ['PUT'])]
+    public function edit(#[MapRequestPayload(serializationContext: ['tasks: put'])] TaskDto $taskDto): JsonResponse
+    {
+        // dd($taskDto);
+
+        /**
+         * Appelle la méthode `create` de la
+         * classe `TaskService` et passe l'objet `TaskDto` en paramètre.
+         * Cette méthode est responsable
+         * de la création d'un nouvel utilisateur basé sur les données
+         * fournies dans l'objet `TaskDto`.
+         */
+        $response = $this->service->update($taskDto, $this->getThisUser());
+
+        /**
+         * Vérifie si la clé 'task' dans le tableau `$response` est nulle.
+         * Si elle est nulle, cela signifie que le processus de création d'utilisateur
+         * n'a pas réussi ou que les données utilisateur n'ont pas été trouvées.
+         * Dans ce cas, la méthode `getError()` est appelée pour renvoyer une réponse JSON
+         * avec des détails sur l'erreur survenue lors du processus de création d'utilisateur.
+         */
+        if ($response['task'] == null) {
+            return $this->getError($response);
+        }
+
+
+        /**
+         * Appelle la méthode `findOne` de la classe `TaskService`
+         * qui est utilisée pour récupérer a tache
+         * qui vient d'être modifiée depuis la bdd.
+         */
+        $response = $this->service->findOne($response['task'], $this->getThisUser());
+        $codeHttp = intval($response['code']);
+        $response = $response['task'][0];
+
+        /**
+         * Utilise une méthode appelée `hydrate` de la classe `ObjectHydrator`
+         * pour remplir un objet `TaskDto` avec les données de la bdd.
+         */
+        $taskDto = ObjectHydrator::hydrate(
+            $response,
+            new TaskDto()
+        );
+
+        return $this->json(
+            $taskDto,
+            $codeHttp,
+            [],
+            ['groups' => ['tasks: read']]
+        );
+    }
 
     // ##########################################
     // ----------------- DELETE ----------------

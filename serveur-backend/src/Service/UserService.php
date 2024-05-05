@@ -119,7 +119,76 @@ class UserService extends AbstractController
     }
 
     // ##########################################
-    // ----------------- GET -------------------
+    // ----------------- UPDATE --------------
+    // ##########################################
+
+    /**
+     * @param UserDto $userDto
+     * @return (User|int)[]|(null|string|int)[]
+     */
+    public function update(UserDto $userDto, ?int $userId)
+    {
+        /**
+         * xtraction des valeurs d'e-mail, de nom, de prénom et de mot de
+         * passe de l'objet `UserDto`.
+         * Ces variables sont utilisées dans le code suivant
+         * pour mettre à jour les champs correspondants d'une entité utilisateur
+         * en fonction des données fournies dans l'objet `UserDto`.
+         */
+        $newEmail = $userDto->getEmail();
+        $newLastname = $userDto->getLastname();
+        $newFirstname = $userDto->getFirstname();
+        $newPassword = $userDto->getPassword();
+
+        /**
+         * Tente de trouver une entité utilisateur dans le référentiel
+         * en fonction de l'adresse e-mail fournie
+         * dans le formulaire.
+         */
+        $userUp = $this->userRepository->findOneByUser('email', $newEmail);
+
+        /**
+         * Vérifie si l'entité utilisateur fourni par JWT existe.
+         */
+        $user = $this->userRepository->findOneByUser('id', $userId);
+
+
+        if ($user === null) {
+            $title = "Update Unauthorized";
+            $codeHttp = Response::HTTP_UNAUTHORIZED;
+            $message = "The user with email '" . $userDto->getEmail() . "' hasn't existed";
+        } elseif ($userUp !== null) {
+            $title = "update is rejected";
+            $codeHttp = Response::HTTP_FORBIDDEN;
+            $message = "The user with email '" . $userDto->getEmail() . "' hasn't updated";
+        } else {
+            if ($newEmail !== null) {
+                $user->setEmail($newEmail);
+            }
+
+            if ($newLastname !== null) {
+                $user->setLastname($newLastname);
+            }
+
+            if ($newFirstname !== null) {
+                $user->setFirstname($newFirstname);
+            }
+
+            if ($newPassword !== null) {
+                $user->setPassword($newPassword);
+            }
+
+            $this->em->flush();
+
+            return ["user" => $user->getId(), "code" => Response::HTTP_CREATED];
+        }
+
+        return ["user" => null, "title" => $title, "code" => $codeHttp, "message" => $message];
+    }
+
+
+    // ##########################################
+    // ----------------- DELETE ---------------
     // ##########################################
 
     /**
@@ -143,7 +212,7 @@ class UserService extends AbstractController
             $this->em->flush();
             $codeResponse = Response::HTTP_ACCEPTED;
             $title = "Delete a user";
-            $message = "The user '" . $user->getName() .  "', creates the " . $user->getCreateAt()->format('d/m/Y') .  ", has been deleted";
+            $message = "The user with email '" . $user->getEmail() .  "', creates the " . $user->getCreateAt()->format('d/m/Y') .  ", has been deleted";
         }
         return ["title" => $title, "code" => $codeResponse, 'message' => $message];
     }

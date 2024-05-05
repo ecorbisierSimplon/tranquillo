@@ -114,7 +114,7 @@ class TaskService extends AbstractController
             $message = "The task doesn't exist";
             return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];
         }
-        if ($userId != $task[0]->getUsersId() && $userId != 'ROLE_WEBMASTER') {
+        if ($userId !== $task[0]->getUsersId() && $userId !== 'ROLE_WEBMASTER') {
             $title = "Access is unauthorized";
             $message = "This is not your task";
             return ["task" => null, "title" => $title, "code" => Response::HTTP_FORBIDDEN, "message" => $message];
@@ -123,8 +123,73 @@ class TaskService extends AbstractController
         return ["task" => $task, "code" => Response::HTTP_ACCEPTED];
     }
 
+
     // ##########################################
-    // ----------------- GET -------------------
+    // ----------------- UPDATE --------------
+    // ##########################################
+
+
+    /**
+     * @param TaskDto $taskDto
+     * @param int|string|null $userId
+     * @return array
+     */
+    public function update(TaskDto $taskDto, int | string | null $userId)
+    {
+
+
+        $id = $taskDto->getId();
+        $task = $this->taskRepository->findOneByTask('id', $id);
+        /* Cet extrait de code vérifie si l'utilisateur essayant de mettre à jour une tâche est
+        autorisé à le faire. Il compare le paramètre `$userId` avec l'ID utilisateur associé à la
+        tâche ($task->getUsersId()`). S'ils ne correspondent pas, cela signifie que l'utilisateur
+        n'est pas autorisé à mettre à jour cette tâche. Dans ce cas, il définit un message d'erreur
+        et renvoie une réponse avec un code d'état « 403 Forbidden », indiquant que l'accès n'est
+        pas autorisé. */
+        if ($userId !== $task->getUsersId()) {
+            $title = "Access is unauthorized";
+            $message = "This is not your task";
+            return ["task" => null, "title" => $title, "code" => Response::HTTP_FORBIDDEN, "message" => $message];
+        }
+
+        /**
+         * Extraction des valeurs de l'objet `TaskDto`.
+         * Ces variables sont utilisées dans le code suivant
+         * pour mettre à jour les champs correspondants d'une entité Task
+         * en fonction des données fournies dans l'objet `TaskDto`.
+         */
+        $newName = $taskDto->getName();
+        $newDescription = $taskDto->getDescription();
+        $newReminder = $taskDto->getReminder();
+        $newStartAt = $taskDto->getStartAt();
+        $newEndAt = $taskDto->getEndAt();
+
+
+        if ($newName !== null) {
+            $task->setName($newName);
+        }
+        if ($newDescription !== null) {
+            $task->setDescription($newDescription);
+        }
+        if ($newReminder !== null) {
+            $task->setReminder($newReminder);
+        }
+        if ($newStartAt !== null) {
+            $task->setStartAt($newStartAt);
+        }
+        if ($newEndAt !== null) {
+            $task->setEndAt($newEndAt);
+        }
+
+        $this->em->flush();
+
+        return ["task" => $task->getId(), "code" => Response::HTTP_CREATED];
+    }
+
+
+
+    // ##########################################
+    // ----------------- DELETE ----------------
     // ##########################################
 
     /**
