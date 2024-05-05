@@ -123,7 +123,6 @@ class TaskService extends AbstractController
         return ["task" => $task, "code" => Response::HTTP_ACCEPTED];
     }
 
-
     // ##########################################
     // ----------------- GET -------------------
     // ##########################################

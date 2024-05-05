@@ -70,6 +70,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $createAt = null;
 
 
+    /** @return void  */
+    public function setId()
+    {
+    }
+
     public function getId(): ?int
     {
         return $this->id;

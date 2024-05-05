@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserDto implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[UserRegex(regex: 'number', entity: "user", field: "id")]
-    #[Groups(['users: create', 'tasks: all'])]
+    #[Groups(['users: read', 'users: create', 'tasks: all'])]
     private ?int $id = null;
 
     #[Assert\Email(message: 'error.user.email: Invalid email')]
@@ -51,6 +51,13 @@ class UserDto implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[Groups(['tasks: read', 'users: read', 'users: create', 'users: put'])]
     private ?\DateTimeImmutable $createAt = null;
+
+    /** @return void  */
+    public function setId(int $id)
+    {
+        $this->id = $id;
+        return $this;
+    }
 
     public function getId(): ?int
     {

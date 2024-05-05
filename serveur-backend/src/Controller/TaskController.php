@@ -35,7 +35,6 @@ final class TaskController extends AbstractController
         $this->service = $service;
     }
 
-
     // ##########################################
     // ----------------- POST -------------------
     // ##########################################
@@ -73,42 +72,13 @@ final class TaskController extends AbstractController
     // ##########################################
     // ----------------- GET -------------------
     // ##########################################
-    /**
-     * ------------  read all ----------------
-     * @return JsonResponse
-     *
-     */
-    #[Route(['', '/'], name: 'task_read_all', methods: ['GET'])]
-    #[IsGranted('ROLE_WEBMASTER')]
-    public function readAll(): JsonResponse
-    {
-        $response = $this->service->findAll();
-        $response = $response['task'];
-
-        if ($response == null) {
-            return $this->getError($response);
-        }
-
-        $taskDto = ObjectHydrator::hydrate(
-            $response,
-            new TaskDto()
-        );
-
-        $codeHttp = intval(Response::HTTP_ACCEPTED);
-        return $this->json(
-            $taskDto,
-            $codeHttp,
-            [],
-            ['groups' => ['tasks: read']]
-        );
-    }
 
     /**
      * ------------  read list ----------------
      * @return JsonResponse
      *
      */
-    #[Route('/list', name: 'task_read_list', methods: ['GET'])]
+    #[Route(['/' | ''], name: 'task_read_list', methods: ['GET'])]
     public function readList(): JsonResponse
     {
         $response = $this->service->findByUserField($this->getThisUser());
