@@ -1,7 +1,9 @@
-<frame>
-    <Home />
-</frame>
-
 <script lang="ts">
-    import Home from './components/Home.svelte'
+  // import { navigate } from "svelte-native";
+  import Home from "./components/Home.svelte";
+  // import Login from "./components/Login.svelte";
 </script>
+
+<page>
+  <Home />
+</page>

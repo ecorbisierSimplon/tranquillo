@@ -30,7 +30,12 @@
     {
       "format": "expanded",
       "extensionName": ".css",
-      "savePath": ""
+      "savePath": "./tranquilloApp/app/css"
+    },
+    {
+      "format": "compressed",
+      "extensionName": ".min.css",
+      "savePath": "./tranquilloApp/app/css"
     }
   ]
 }

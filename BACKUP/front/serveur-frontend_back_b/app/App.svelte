@@ -12,7 +12,6 @@
   </actionBar>
   <Home />
 </page>
+
 <style lang="scss">
-
-
 </style>

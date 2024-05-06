@@ -1,27 +1,41 @@
-<page>
-    <actionBar title="Home" />
-    <gridLayout>
-        <label class="info">
-            <formattedString>
-                <span class="fas" text="&#xf135;" />
-                <span text=" {message}" />
-            </formattedString>
-        </label>
-    </gridLayout>
-</page>
-
 <script lang="ts">
-    let message: string = "Blank Svelte Native App"
+  import { localize } from "~/lib/packages/localize";
+  import ActionBar from "../ActionBar.svelte";
+  import Menu from "../Menu.svelte";
+  import { isPage } from "~/lib/packages/variables";
+  import { onMount } from "svelte";
+  import { strUcFirst } from "~/lib/packages/functions";
+
+  isPage.set("home");
+
+  let nameApp: string = "";
+
+  onMount(async () => {
+    nameApp = strUcFirst(await localize("name_app"));
+  });
 </script>
 
-<style>
-    .info .fas {
-        color: #3A53FF;
-    }
+<page>
+  <ActionBar />
+  <stackLayout>
+    <Menu />
+    <label class="info" height="80">
+      <formattedString>
+        <span class="fas" text="&#xf135;" />
+        <span text=" {nameApp}" />
+      </formattedString>
+    </label>
+  </stackLayout>
+</page>
 
-    .info {
-        font-size: 20;
-        horizontal-align: center;
-        vertical-align: center;
-    }
+<style>
+  .info .fas {
+    color: #3a53ff;
+  }
+
+  .info {
+    font-size: 20;
+    horizontal-align: center;
+    vertical-align: center;
+  }
 </style>

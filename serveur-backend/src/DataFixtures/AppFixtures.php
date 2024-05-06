@@ -82,7 +82,7 @@ class AppFixtures extends Fixture
             $userId = $users->getId(); // Récupérer l'ID de l'utilisateur
 
             // Utiliser l'entité utilisateur dans la tâche
-            $task->setUsersId($users);
+            $task->setUsersId($userId);
 
             $task->setName($fixTask['taskTitle']);
             $task->setDescription($fixTask['taskDescription']);

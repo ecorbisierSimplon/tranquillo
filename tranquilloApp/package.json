@@ -5,16 +5,19 @@
   "private": true,
   "dependencies": {
     "@nativescript/core": "~8.5.9",
-    "@nativescript/theme": "~3.0.2",
+    "@nativescript/theme": "^3.0.2",
     "bootstrap": "^5.3.3",
-    "svelte-native": "~1.0.21"
+    "nativescript-dna-deviceinfo": "^3.7.3",
+    "svelte-native": "~1.0.21",
+    "tailwindcss": "^3.4.3"
   },
   "devDependencies": {
-    "@nativescript/preview-cli": "^1.0.13",
+    "@nativescript/preview-cli": "1.0.13",
     "@nativescript/types": "^8.7.0",
     "@nativescript/webpack": "^5.0.21",
     "sass": "^1.76.0",
     "svelte": "^4.2.15",
+    "svelte-hmr": "^0.16.0",
     "svelte-loader": "^3.2.0",
     "svelte-preprocess": "^5.1.4",
     "typescript": "^5.4.5"
