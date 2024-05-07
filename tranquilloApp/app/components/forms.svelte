@@ -1,8 +1,8 @@
 <script lang="ts">
   import { isPage } from "~/lib/packages/variables";
-  import Menu from "~/Menu.svelte";
+  import Menu from "~/layout/Menu.svelte";
   import { goBack } from "svelte-native";
-  import ActionBar from "~/ActionBar.svelte";
+  import ActionBar from "~/layout/ActionBar.svelte";
 
   let email: string = ""; // ou une autre valeur par défaut
   let password: string = ""; // ou une autre valeur par défaut

@@ -1,38 +1,60 @@
 <script lang="ts">
-  import Home from "./Home.svelte";
   import Register from "./Register.svelte";
-  import ActionBar from "../ActionBar.svelte";
-  import Menu from "~/Menu.svelte";
-  import { isPage } from "~/lib/packages/variables";
-  import { icons } from "../utils/icons";
+  import Home from "./Home.svelte";
+  import ActionBar from "../layout/ActionBar.svelte";
+  import Menu from "~/layout/Menu.svelte";
   import { alert } from "@nativescript/core/ui/dialogs";
   import { navigate } from "svelte-native";
   import { onMount } from "svelte";
-
-  // import { user_token, user_profile, login } from "../stores/user";
-  import { login } from "../stores/login";
   import { localize } from "~/lib/packages/localize";
+  import { isPage } from "~/lib/packages/variables";
+  import { user_token, user_profile, login } from "../stores/user";
+  import { isLoading } from "./base";
 
-  let email: string = "";
-  let password: string = "";
+  isPage.set("login");
+  // import { user_token, user_profile, login } from "../stores/user";
 
-  let isLoading = false;
-  let emailL: string = "";
-  let passwordL: string = "";
-  let noAccountL: string = "";
-  let registerL: string = "";
-  let loginL: string = "";
+  // export let msg;
+  let email: string = "",
+    password: string = "",
+    email_edit: string = "",
+    password_edit: string = "",
+    emailL: string = "",
+    passwordL: string = "",
+    noAccountL: string = "",
+    notLoggedL: string = "",
+    registerL: string = "",
+    loginL: string = "";
 
   onMount(async () => {
     emailL = await localize("user.email");
     passwordL = await localize("user.password");
     noAccountL = await localize("form.no_account", true);
+    noAccountL = await localize("form.no_account", true);
+    notLoggedL = await localize("message.not_logged", true);
     registerL = await localize("form.register", true);
     loginL = await localize("form.login", true);
-    // if ($user_profile) {
-    //   // closeModal($user_profile);
-    // }
   });
+  onMount(() => {
+    if ($user_profile) {
+      homeResult($user_profile);
+    }
+  });
+
+  function doLogin() {
+    login(email as string, password as string).then(
+      (user) => homeResult(user),
+      (err) => {
+        console.log(err.errorCode);
+
+        if (err.errorCode > 202) {
+          alert(notLoggedL);
+        } else {
+          alert(err.message);
+        }
+      },
+    );
+  }
 
   function handleEmailChange(event: { value: string }) {
     email = event.value;
@@ -42,32 +64,13 @@
     password = event.value;
   }
 
-  function loginForm() {
-    console.log("Email:", email);
-    console.log("Password:", password);
-
-    // Ici, vous pouvez envoyer les valeurs à votre API Symfony pour authentifier l'utilisateur
-    login(email, password);
-    // login(email, password).then(
-    //   console.log("response login"),
-    //   // (user) => closeModal(user),
-    //   // (err) => {
-    //   //   if (err.errorCode == 422) {
-    //   //     alert("Invalid username/password");
-    //   //   } else {
-    //   //     alert(err.message);
-    //   //   }
-    //   // },
-    // );
-  }
   function register() {
     navigate({ page: Register, clearHistory: true });
   }
-  function home() {
+  function homeResult(result: any) {
+    isLoading.set(true);
     navigate({ page: Home, clearHistory: true });
   }
-
-  isPage.set("login");
 </script>
 
 <page>
@@ -75,46 +78,47 @@
   <stackLayout>
     <Menu />
 
-    <label row="0" text="" class="" horizontalAlignment="right" />
-    <stackLayout row="1" class="form mb-3 mt-3" verticalAlignment="center">
-      <label text={registerL} class="title" horizontalAlignment="center" />
-      <stackLayout class="input-field">
+    <stackLayout row="1" class="mb-3 mt-3" verticalAlignment="center">
+      <label text={registerL} class="form-label" horizontalAlignment="center" />
+      <stackLayout class="form-contro">
         <textField
+          bind:this={email_edit}
           on:textChange={handleEmailChange}
-          class="input"
           hint={emailL}
+          class="input"
           keyboardType="email"
           autocorrect="false"
           autocapitalizationType="none"
           returnKeyType="next"
-          editable={!isLoading}
-        ></textField>
+          editable={!$isLoading}
+          on:returnPress={() => password_edit.nativeView.focus()}
+        />
         <stackLayout class="hr-light" />
       </stackLayout>
-      <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
 
       <stackLayout class="input-field">
         <textField
+          bind:this={password_edit}
           on:textChange={handlePasswordChange}
-          class="input"
           hint={passwordL}
-          secure="false"
+          class="input"
+          secure="true"
           returnKeyType="done"
-          editable={!isLoading}
-        ></textField>
+          editable={!$isLoading}
+          on:returnPress={doLogin}
+        />
         <stackLayout class="hr-light" />
       </stackLayout>
-      <!-- on:returnPress={doLogin} -->
 
       <button
         text={loginL}
-        on:tap={loginForm}
+        on:tap={doLogin}
         class="btn m-t-20"
-        isEnabled={!isLoading}
+        isEnabled={!$isLoading}
       />
 
       <activityIndicator
-        busy={isLoading}
+        busy={$isLoading}
         horizontalAlignment="center"
         verticalAlignment="center"
         class="activity-indicator"

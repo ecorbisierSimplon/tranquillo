@@ -1,9 +1,11 @@
-import { EventEmitter } from "~/utils/eventemitter";
+import { EventEmitter } from "../utils/eventemitter";
 
-const API_BASE = "http://192.168.178.27:8088/api";
+const API_BASE = "http://localhost:8088/api";
 
 type ValidationErrors = { [index: string]: string[] };
 
+/* La classe ApiError dans TypeScript définit un objet d'erreur avec un message et un code d'erreur,
+ainsi qu'une propriété d'erreurs facultative pour les erreurs de validation. */
 class ApiError {
   constructor(message: string, errorCode: number = 0) {
     this.message = message;
@@ -14,6 +16,8 @@ class ApiError {
   message: string = "Api Error";
 }
 
+/* La classe ApiClient dans TypeScript gère l'envoi de requêtes à une API, la gestion des erreurs et
+l'analyse des réponses du serveur. */
 class ApiClient {
   onError: EventEmitter<ApiError>;
 
@@ -24,7 +28,7 @@ class ApiClient {
   async sendRequest<T>(
     relative_url: string,
     method: string,
-    token: string | null = null,
+    token: string = "",
     payload = {}
   ): Promise<T> {
     console.log("fetching ", `${API_BASE}${relative_url}`, method);
@@ -35,25 +39,31 @@ class ApiClient {
       headers["cty"] = "JWTTranquillo";
     }
     if (token) {
-      headers["Authorization"] = `Token ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
+
     let res;
     try {
       res = await fetch(`${API_BASE}${relative_url}`, {
         method: method,
-        mode: "cors",
-        headers: headers,
+        headers: {
+          "User-Agent": "Tranquillo application",
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          cty: "JWTTranquillo",
+        },
         body: payload ? JSON.stringify(payload) : null,
       });
     } catch (e) {
       console.log("error running fetch", e);
       throw e;
     }
-    console.log(res.status);
+    // mode: "cors",
+    // headers,
 
     if (!res.ok) {
       let err = new ApiError(res.statusText, res.status);
-      if (res.status > 202) {
+      if (res.status == 422) {
         try {
           let validation_errors = await res.json();
           err.errors = validation_errors;

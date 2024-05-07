@@ -9,4 +9,7 @@ export const i18n = {
     register: "register",
     login: "login",
   },
+  message: {
+    not_logged: "Invalid username/password",
+  },
 };

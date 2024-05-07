@@ -1,7 +1,7 @@
 <script lang="ts">
   import { localize } from "~/lib/packages/localize";
-  import ActionBar from "../ActionBar.svelte";
-  import Menu from "../Menu.svelte";
+  import ActionBar from "../layout/ActionBar.svelte";
+  import Menu from "../layout/Menu.svelte";
   import { isPage } from "~/lib/packages/variables";
   import { onMount } from "svelte";
   import { strUcFirst } from "~/lib/packages/functions";

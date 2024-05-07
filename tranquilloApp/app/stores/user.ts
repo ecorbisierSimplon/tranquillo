@@ -52,15 +52,15 @@ export function logout() {
 
 export function login(email: string, password: string): Promise<User> {
   return client
-    .sendRequest<UserResponse>("/users/login_check", "POST", undefined, {
-      user: {
-        email: email,
-        password: password,
-      },
+    .sendRequest<UserResponse>("/login_check", "POST", null, {
+      username: email,
+      password: password,
     })
     .then((userResponse) => {
+      console.log(userResponse);
+
       let user = userResponse.user;
-      user_token.set(user.token || "");
+      user_token.set(userResponse.token || "");
       user_profile.set(user);
       return user;
     });

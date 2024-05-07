@@ -6,10 +6,12 @@ namespace App\EventListener;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTEncodedEvent;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 
-final class UsersJWTCreatedListener
+final class UsersJWTCreatedListener extends AbstractController
 {
     /**
      * @var RequestStack
@@ -51,7 +53,7 @@ final class UsersJWTCreatedListener
         // $event->setHeader($header);
 
         // Définir la date d'expiration du JWT
-        $expiration = new \DateTime('+1 day');
+        $expiration = new \DateTime('+30 day');
         $expiration->setTime(2, 0, 0);
         $payload['exp'] = $expiration->getTimestamp();
         $event->setData($payload);

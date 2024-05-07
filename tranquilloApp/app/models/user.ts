@@ -1,4 +1,5 @@
 export class User {
+  id?: number;
   email: string = "";
   firstname?: string;
   lastname?: string;
@@ -21,9 +22,9 @@ export interface ApiHeader {
 }
 
 export interface UserResponse {
-  id: number;
-  email: string;
-  user: User;
+  token: string;
+  user?: User;
+  code: number;
 }
 
 export interface LoginResponse {

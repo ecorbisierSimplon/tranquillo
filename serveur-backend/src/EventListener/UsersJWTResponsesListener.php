@@ -3,16 +3,20 @@
 
 namespace App\EventListener;
 
+use App\Dto\UserDto;
+use App\Entity\User;
+use App\Helper\ObjectHydrator;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationFailureEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTInvalidEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTNotFoundEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationFailureResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-final class UsersJWTResponsesListener
+final class UsersJWTResponsesListener extends AbstractController
 {
 
 
@@ -22,16 +26,23 @@ final class UsersJWTResponsesListener
     public function onAuthenticationSuccessResponse(AuthenticationSuccessEvent $event)
     {
         $data = $event->getData();
-        $user = $event->getUser();
+        $user = ObjectHydrator::hydrate($event->getUser(), new UserDto);
 
-        if (!$user instanceof UserInterface) {
+        if (!$user instanceof UserDto) {
             return;
         }
 
-        $data['data'] = array(
-            // 'roles' => $user->getRoles(),
-            "message" => "Bienvenue"
+        $data['user'] = $this->jsonEncode(
+            $user,
+            ['groups' => ['users: read']]
         );
+        $data['code'] = Response::HTTP_ACCEPTED;
+
+
+        // array(
+        //     // 'roles' => $user->getRoles(),
+        //     "message" => "Bienvenue"
+        // );
 
         $event->setData($data);
     }
@@ -84,5 +95,23 @@ final class UsersJWTResponsesListener
         $response->setData($data);
 
         $event->setResponse($response);
+    }
+
+
+    /**
+     * Returns a Json that uses the serializer component if enabled, or json_encode.
+     *
+     * @param int $status The HTTP status code (200 "OK" by default)
+     */
+    private function jsonEncode(mixed $data, array $context = []): mixed
+    {
+        if ($this->container->has('serializer')) {
+            $json = $this->container->get('serializer')->serialize($data, 'json', array_merge([
+                'json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS,
+            ], $context));
+
+            return $json;
+        }
+        return $data;
     }
 }

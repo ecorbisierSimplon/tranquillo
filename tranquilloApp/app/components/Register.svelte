@@ -1,8 +1,7 @@
 <script lang="ts">
-  import { writable } from "svelte/store";
-  import ActionBar from "../ActionBar.svelte";
+  import ActionBar from "../layout/ActionBar.svelte";
   import { isPage } from "~/lib/packages/variables";
-  import Menu from "~/Menu.svelte";
+  import Menu from "~/layout/Menu.svelte";
   isPage.set("register");
 </script>
 
