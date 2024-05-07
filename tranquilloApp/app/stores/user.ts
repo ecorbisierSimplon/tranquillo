@@ -36,7 +36,7 @@ function buildUserProfileStore() {
       // Supposons que client et sendRequest soient correctement définis ailleurs
       return client
         .sendRequest<UserResponse>("/user", "GET", user_token)
-        .then((userResponse) => user_profile.set(userResponse));
+        .then((userResponse) => user_profile.set(userResponse.user ?? null));
     },
 
     set: user_profile.set,
@@ -53,24 +53,24 @@ export function logout() {
 export function login(email: string, password: string): Promise<User> {
   return client
     .sendRequest<UserResponse>("/login_check", "POST", null, {
-      username: email,
-      password: password,
+      username: email.trim(),
+      password: password.trim(),
     })
     .then((userResponse) => {
-      console.log(userResponse);
+      // console.log("UserResponse : " + userResponse.token);
 
-      let user = userResponse.user;
-      user_token.set(userResponse.token || "");
-      user_profile.set(user);
+      let user: User = userResponse.user as User;
+      user_token.set(userResponse.token as string);
+      user_profile.set(user as User);
       return user;
     });
 }
 
 export function update(update: ProfileUpdate): Promise<User> {
   let payload: any = {
-    firstname: update.firstname,
-    lastname: update.lastname,
-    email: update.email,
+    firstname: update.firstname.trim(),
+    lastname: update.lastname.trim(),
+    email: update.email.trim(),
   };
   if (update.new_password) {
     payload.new_password = update.new_password;
@@ -81,31 +81,33 @@ export function update(update: ProfileUpdate): Promise<User> {
       user: payload,
     })
     .then((userResponse) => {
-      let user = userResponse.user;
-      user_token.set(user.token || "");
-      user_profile.set(user);
+      let user: User = userResponse.user as User;
+      user_token.set(user?.token as string);
+      user_profile.set(user ?? null);
       return user;
     });
 }
 
 export function register(
-  username: string,
+  lastname: string,
+  firstname: string,
   email: string,
   password: string
 ): Promise<User> {
   return client
-    .sendRequest<UserResponse>("/users", "POST", undefined, {
-      user: {
-        username: username,
-
-        email: email,
-        password: password,
-      },
+    .sendRequest<any>("/user", "POST", null, {
+      lastname: lastname.trim(),
+      firstname: firstname.trim(),
+      email: email.trim(),
+      password: password.trim(),
     })
-    .then((userResponse) => {
-      let user = userResponse.user;
-      user_token.set(user.token || "");
-      user_profile.set(user);
-      return user;
+    .then((response) => {
+      // let user: User = userResponse.user as User;
+      // user_token.set(user.token || "");
+      // user_profile.set(user);
+      console.log("Response key   : " + Object.keys(response));
+      console.log("Response value : " + Object.values(response));
+
+      return response;
     });
 }

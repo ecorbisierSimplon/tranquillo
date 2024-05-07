@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Register from "./Register.svelte";
-  import Home from "./Home.svelte";
-  import ActionBar from "../layout/ActionBar.svelte";
-  import Menu from "~/layout/Menu.svelte";
+  isPage.set("login");
+
   import { alert } from "@nativescript/core/ui/dialogs";
-  import { navigate } from "svelte-native";
   import { onMount } from "svelte";
+  import { navigate } from "svelte-native";
+  import Register from "./Register.svelte";
+  import Home from "~/components/Home.svelte";
+  import ActionBar from "~/layout/ActionBar.svelte";
+  import Menu from "~/layout/Menu.svelte";
   import { localize } from "~/lib/packages/localize";
   import { isPage } from "~/lib/packages/variables";
-  import { user_token, user_profile, login } from "../stores/user";
-  import { isLoading } from "./base";
-
-  isPage.set("login");
-  // import { user_token, user_profile, login } from "../stores/user";
+  import { user_token, user_profile, login } from "~/stores/user";
+  import { get } from "svelte/store";
 
   // export let msg;
-  let email: string = "",
+  let isLoading: boolean = false,
+    email: string = "",
     password: string = "",
     email_edit: string = "",
     password_edit: string = "",
@@ -24,26 +24,34 @@
     noAccountL: string = "",
     notLoggedL: string = "",
     registerL: string = "",
-    loginL: string = "";
+    loginL: string = "",
+    bt_validL: string = "";
 
   onMount(async () => {
     emailL = await localize("user.email");
     passwordL = await localize("user.password");
     noAccountL = await localize("form.no_account", true);
-    noAccountL = await localize("form.no_account", true);
-    notLoggedL = await localize("message.not_logged", true);
+    notLoggedL = await localize("message.error.not_logged", true);
     registerL = await localize("form.register", true);
     loginL = await localize("form.login", true);
+    bt_validL = await localize("button.validate", true);
   });
+
   onMount(() => {
     if ($user_profile) {
       homeResult($user_profile);
     }
   });
 
-  function doLogin() {
+  function doLogin(): void {
+    isLoading = true;
     login(email as string, password as string).then(
-      (user) => homeResult(user),
+      (user) => {
+        // console.log("Token : " + get(user_token));
+        // console.log("Token : " + Object.values(user));
+
+        homeResult(user);
+      },
       (err) => {
         console.log(err.errorCode);
 
@@ -52,23 +60,24 @@
         } else {
           alert(err.message);
         }
+        isLoading = false;
       },
     );
   }
 
-  function handleEmailChange(event: { value: string }) {
+  function handleEmailChange(event: { value: string }): void {
     email = event.value;
   }
 
-  function handlePasswordChange(event: { value: string }) {
+  function handlePasswordChange(event: { value: string }): void {
     password = event.value;
   }
 
-  function register() {
+  function register(): void {
     navigate({ page: Register, clearHistory: true });
   }
-  function homeResult(result: any) {
-    isLoading.set(true);
+  function homeResult(result: any): void {
+    isLoading = true;
     navigate({ page: Home, clearHistory: true });
   }
 </script>
@@ -79,7 +88,11 @@
     <Menu />
 
     <stackLayout row="1" class="mb-3 mt-3" verticalAlignment="center">
-      <label text={registerL} class="form-label" horizontalAlignment="center" />
+      <label
+        text={loginL}
+        class="title form-label"
+        horizontalAlignment="center"
+      />
       <stackLayout class="form-contro">
         <textField
           bind:this={email_edit}
@@ -90,8 +103,8 @@
           autocorrect="false"
           autocapitalizationType="none"
           returnKeyType="next"
-          editable={!$isLoading}
           on:returnPress={() => password_edit.nativeView.focus()}
+          editable={!isLoading}
         />
         <stackLayout class="hr-light" />
       </stackLayout>
@@ -104,21 +117,21 @@
           class="input"
           secure="true"
           returnKeyType="done"
-          editable={!$isLoading}
           on:returnPress={doLogin}
+          editable={!isLoading}
         />
         <stackLayout class="hr-light" />
       </stackLayout>
 
       <button
-        text={loginL}
+        text={bt_validL}
+        class="btn m-t-20 submit"
         on:tap={doLogin}
-        class="btn m-t-20"
-        isEnabled={!$isLoading}
+        isEnabled={!isLoading}
       />
 
       <activityIndicator
-        busy={$isLoading}
+        busy={isLoading}
         horizontalAlignment="center"
         verticalAlignment="center"
         class="activity-indicator"
@@ -140,11 +153,6 @@
 </page>
 
 <style lang="scss">
-  .close-button {
-    font-size: 25;
-    padding: 10;
-  }
-
   .btn {
     background-color: rgb(11, 40, 121);
     color: white;
@@ -156,10 +164,6 @@
     margin-top: 20;
     margin-bottom: 20;
     color: rgb(211, 155, 2);
-  }
-
-  .form {
-    padding: 20;
   }
 
   .input {

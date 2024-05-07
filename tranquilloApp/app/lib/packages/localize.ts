@@ -37,7 +37,3 @@ export async function localize(
   }
   return value;
 }
-
-// export let localize = writable<any>(async (key: string) => {
-//   return await localizeF(key);
-// });

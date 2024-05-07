@@ -34,7 +34,7 @@ class UserRegex extends Constraint
         mixed $payload = null,
         array $options = []
     ) {
-        $pattern = ($regex === "password") ? '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&§+=!])(?!.*[ç<\">[\]\'µ`~\\/]).{0,}$/' : null;
+        $pattern = ($regex === "password") ? '/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&:§+=!])(?!.*[ç<\">\'µ`~\\/]).{0,}$/' : null;
         $pattern = ($regex === "name") ? '/^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]$/' : $pattern;
         $pattern = ($regex === "number") ? '/^[0-9]\d*$/' : $pattern;
 

@@ -1,4 +1,6 @@
 ﻿@import "../node_modules/bootstrap/scss/bootstrap.scss";
+// @import "./scss/buttons";
+
 // @import "@nativescript/theme/css/core.css";
 // @import "@nativescript/theme/css/default.css";
 
@@ -26,14 +28,20 @@
 }
 
 actionBar {
-  background-color: hsl(221, 100%, 79%);
+  background-color: rgb(148, 182, 255);
+  font-size: 0;
 
-  .icon {
-    font-size: 20;
-  }
+}
 
-  .title {
-    font-size: 16;
-    margin-left: 20;
+.error {
+  color: #d30000;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 13;
+  margin: 0 0 0 10;
+
+  &>label {
+    // background-color: aqua;
+    // white-space: pre;
   }
 }

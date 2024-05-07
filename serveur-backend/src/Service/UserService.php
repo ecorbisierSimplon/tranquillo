@@ -8,7 +8,7 @@ use App\Helper\ObjectHydrator;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 
@@ -22,10 +22,14 @@ class UserService extends AbstractController
      * @param EntityManagerInterface $entityManager
      * @return void
      */
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager)
+    private $userPasswordHasher;
+
+
+    public function __construct(UserRepository $userRepository, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->userRepository = $userRepository;
         $this->em = $entityManager;
+        $this->userPasswordHasher = $userPasswordHasher;
     }
 
     // ##########################################
@@ -47,7 +51,7 @@ class UserService extends AbstractController
                 $userDto,
                 new User
             );
-            $user->setUsers($user);
+            $user->setPassword($this->userPasswordHasher->hashPassword($user, $userDto->getPassword()));
 
             $this->em->persist($user);
             $this->em->flush();
@@ -55,9 +59,9 @@ class UserService extends AbstractController
             return ["user" => $user->getId(), "code" => Response::HTTP_CREATED];
         }
 
-        $title = "Not found";
+        $title = "Conflict with email";
         $message = "The user with email '" . $userDto->getEmail() . "' has existed since " . $userCreateAt->format('d/m/Y') . " at " . $userCreateAt->format('H:m:s');
-        return ["user" => null, "title" => $title, "code" => 400, "message" => $message];
+        return ["user" => null, "title" => $title, "code" => Response::HTTP_CONFLICT, "message" => $message];
     }
 
 
@@ -229,9 +233,6 @@ class UserService extends AbstractController
      */
     public function ifExist(UserDto $userDto)
     {
-        return $this->userRepository->findExistingUser(
-            $userDto->getEmail(),
-            new \DateTimeImmutable()
-        );
+        return $this->userRepository->findOneByUser("email", $userDto->getEmail());
     }
 }
