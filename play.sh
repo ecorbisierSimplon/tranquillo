@@ -135,7 +135,7 @@ else
     echo "--------------------------------"
 
 fi
-pause s 2 m
+
 echo "${ip_server}"
 pause s 2 m
 
@@ -150,7 +150,7 @@ if [[ "${serveur}" == "back" ]]; then
         echo
 
         php -S $ip_server:$port_symfony -t public
-        pause s 2 m
+
         exit 1
     else
         chmod +x ./install.sh && ./install.sh
@@ -166,7 +166,7 @@ else
         echo
         URL "http://localhost:9876"
         command ns preview android
-        pause s 2 m
+
     else
         chmod +x ./install.sh && ./install.sh
     fi

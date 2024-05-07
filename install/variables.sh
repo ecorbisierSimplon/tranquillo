@@ -26,7 +26,7 @@ file_env=".env"
 
 folder_rel_bin=~/bin
 folder_serveur="serveur-backend"
-folder_front="serveur-frontend"
+folder_front="tranquilloApp"
 folder_rel_serveur="$myfolder/$folder_serveur"
 folder_rel_front="$myfolder/$folder_front"
 folder_rel_env=$folder_rel_serveur/
