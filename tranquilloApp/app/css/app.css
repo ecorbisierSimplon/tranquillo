@@ -11989,12 +11989,14 @@ textarea.form-control-lg {
 }
 
 actionBar {
-  background-color: hsl(221, 100%, 79%);
+  background-color: rgb(148, 182, 255);
+  font-size: 0;
 }
-actionBar .icon {
-  font-size: 20;
-}
-actionBar .title {
-  font-size: 16;
-  margin-left: 20;
+
+.error {
+  color: #d30000;
+  font-weight: normal;
+  font-style: italic;
+  font-size: 13;
+  margin: 0 0 0 10;
 }/*# sourceMappingURL=app.css.map */

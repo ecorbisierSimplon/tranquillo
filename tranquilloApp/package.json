@@ -7,6 +7,7 @@
     "@nativescript/core": "~8.5.9",
     "@nativescript/theme": "^3.0.2",
     "bootstrap": "^5.3.3",
+    "jwt-decode": "^4.0.0",
     "nativescript-dna-deviceinfo": "^3.7.3",
     "svelte-native": "~1.0.21",
     "tailwindcss": "^3.4.3"

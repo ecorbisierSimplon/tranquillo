@@ -8,10 +8,12 @@
 
   isPage.set("home");
 
-  let nameApp: string = "";
+  let nameApp: string = "",
+    welcomeL: string = "";
 
   onMount(async () => {
-    nameApp = strUcFirst(await localize("name_app"));
+    welcomeL = await localize("message.welcome", true);
+    nameApp = await localize("name_app");
   });
 </script>
 
@@ -19,22 +21,24 @@
   <ActionBar />
   <stackLayout>
     <Menu />
-    <label class="info" height="80">
-      <formattedString>
-        <span class="fas" text="&#xf135;" />
-        <span text=" {nameApp}" />
-      </formattedString>
-    </label>
+    <label class="title info" height="80" text={welcomeL} />
   </stackLayout>
 </page>
 
 <style>
+  .title {
+    font-weight: bold;
+    font-size: 20;
+    margin: 10 0;
+    color: rgb(211, 155, 2);
+  }
+
   .info .fas {
-    color: #3a53ff;
+    font-size: 20;
+    color: hsl(221, 100%, 61%);
   }
 
   .info {
-    font-size: 20;
     horizontal-align: center;
     vertical-align: center;
   }

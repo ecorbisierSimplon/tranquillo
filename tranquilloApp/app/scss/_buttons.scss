@@ -1,0 +1,54 @@
+button {
+
+
+
+	&.remove {
+		background-color: #950000;
+		box-shadow: 1px 1px 0px 2px hsl(0, 53%, 17%),
+			1px 1px 2px 2px hsla(0, 4%, 54%, 0.604);
+
+		&:hover {
+			box-shadow: 1px 1px 2px 2px hsla(0, 4%, 54%, 0.604),
+				-1px -1px 2px 2px hsl(0, 53%, 17%);
+		}
+	}
+
+	&.plus {
+		background-color: hsl(231.08deg 54.61% 50.01%);
+		box-shadow: 1px 1px 0px 2px hsl(231, 53%, 17%),
+			1px 1px 2px 2px hsla(0, 4%, 54%, 0.604);
+
+		&:hover {
+			box-shadow: 1px 1px 2px 2px hsla(0, 4%, 54%, 0.604),
+				-1px -1px 2px 2px hsl(231, 53%, 17%);
+		}
+	}
+
+	&.submit {
+		background-color: hsl(231.08deg 54.61% 50.01%);
+		box-shadow: 1px 1px 0px 2px hsl(234, 6%, 32%),
+			1px 1px 2px 2px hsla(0, 4%, 54%, 0.604);
+
+		&:hover {
+			box-shadow: 1px 1px 2px 2px hsla(0, 4%, 54%, 0.604),
+				-1px -1px 2px 2px hsl(230, 3%, 41%);
+		}
+	}
+
+	.fa {
+		margin-right: 0;
+	}
+
+	&.submit {
+		background-color: hsl(231, 35%, 66%);
+		box-shadow: 1px 1px 0px 2px hsl(231, 53%, 17%),
+			1px 1px 2px 2px hsla(0, 4%, 54%, 0.604);
+
+		&:hover {
+			color: hsl(231, 93%, 17%);
+			background-color: hsl(231, 56%, 80%);
+			box-shadow: 1px 1px 2px 2px hsla(0, 4%, 54%, 0.604),
+				-1px -1px 2px 2px hsl(231, 53%, 17%);
+		}
+	}
+}

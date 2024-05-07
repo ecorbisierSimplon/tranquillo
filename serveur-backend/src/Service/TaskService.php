@@ -58,7 +58,7 @@ class TaskService extends AbstractController
 
         $title = "Not found";
         $message = "The task '" . $taskDto->getName() . "' has existed since " . $taskCreateAt->format('d/m/Y') . " at " . $taskCreateAt->format('H:m:s');
-        return ["task" => null, "title" => $title, "code" => 400, "message" => $message];
+        return ["task" => null, "title" => $title, "code" => Response::HTTP_CONFLICT, "message" => $message];
     }
 
 
@@ -183,7 +183,7 @@ class TaskService extends AbstractController
 
         $this->em->flush();
 
-        return ["task" => $task->getId(), "code" => Response::HTTP_CREATED];
+        return ["task" => $task->getId(), "code" => Response::HTTP_ACCEPTED];
     }
 
 
