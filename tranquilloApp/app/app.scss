@@ -1,4 +1,4 @@
-﻿@import "../node_modules/bootstrap/scss/bootstrap.scss";
+﻿// @import "../node_modules/bootstrap/scss/bootstrap.scss";
 // @import "./scss/buttons";
 
 // @import "@nativescript/theme/css/core.css";
@@ -21,17 +21,13 @@
 
 .btn {
   font-size: 18;
+  font-weight: bold;
 }
 
 .icon {
   font-family: "Material-Design-Iconic-Font";
 }
 
-actionBar {
-  background-color: rgb(148, 182, 255);
-  font-size: 0;
-
-}
 
 .error {
   color: #d30000;
@@ -40,8 +36,8 @@ actionBar {
   font-size: 13;
   margin: 0 0 0 10;
 
-  &>label {
-    // background-color: aqua;
-    // white-space: pre;
-  }
+  // &>label {
+  //   // background-color: aqua;
+  //   // white-space: pre;
+  // }
 }
