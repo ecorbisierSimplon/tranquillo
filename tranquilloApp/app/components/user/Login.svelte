@@ -84,78 +84,83 @@
 
 <page>
   <ActionBar />
-  <stackLayout>
-    <Menu />
-
-    <stackLayout row="1" class="mb-3 mt-3" verticalAlignment="center">
-      <label
-        text={loginL}
-        class="title form-label"
-        horizontalAlignment="center"
-      />
-      <stackLayout class="form-contro">
-        <textField
-          bind:this={email_edit}
-          on:textChange={handleEmailChange}
-          hint={emailL}
-          class="input"
-          keyboardType="email"
-          autocorrect="false"
-          autocapitalizationType="none"
-          returnKeyType="next"
-          on:returnPress={() => password_edit.nativeView.focus()}
-          editable={!isLoading}
-        />
-        <stackLayout class="hr-light" />
-      </stackLayout>
-
-      <stackLayout class="input-field">
-        <textField
-          bind:this={password_edit}
-          on:textChange={handlePasswordChange}
-          hint={passwordL}
-          class="input"
-          secure="true"
-          returnKeyType="done"
-          on:returnPress={doLogin}
-          editable={!isLoading}
-        />
-        <stackLayout class="hr-light" />
-      </stackLayout>
-
-      <button
-        text={bt_validL}
-        class="btn m-t-20 submit"
-        on:tap={doLogin}
-        isEnabled={!isLoading}
-      />
-
-      <activityIndicator
-        busy={isLoading}
-        horizontalAlignment="center"
-        verticalAlignment="center"
-        class="activity-indicator"
-      />
+  <dockLayout stretchLastChild="true">
+    <stackLayout dock="bottom">
+      <Menu />
     </stackLayout>
+    <stackLayout>
+      <stackLayout row="1" class="mb-3 mt-3" verticalAlignment="center">
+        <label
+          text={loginL}
+          class="title form-label"
+          horizontalAlignment="center"
+        />
+        <stackLayout class="form-contro">
+          <textField
+            bind:this={email_edit}
+            on:textChange={handleEmailChange}
+            hint={emailL}
+            class="input"
+            keyboardType="email"
+            autocorrect="false"
+            autocapitalizationType="none"
+            returnKeyType="next"
+            on:returnPress={() => password_edit.nativeView.focus()}
+            editable={!isLoading}
+          />
+          <stackLayout class="hr-light" />
+        </stackLayout>
 
-    <label
-      row="2"
-      class="login-label sign-up-label"
-      on:tap={register}
-      horizontalAlignment="center"
-    >
-      <formattedString>
-        <span text={noAccountL} />
-        <span text=" {registerL}" class="bold" />
-      </formattedString>
-    </label>
-  </stackLayout>
+        <stackLayout class="input-field">
+          <textField
+            bind:this={password_edit}
+            on:textChange={handlePasswordChange}
+            hint={passwordL}
+            class="input"
+            secure="true"
+            returnKeyType="done"
+            on:returnPress={doLogin}
+            editable={!isLoading}
+          />
+          <stackLayout class="hr-light" />
+        </stackLayout>
+
+        <button
+          text={bt_validL}
+          class="btn"
+          on:tap={doLogin}
+          isEnabled={!isLoading}
+        />
+
+        <activityIndicator
+          busy={isLoading}
+          horizontalAlignment="center"
+          verticalAlignment="center"
+          class="activity-indicator"
+        />
+      </stackLayout>
+
+      <label
+        row="2"
+        class="login-label sign-up-label"
+        on:tap={register}
+        horizontalAlignment="center"
+      >
+        <formattedString>
+          <span text={noAccountL} />
+          <span text=" {registerL}" class="bold" />
+        </formattedString>
+      </label>
+    </stackLayout>
+  </dockLayout>
 </page>
 
 <style lang="scss">
   .btn {
     background-color: rgb(11, 40, 121);
     color: white;
+    font-size: 15;
+    width: 280;
   }
 
   label.title {

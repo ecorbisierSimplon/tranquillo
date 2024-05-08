@@ -4,7 +4,6 @@
   import Menu from "~/layout/Menu.svelte";
   import { isPage } from "~/lib/packages/variables";
   import { onMount } from "svelte";
-  import { strUcFirst } from "~/lib/packages/functions";
 
   isPage.set("home");
 
@@ -12,8 +11,8 @@
     welcomeL: string = "";
 
   onMount(async () => {
-    welcomeL = await localize("message.welcome", true);
-    nameApp = await localize("name_app");
+    // welcomeL = await localize("message.welcome", true);
+    // nameApp = await localize("name_app");
   });
 </script>
 
@@ -24,7 +23,11 @@
       <Menu />
     </stackLayout>
     <stackLayout>
-      <label class="title info" height="80" text={welcomeL} />
+      <label
+        class="title info"
+        height="80"
+        text={await localize("message.welcome", true)}
+      />
     </stackLayout>
   </dockLayout>
 </page>

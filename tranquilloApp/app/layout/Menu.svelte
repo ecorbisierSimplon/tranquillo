@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { writable } from "svelte/store";
+  import { getWritable } from "~/lib/packages/getWritable";
   import Home from "~/components/Home.svelte";
   import Register from "~/components/user/Register.svelte";
   import Login from "~/components/user/Login.svelte";
@@ -9,6 +11,16 @@
 
   const width: number = 80;
   const height: number = 50;
+
+  const classHome = writable<string>(
+    getWritable(isPage) == "home" ? "disabled" : "enabled",
+  );
+  const classLogin = writable<string>(
+    getWritable(isPage) == "login" ? "disabled" : "enabled",
+  );
+  const classRegister = writable<string>(
+    getWritable(isPage) == "register" ? "disabled" : "enabled",
+  );
 
   function home(): void {
     navigate({ page: Home, clearHistory: true });
@@ -25,68 +37,85 @@
   }
 </script>
 
-<wrapLayout class="btn-group btn-group-lg">
-  <button
+<flexboxLayout justifyContent="space-around">
+  <label
     text={icons.home}
-    class="home icon menu home btn btn-primary"
+    class="btn home icon menu home {$classHome}"
     on:tap={home}
-    isEnabled={$isPage != "home"}
   />
+
   {#if !$user_profile}
-    <button
+    <!-- isEnabled={$isPage != "home"} -->
+    <label
       text={icons.power}
-      class="login icon menu power btn btn-primary"
+      class="btn login icon menu power {$classLogin}"
       on:tap={login}
-      isEnabled={$isPage != "login"}
     />
 
-    <button
+    <!-- isEnabled={$isPage != "login"} -->
+    <label
       text={icons.account_add}
-      class="register icon menu account-add btn btn-primary"
+      class="btn register icon menu account-add {$classRegister}"
       on:tap={register}
-      isEnabled={$isPage != "register"}
     />
   {:else}
-    <button
+    <label
       text={icons.power}
-      class="islogin icon power btn btn-primary"
+      class="btn islogin icon power enabled"
       on:tap={logout}
     />
   {/if}
-</wrapLayout>
+</flexboxLayout>
+
+<!-- isEnabled={$isPage != "register"} -->
 
 <style lang="scss">
-  wrapLayout {
-    margin-top: 2;
-    border-bottom-width: 2;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(255, 224, 183);
-    // background-color: hsl(44, 100%, 88%);
+  flexboxLayout {
+    margin: 2 0;
+    border-top-width: 2;
+    border-top-style: solid;
+    border-top-color: hsl(34, 100%, 86%);
+    background-color: hsl(30, 100%, 98%);
   }
-  button {
-    width: 60;
-    height: 40;
-    border-radius: 5;
-    margin: 4 2 4 4;
+  // background-color: hsl(44, 100%, 88%);
+  label {
+    &.btn {
+      width: 60;
+      height: 60;
+      border-radius: 50%;
+      margin: 4 2 4 4;
+      text-align: center;
+      box-shadow: 0 0 0 rgb(255, 255, 255);
+      font-weight: bold;
+      font-size: 25;
 
-    box-shadow:
-      2px 2px 5px 1px rgba(2, 76, 146, 0.527),
-      -1px -1px 2px 2px rgb(66, 20, 20);
-    &.home {
-      background-color: rgb(148, 182, 255);
-    }
-    &.login {
-      background-color: rgb(147, 219, 144);
-    }
-    &.islogin {
-      background-color: rgb(255, 148, 148);
-    }
-    &.register {
-      background-color: rgb(148, 182, 255);
-    }
-    &:disabled {
-      // background-color: rgb(163, 163, 163);
-      box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+      border-style: solid;
+      border-width: 2;
+      border-color: hsl(0, 0%, 100%, 0);
+      color: rgb(150, 150, 150);
+      &.islogin {
+        color: hsl(0, 80%, 65%);
+        font-size: 30;
+      }
+
+      &.disabled {
+        border-color: hsl(54, 98%, 63%);
+        box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
+        font-size: 30;
+        &.home {
+          color: hsl(221, 54%, 52%);
+        }
+        &.login {
+          color: hsl(117, 54%, 52%);
+        }
+
+        &.register {
+          color: hsl(24, 54%, 52%);
+        }
+      }
+      &.enabled {
+        box-shadow: 3px 3px 3px 1px hsla(32, 97%, 24%, 0.856) !important;
+      }
     }
   }
 </style>

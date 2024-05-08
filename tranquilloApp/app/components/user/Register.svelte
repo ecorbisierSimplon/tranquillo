@@ -150,141 +150,151 @@
 
 <page>
   <ActionBar />
-  <stackLayout>
-    <Menu />
-
-    <stackLayout row="1" class="form" verticalAlignment="center">
-      <label text={registrationL} class="title" horizontalAlignment="center" />
-
-      <stackLayout class="input-field m-t-10">
-        <textField
-          bind:this={firstname_edit}
-          on:textChange={handleFirstnameChange}
-          hint={firstnameL}
-          class="input"
-          autocapitalizationType="none"
-          returnKeyType="next"
-          on:returnPress={() => lastname_edit.nativeView.focus()}
-          editable={!isLoading}
-        />
-        {#if errMessage?.firstname}
-          <stackLayout class="error">
-            <label text={errMessage?.firstname} />
-          </stackLayout>
-          <stackLayout class="hr-light" />
-        {/if}
-      </stackLayout>
-
-      <stackLayout class="input-field m-t-10">
-        <textField
-          bind:this={lastname_edit}
-          on:textChange={handleLastnameChange}
-          hint={lastnameL}
-          class="input"
-          autocapitalizationType="none"
-          returnKeyType="next"
-          on:returnPress={() => email_edit.nativeView.focus()}
-          editable={!isLoading}
-        />
-        {#if errMessage?.lastname}
-          <stackLayout class="error">
-            <label text={errMessage?.lastname} />
-          </stackLayout>
-          <stackLayout class="hr-light" />
-        {/if}
-      </stackLayout>
-
-      <stackLayout class="input-field m-t-10">
-        <textField
-          bind:this={email_edit}
-          on:textChange={handleEmailChange}
-          hint={emailL}
-          class="input"
-          keyboardType="email"
-          autocorrect="false"
-          autocapitalizationType="none"
-          returnKeyType="next"
-          on:returnPress={() => password_edit.nativeView.focus()}
-          editable={!isLoading}
-        />
-        {#if errMessage?.email}
-          <stackLayout class="error">
-            <label text={errMessage?.email} />
-          </stackLayout>
-          <stackLayout class="hr-light" />
-        {/if}
-      </stackLayout>
-
-      <stackLayout class="input-field">
-        <textField
-          bind:this={password_edit}
-          on:textChange={handlePasswordChange}
-          hint={passwordL}
-          class="input"
-          secure="true"
-          returnKeyType="done"
-          on:returnPress={() => password_repeat_edit.nativeView.focus()}
-          editable={!isLoading}
-        />
-        {#if errMessage?.password}
-          <stackLayout class="error">
-            <label text={errMessage?.password} />
-          </stackLayout>
-          <stackLayout class="hr-light" />
-        {/if}
-      </stackLayout>
-
-      <stackLayout class="input-field">
-        <textField
-          bind:this={password_repeat_edit}
-          on:textChange={handlePasswordRepeatChange}
-          hint={passwordRepeatL}
-          class="input"
-          secure="true"
-          returnKeyType="done"
-          on:returnPress={doRegister}
-          editable={!isLoading}
-        />
-        {#if errMessage?.password_repeat}
-          <stackLayout class="error">
-            <label text={errMessage?.password_repeat} />
-          </stackLayout>
-          <stackLayout class="hr-light" />
-        {/if}
-      </stackLayout>
-      <button
-        text={registerL}
-        on:tap={doRegister}
-        class="btn m-t-20 submit"
-        isEnabled={!isLoading}
-      />
-
-      <activityIndicator
-        busy={isLoading}
-        horizontalAlignment="center"
-        verticalAlignment="center"
-        class="activity-indicator"
-      />
+  <ActionBar />
+  <dockLayout stretchLastChild="true">
+    <stackLayout dock="bottom">
+      <Menu />
     </stackLayout>
+    <stackLayout>
+      <stackLayout row="1" class="form" verticalAlignment="center">
+        <label
+          text={registrationL}
+          class="title"
+          horizontalAlignment="center"
+        />
 
-    <label
-      row="2"
-      class="login-label"
-      on:tap={login}
-      horizontalAlignment="center"
-    >
-      <formattedString>
-        <span text={asAccountL} />
-        <span text=" {loginL}" class="bold" />
-      </formattedString>
-    </label>
-  </stackLayout>
+        <stackLayout class="input-field m-t-10">
+          <textField
+            bind:this={firstname_edit}
+            on:textChange={handleFirstnameChange}
+            hint={firstnameL}
+            class="input"
+            autocapitalizationType="none"
+            returnKeyType="next"
+            on:returnPress={() => lastname_edit.nativeView.focus()}
+            editable={!isLoading}
+          />
+          {#if errMessage?.firstname}
+            <stackLayout class="error">
+              <label text={errMessage?.firstname} />
+            </stackLayout>
+            <stackLayout class="hr-light" />
+          {/if}
+        </stackLayout>
+
+        <stackLayout class="input-field m-t-10">
+          <textField
+            bind:this={lastname_edit}
+            on:textChange={handleLastnameChange}
+            hint={lastnameL}
+            class="input"
+            autocapitalizationType="none"
+            returnKeyType="next"
+            on:returnPress={() => email_edit.nativeView.focus()}
+            editable={!isLoading}
+          />
+          {#if errMessage?.lastname}
+            <stackLayout class="error">
+              <label text={errMessage?.lastname} />
+            </stackLayout>
+            <stackLayout class="hr-light" />
+          {/if}
+        </stackLayout>
+
+        <stackLayout class="input-field m-t-10">
+          <textField
+            bind:this={email_edit}
+            on:textChange={handleEmailChange}
+            hint={emailL}
+            class="input"
+            keyboardType="email"
+            autocorrect="false"
+            autocapitalizationType="none"
+            returnKeyType="next"
+            on:returnPress={() => password_edit.nativeView.focus()}
+            editable={!isLoading}
+          />
+          {#if errMessage?.email}
+            <stackLayout class="error">
+              <label text={errMessage?.email} />
+            </stackLayout>
+            <stackLayout class="hr-light" />
+          {/if}
+        </stackLayout>
+
+        <stackLayout class="input-field">
+          <textField
+            bind:this={password_edit}
+            on:textChange={handlePasswordChange}
+            hint={passwordL}
+            class="input"
+            secure="true"
+            returnKeyType="done"
+            on:returnPress={() => password_repeat_edit.nativeView.focus()}
+            editable={!isLoading}
+          />
+          {#if errMessage?.password}
+            <stackLayout class="error">
+              <label text={errMessage?.password} />
+            </stackLayout>
+            <stackLayout class="hr-light" />
+          {/if}
+        </stackLayout>
+
+        <stackLayout class="input-field">
+          <textField
+            bind:this={password_repeat_edit}
+            on:textChange={handlePasswordRepeatChange}
+            hint={passwordRepeatL}
+            class="input"
+            secure="true"
+            returnKeyType="done"
+            on:returnPress={doRegister}
+            editable={!isLoading}
+          />
+          {#if errMessage?.password_repeat}
+            <stackLayout class="error">
+              <label text={errMessage?.password_repeat} />
+            </stackLayout>
+            <stackLayout class="hr-light" />
+          {/if}
+        </stackLayout>
+        <button
+          text={registerL}
+          on:tap={doRegister}
+          class="btn m-t-20 submit"
+          isEnabled={!isLoading}
+        />
+
+        <activityIndicator
+          busy={isLoading}
+          horizontalAlignment="center"
+          verticalAlignment="center"
+          class="activity-indicator"
+        />
+      </stackLayout>
+
+      <label
+        row="2"
+        class="login-label sign-up-label"
+        on:tap={login}
+        horizontalAlignment="center"
+      >
+        <formattedString>
+          <span text={asAccountL} />
+          <span text=" {loginL}" class="bold" />
+        </formattedString>
+      </label>
+    </stackLayout>
+  </dockLayout>
 </page>
 
 <style lang="scss">
   .btn {
     background-color: rgb(11, 40, 121);
     color: white;
+    font-size: 15;
+    width: 280;
   }
 
   label.title {
@@ -298,10 +308,11 @@
   .input {
     font-size: 13;
   }
-  //   .sign-up-label {
-  //     font-size: 15;
-  //     padding: 10;
-  //   }
+  .sign-up-label {
+    font-size: 15;
+    margin: 0;
+    padding: 0;
+  }
 
   .bold {
     font-weight: bold;
