@@ -1,11 +1,19 @@
 export const i18n = {
   name_app: "Tranquillo",
+  global: {
+    yes: "yes",
+    no: "no",
+  },
   user: {
     email: "email",
     password: "password",
     password_repeat: "recopy password",
     lastname: "lastname",
     firstname: "firstname",
+  },
+  task: {
+    title: "list of tasks",
+    no_task: "No tasks are here... yet",
   },
   form: {
     no_account: "don't have an account?",
@@ -16,12 +24,19 @@ export const i18n = {
   },
   button: {
     validate: "Confirm",
+    cancel: "cancel",
+    edit: "edit",
+    delete: "delete",
+    share: "share",
   },
   message: {
     welcome: "welcome",
     ok_register: "you can log in",
+    confirm_delete: "do you really want to remove '$1'?",
     title: {
       ok_register: "registration successful",
+      err_validation: "validation problem",
+      delete_task: "delete task",
       HTTP_100: "Continue",
       HTTP_101: "Switching Protocols",
       HTTP_200: "OK",
@@ -64,7 +79,6 @@ export const i18n = {
       HTTP_503: "Service Unavailable",
       HTTP_504: "Gateway Timeout",
       HTTP_505: "HTTP Version Not Supported",
-      err_validation: "validation problem",
     },
     error: {
       not_logged: "invalid username/password",

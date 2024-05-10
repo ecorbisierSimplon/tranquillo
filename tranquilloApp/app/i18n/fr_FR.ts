@@ -1,11 +1,19 @@
 export const i18n = {
   name_app: "Tranquillo",
+  global: {
+    yes: "oui",
+    no: "non",
+  },
   user: {
     email: "courriel",
     password: "mot de passe",
     password_repeat: "recopier le mot de passe",
     lastname: "nom",
     firstname: "prénom",
+  },
+  task: {
+    title: "Listes des taches",
+    no_task: "Aucune tâche n'est ici... pour le moment",
   },
   form: {
     no_account: "vous n'avez pas de compte ?",
@@ -15,13 +23,20 @@ export const i18n = {
     login: "se connecter",
   },
   button: {
-    validate: "validez",
+    validate: "valider",
+    cancel: "annuler",
+    edit: "éditer",
+    delete: "supprimer",
+    share: "partager",
   },
   message: {
     welcome: "bienvenue",
     ok_register: "vous pouvez vous connecter",
+    confirm_delete: "voulez-vous vraiment supprimer « $1 » ?",
     title: {
       ok_register: "inscription réussi",
+      err_validation: "problème de validation",
+      delete_task: "supprimer une tâche",
       HTTP_100: "Continuer",
       HTTP_101: "Changement de protocole",
       HTTP_200: "OK",
@@ -64,7 +79,6 @@ export const i18n = {
       HTTP_503: "Service indisponible",
       HTTP_504: "Délai d'expiration de la passerelle",
       HTTP_505: "Version HTTP non prise en charge",
-      err_validation: "problème de validation",
     },
     error: {
       not_logged: "nom d'utilisateur ou/et mot de passe invalide",

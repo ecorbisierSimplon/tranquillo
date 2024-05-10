@@ -52,7 +52,7 @@ final class TaskController extends AbstractController
             return $this->getError($response);
         }
 
-        $response = $this->service->findOne($response['task']);
+        $response = $this->service->findOne($response['task'], $this->getThisUser());
         $codeHttp = intval($response['code']);
         $response = $response['task'][0];
 
@@ -83,13 +83,12 @@ final class TaskController extends AbstractController
     {
         $response = $this->service->findByUserField($this->getThisUser());
 
-        $response = $response['task'];
-        if ($response == null) {
+        if ($response['task'] == null) {
             return $this->getError($response);
         }
 
-        $taskDto = ObjectHydrator::hydrate(
-            $response,
+        $taskDto['task'] = ObjectHydrator::hydrate(
+            $response['task'],
             new TaskDto()
         );
 

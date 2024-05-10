@@ -6,11 +6,16 @@
   "dependencies": {
     "@nativescript/core": "~8.5.9",
     "@nativescript/theme": "^3.0.2",
+    "@types/marked": "^6.0.0",
     "bootstrap": "^5.3.3",
     "jwt-decode": "^4.0.0",
+    "marked": "^12.0.2",
     "nativescript-dna-deviceinfo": "^3.7.3",
+    "nativescript-ui-listview": "^15.2.3",
     "svelte-native": "~1.0.21",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "timeago.js": "^4.0.2",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@nativescript/preview-cli": "1.0.13",

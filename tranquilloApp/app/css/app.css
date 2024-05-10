@@ -28,4 +28,49 @@
   font-style: italic;
   font-size: 13;
   margin: 0 0 0 10;
+}
+
+.form .btn {
+  background-color: hsl(224, 83%, 26%);
+  color: white;
+  font-size: 15;
+  max-width: 280;
+  width: 40%;
+  box-shadow: 10px 10px 10px 1px #8a8a8a;
+}
+.form .btn.cancel {
+  background-color: hsl(0, 83%, 26%);
+}
+.form label.title {
+  font-weight: bold;
+  font-size: 20;
+  margin-top: 20;
+  margin-bottom: 20;
+  color: rgb(211, 155, 2);
+}
+.form .input {
+  font-size: 13;
+}
+.form .sign-up-label {
+  font-size: 15;
+  margin: 0;
+  padding: 0;
+}
+.form .bold {
+  font-weight: bold;
+  color: rgb(15, 61, 104);
+}
+.form .hr-light {
+  background-color: rgb(181, 189, 218);
+  height: 0.5;
+  margin: 0;
+  padding: 0;
+}
+.form .error {
+  margin-top: -10;
+}
+.form .error > label {
+  padding: 2;
+  margin: 0;
+  white-space: normal;
 }/*# sourceMappingURL=app.css.map */
