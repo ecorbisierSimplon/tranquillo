@@ -91,7 +91,7 @@ class TaskService extends AbstractController
     {
         $task = $this->taskRepository->findByUserField($id);
 
-        if ($task === []) {
+        if ($task === null) {
             $title = "Tasks not found";
             $message = "You have not tasks";
             return ["task" => null, "title" => $title, "code" => Response::HTTP_NOT_FOUND, "message" => $message];

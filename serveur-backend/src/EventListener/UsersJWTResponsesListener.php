@@ -53,7 +53,7 @@ final class UsersJWTResponsesListener extends AbstractController
     public function onAuthenticationFailureResponse(AuthenticationFailureEvent $event)
     {
         $data = [
-            'status'  => '403 Accès refusé',
+            'status'  => "Accès interdit",
             'message' => "Mauvaises informations d'identification, veuillez vérifier que votre nom d'utilisateur/mot de passe sont correctement définis.",
         ];
 
@@ -69,7 +69,7 @@ final class UsersJWTResponsesListener extends AbstractController
     public function onJWTInvalid(JWTInvalidEvent $event)
     {
         $data = [
-            'status'  => '401 Accès non autorisé',
+            'status'  => "Accès refusé",
             'message' => "Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.",
         ];
 
@@ -87,11 +87,11 @@ final class UsersJWTResponsesListener extends AbstractController
     public function onJWTNotFound(JWTNotFoundEvent $event)
     {
         $data = [
-            'status'  => '401 Accès non autorisé',
+            'status'  => "Token non accepter",
             'message' => "Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.",
         ];
 
-        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", Response::HTTP_UNAUTHORIZED);
+        $response = new JWTAuthenticationFailureResponse("Votre token n'est pas valide, veuillez vous reconnecter pour en obtenir un nouveau.", Response::HTTP_NOT_ACCEPTABLE);
         $response->setData($data);
 
         $event->setResponse($response);

@@ -71,37 +71,39 @@
 
 <style lang="scss">
   flexboxLayout {
-    margin: 2 0;
-    border-top-width: 2;
+    margin: 2px 0;
+    padding: 5 0;
+    border-top-width: 2px;
     border-top-style: solid;
-    border-top-color: hsl(34, 100%, 86%);
+    border-top-color: hsl(34, 72%, 74%);
     background-color: hsl(30, 100%, 98%);
   }
   // background-color: hsl(44, 100%, 88%);
   label {
     &.btn {
-      width: 60;
-      height: 60;
+      width: 45;
+      height: 45;
       border-radius: 50%;
-      margin: 4 2 4 4;
+      margin: 4px 2px 4px 4px;
+      padding: 5px;
       text-align: center;
       box-shadow: 0 0 0 rgb(255, 255, 255);
       font-weight: bold;
-      font-size: 25;
+      font-size: 20px;
 
       border-style: solid;
-      border-width: 2;
+      border-width: 2px;
       border-color: hsl(0, 0%, 100%, 0);
       color: rgb(150, 150, 150);
       &.islogin {
         color: hsl(0, 80%, 65%);
-        font-size: 30;
+        font-size: 25px;
       }
 
       &.disabled {
         border-color: hsl(54, 98%, 63%);
         box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
-        font-size: 30;
+        font-size: 25px;
         &.home {
           color: hsl(221, 54%, 52%);
         }

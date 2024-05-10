@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { ErrorResponse } from "./../../models/user.ts";
   isPage.set("register");
 
   import Login from "~/components/user/Login.svelte";
@@ -8,51 +7,26 @@
   import { alert } from "@nativescript/core/ui/dialogs";
   import { onMount } from "svelte";
   import { navigate } from "svelte-native";
-  import { writable } from "svelte/store";
   import { user_profile, register } from "~/stores/user";
   import { localize } from "~/lib/packages/localize";
   import { isPage } from "~/lib/packages/variables";
   import { ErrRegister, ErrRespRegister } from "~/models/user";
   import { control } from "../../lib/packages/control";
-  import { getWritable } from "~/lib/packages/getWritable";
 
   let errMessage: ErrRegister = {};
 
-  // export let msg;
   let isLoading = false,
     lastname: string = "",
     firstname: string = "",
     email: string = "",
     password: string = "",
-    password_repeat: string = "",
-    lastname_edit: string = "",
-    firstname_edit: string = "",
-    email_edit: string = "",
-    password_edit: string = "",
-    password_repeat_edit: string = "",
-    emailL: string = "",
-    firstnameL: string = "",
-    lastnameL: string = "",
-    passwordL: string = "",
-    passwordRepeatL: string = "",
-    asAccountL: string = "",
-    notRegisteredL: string = "",
-    registerL: string = "",
-    registrationL: string = "",
-    loginL: string = "";
+    password_repeat: string = "";
 
-  onMount(async () => {
-    lastnameL = await localize("user.lastname");
-    firstnameL = await localize("user.firstname");
-    emailL = await localize("user.email");
-    passwordL = await localize("user.password");
-    passwordRepeatL = await localize("user.password_repeat");
-    asAccountL = await localize("form.as_account", true);
-    notRegisteredL = await localize("message.error.not_registered", true);
-    registerL = await localize("form.register", true);
-    registrationL = await localize("form.registration", true);
-    loginL = await localize("form.login", true);
-  });
+  let lastname_edit: any,
+    firstname_edit: any,
+    email_edit: any,
+    password_edit: any,
+    password_repeat_edit: any;
 
   onMount(() => {
     if ($user_profile) {
@@ -86,7 +60,7 @@
             if (!err.errors || !err.errors.errors) {
               alert({
                 title: await localize("message.title.HTTP_500"),
-                message: notRegisteredL,
+                message: localize("message.error.not_registered", true),
               });
             } else {
               let msg = "";
@@ -150,187 +124,142 @@
 
 <page>
   <ActionBar />
-  <ActionBar />
   <dockLayout stretchLastChild="true">
     <stackLayout dock="bottom">
       <Menu />
     </stackLayout>
-    <stackLayout>
-      <stackLayout row="1" class="form" verticalAlignment="center">
+    <scrollView scrollBarIndicatorVisible="true">
+      <stackLayout class="form">
+        <stackLayout verticalAlignment="middle">
+          <label
+            text={localize("form.registration", true)}
+            class="title"
+            horizontalAlignment="center"
+          />
+
+          <stackLayout class="input-field">
+            <textField
+              bind:this={firstname_edit}
+              on:textChange={handleFirstnameChange}
+              hint={localize("user.firstname")}
+              class="input"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              editable={!isLoading}
+            />
+            <!-- on:returnPress={() => lastname_edit.nativeView.focus($event)} -->
+            {#if errMessage?.firstname}
+              <stackLayout class="error">
+                <label text={errMessage?.firstname} />
+              </stackLayout>
+              <stackLayout class="hr-light" />
+            {/if}
+          </stackLayout>
+
+          <stackLayout class="input-field m-t-10">
+            <textField
+              bind:this={lastname_edit}
+              on:textChange={handleLastnameChange}
+              hint={localize("user.lastname")}
+              class="input"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              editable={!isLoading}
+            />
+            <!-- on:returnPress={() => email_edit.nativeView.focus()} -->
+            {#if errMessage?.lastname}
+              <stackLayout class="error">
+                <label text={errMessage?.lastname} />
+              </stackLayout>
+              <stackLayout class="hr-light" />
+            {/if}
+          </stackLayout>
+
+          <stackLayout class="input-field m-t-10">
+            <textField
+              bind:this={email_edit}
+              on:textChange={handleEmailChange}
+              hint={localize("user.email")}
+              class="input"
+              keyboardType="email"
+              autocorrect="false"
+              autocapitalizationType="none"
+              returnKeyType="next"
+              editable={!isLoading}
+            />
+            <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
+            {#if errMessage?.email}
+              <stackLayout class="error">
+                <label text={errMessage?.email} />
+              </stackLayout>
+              <stackLayout class="hr-light" />
+            {/if}
+          </stackLayout>
+
+          <stackLayout class="input-field">
+            <textField
+              bind:this={password_edit}
+              on:textChange={handlePasswordChange}
+              hint={localize("user.password")}
+              class="input"
+              secure="true"
+              returnKeyType="done"
+              editable={!isLoading}
+            />
+            <!-- on:returnPress={() => password_repeat_edit.nativeView.focus()} -->
+            {#if errMessage?.password}
+              <stackLayout class="error">
+                <label text={errMessage?.password} />
+              </stackLayout>
+              <stackLayout class="hr-light" />
+            {/if}
+          </stackLayout>
+
+          <stackLayout class="input-field">
+            <textField
+              bind:this={password_repeat_edit}
+              on:textChange={handlePasswordRepeatChange}
+              hint={localize("user.password_repeat")}
+              class="input"
+              secure="true"
+              returnKeyType="done"
+              editable={!isLoading}
+            />
+            <!-- on:returnPress={doRegister} -->
+            {#if errMessage?.password_repeat}
+              <stackLayout class="error">
+                <label text={errMessage?.password_repeat} />
+              </stackLayout>
+              <stackLayout class="hr-light" />
+            {/if}
+          </stackLayout>
+          <button
+            text={localize("form.register", true)}
+            on:tap={doRegister}
+            class="btn m-t-20 submit"
+            isEnabled={!isLoading}
+          />
+
+          <activityIndicator
+            busy={isLoading}
+            horizontalAlignment="center"
+            verticalAlignment="middle"
+            class="activity-indicator"
+          />
+        </stackLayout>
+
         <label
-          text={registrationL}
-          class="title"
+          row="2"
+          class="login-label sign-up-label"
+          on:tap={login}
           horizontalAlignment="center"
-        />
-
-        <stackLayout class="input-field m-t-10">
-          <textField
-            bind:this={firstname_edit}
-            on:textChange={handleFirstnameChange}
-            hint={firstnameL}
-            class="input"
-            autocapitalizationType="none"
-            returnKeyType="next"
-            on:returnPress={() => lastname_edit.nativeView.focus()}
-            editable={!isLoading}
-          />
-          {#if errMessage?.firstname}
-            <stackLayout class="error">
-              <label text={errMessage?.firstname} />
-            </stackLayout>
-            <stackLayout class="hr-light" />
-          {/if}
-        </stackLayout>
-
-        <stackLayout class="input-field m-t-10">
-          <textField
-            bind:this={lastname_edit}
-            on:textChange={handleLastnameChange}
-            hint={lastnameL}
-            class="input"
-            autocapitalizationType="none"
-            returnKeyType="next"
-            on:returnPress={() => email_edit.nativeView.focus()}
-            editable={!isLoading}
-          />
-          {#if errMessage?.lastname}
-            <stackLayout class="error">
-              <label text={errMessage?.lastname} />
-            </stackLayout>
-            <stackLayout class="hr-light" />
-          {/if}
-        </stackLayout>
-
-        <stackLayout class="input-field m-t-10">
-          <textField
-            bind:this={email_edit}
-            on:textChange={handleEmailChange}
-            hint={emailL}
-            class="input"
-            keyboardType="email"
-            autocorrect="false"
-            autocapitalizationType="none"
-            returnKeyType="next"
-            on:returnPress={() => password_edit.nativeView.focus()}
-            editable={!isLoading}
-          />
-          {#if errMessage?.email}
-            <stackLayout class="error">
-              <label text={errMessage?.email} />
-            </stackLayout>
-            <stackLayout class="hr-light" />
-          {/if}
-        </stackLayout>
-
-        <stackLayout class="input-field">
-          <textField
-            bind:this={password_edit}
-            on:textChange={handlePasswordChange}
-            hint={passwordL}
-            class="input"
-            secure="true"
-            returnKeyType="done"
-            on:returnPress={() => password_repeat_edit.nativeView.focus()}
-            editable={!isLoading}
-          />
-          {#if errMessage?.password}
-            <stackLayout class="error">
-              <label text={errMessage?.password} />
-            </stackLayout>
-            <stackLayout class="hr-light" />
-          {/if}
-        </stackLayout>
-
-        <stackLayout class="input-field">
-          <textField
-            bind:this={password_repeat_edit}
-            on:textChange={handlePasswordRepeatChange}
-            hint={passwordRepeatL}
-            class="input"
-            secure="true"
-            returnKeyType="done"
-            on:returnPress={doRegister}
-            editable={!isLoading}
-          />
-          {#if errMessage?.password_repeat}
-            <stackLayout class="error">
-              <label text={errMessage?.password_repeat} />
-            </stackLayout>
-            <stackLayout class="hr-light" />
-          {/if}
-        </stackLayout>
-        <button
-          text={registerL}
-          on:tap={doRegister}
-          class="btn m-t-20 submit"
-          isEnabled={!isLoading}
-        />
-
-        <activityIndicator
-          busy={isLoading}
-          horizontalAlignment="center"
-          verticalAlignment="center"
-          class="activity-indicator"
-        />
+        >
+          <formattedString>
+            <span text={localize("form.as_account", true)} />
+            <span text=" {localize('form.login', true)}" class="bold" />
+          </formattedString>
+        </label>
       </stackLayout>
-
-      <label
-        row="2"
-        class="login-label sign-up-label"
-        on:tap={login}
-        horizontalAlignment="center"
-      >
-        <formattedString>
-          <span text={asAccountL} />
-          <span text=" {loginL}" class="bold" />
-        </formattedString>
-      </label>
-    </stackLayout>
+    </scrollView>
   </dockLayout>
 </page>
-
-<style lang="scss">
-  .btn {
-    background-color: rgb(11, 40, 121);
-    color: white;
-    font-size: 15;
-    width: 280;
-  }
-
-  label.title {
-    font-weight: bold;
-    font-size: 20;
-    margin-top: 20;
-    margin-bottom: 20;
-    color: rgb(211, 155, 2);
-  }
-
-  .input {
-    font-size: 13;
-  }
-  .sign-up-label {
-    font-size: 15;
-    margin: 0;
-    padding: 0;
-  }
-
-  .bold {
-    font-weight: bold;
-    color: rgb(15, 61, 104);
-  }
-
-  .hr-light {
-    background-color: rgb(181, 189, 218);
-    height: 0.5;
-    margin: 0;
-    padding: 0;
-  }
-  .error {
-    margin-top: -10;
-    & > label {
-      padding: 2;
-      margin: 0;
-      white-space: normal;
-    }
-  }
-</style>

@@ -1,20 +1,12 @@
 <script lang="ts">
-  import { localize } from "~/lib/packages/localize";
   import ActionBar from "~/layout/ActionBar.svelte";
   import Menu from "~/layout/Menu.svelte";
+  import Task from "./task/TaskList.svelte";
   import { isPage } from "~/lib/packages/variables";
-  import { onMount } from "svelte";
-  import { strUcFirst } from "~/lib/packages/functions";
+  import { user_profile } from "~/stores/user";
+  import { localize } from "~/lib/packages/localize";
 
   isPage.set("home");
-
-  let nameApp: string = "",
-    welcomeL: string = "";
-
-  onMount(async () => {
-    welcomeL = await localize("message.welcome", true);
-    nameApp = await localize("name_app");
-  });
 </script>
 
 <page>
@@ -24,7 +16,15 @@
       <Menu />
     </stackLayout>
     <stackLayout>
-      <label class="title info" height="80" text={welcomeL} />
+      {#if !$user_profile}
+        <label
+          class="title info"
+          height="80"
+          text={localize("message.welcome", true)}
+        />
+      {:else}
+        <Task />
+      {/if}
     </stackLayout>
   </dockLayout>
 </page>

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Home from "./components/task/Task.svelte";
+  import Home from "./components/Home.svelte";
   import ActionBar from "./layout/ActionBar.svelte";
 </script>
 

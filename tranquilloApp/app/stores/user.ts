@@ -45,11 +45,22 @@ function buildUserProfileStore() {
 
 export const user_profile = buildUserProfileStore();
 
+/**
+ * Cette fonction est utilisée pour déconnecter un utilisateur.
+ */
 export function logout() {
   user_profile.set(null);
   user_token.set("");
 }
 
+/**
+ * Cette fonction prend un e-mail et un mot de passe comme paramètres d'entrée et renvoie une promesse
+ * qui se résout en un objet utilisateur.
+ * @param {string} email - Adresse e-mail de l'utilisateur essayant de se connecter.
+ * @param {string} password - Le paramètre « password » dans la fonction « login » est une chaîne qui
+ * représente le mot de passe de l'utilisateur. Il est utilisé à des fins d'authentification pour
+ * vérifier l'identité de l'utilisateur lors de la connexion au système.
+ */
 export function login(email: string, password: string): Promise<User> {
   return client
     .sendRequest<UserResponse>("/login_check", "POST", null, {
@@ -66,6 +77,12 @@ export function login(email: string, password: string): Promise<User> {
     });
 }
 
+/**
+ * Cette fonction prend un objet ProfileUpdate en entrée et renvoie une promesse qui se résout en un
+ * objet User après la mise à jour du profil.
+ * @param {ProfileUpdate} update - Objet ProfileUpdate contenant les champs à mettre à jour pour le
+ * profil d'un utilisateur.
+ */
 export function update(update: ProfileUpdate): Promise<User> {
   let payload: any = {
     firstname: update.firstname.trim(),
@@ -88,6 +105,18 @@ export function update(update: ProfileUpdate): Promise<User> {
     });
 }
 
+/**
+ * Cette fonction est utilisée pour enregistrer un nouvel utilisateur avec les détails fournis.
+ * @param {string} lastname - Nom de famille de l'utilisateur sous forme de chaîne
+ * @param {string} firstname - Prénom de l'utilisateur.
+ * @param {string} email - La fonction `register` prend quatre paramètres : `lastname`, `firstname`,
+ * `email` et `password`, qui sont tous de type `string`. La fonction renvoie une « Promesse » qui se
+ * résout en un objet « Utilisateur ».
+ * @param {string} password - La fonction `register` prend quatre paramètres : `lastname`, `firstname`,
+ * `email` et `password`. Le paramètre « password » est un type de chaîne, qui représente généralement
+ * le mot de passe choisi par l'utilisateur pour son compte. Il est important de gérer et de stocker
+ * les mots de passe en toute sécurité pour garantir la sécurité des comptes d'utilisateurs.
+ */
 export function register(
   lastname: string,
   firstname: string,

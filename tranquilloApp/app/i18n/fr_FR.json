@@ -1,0 +1,84 @@
+{
+  "name_app": "Tranquillo",
+  "user": {
+    "email": "courriel",
+    "password": "mot de passe",
+    "password_repeat": "recopier le mot de passe",
+    "lastname": "nom",
+    "firstname": "prénom"
+  },
+  "form": {
+    "no_account": "vous n'avez pas de compte ?",
+    "as_account": "vous avez déjà un compte ?",
+    "registration": "inscription",
+    "register": "s'enregistrer",
+    "login": "se connecter"
+  },
+  "button": {
+    "validate": "validez"
+  },
+  "message": {
+    "welcome": "bienvenue",
+    "ok_register": "vous pouvez vous connecter",
+    "title": {
+      "ok_register": "inscription réussi",
+      "HTTP_100": "Continuer",
+      "HTTP_101": "Changement de protocole",
+      "HTTP_200": "OK",
+      "HTTP_201": "Créé",
+      "HTTP_202": "Accepté",
+      "HTTP_203": "Informations non faisant autorité",
+      "HTTP_204": "Aucun contenu",
+      "HTTP_205": "Réinitialiser le contenu",
+      "HTTP_206": "Contenu partiel",
+      "HTTP_300": "Choix multiples",
+      "HTTP_301": "Déplacé définitivement",
+      "HTTP_302": "Trouvé",
+      "HTTP_303": "Voir Autre",
+      "HTTP_304": "Non modifié",
+      "HTTP_305": "Utiliser un proxy",
+      "HTTP_306": "(Inutilisé)",
+      "HTTP_307": "Redirection temporaire",
+      "HTTP_400": "Requête incorrecte",
+      "HTTP_401": "Non autorisé",
+      "HTTP_402": "Paiement requis",
+      "HTTP_403": "Accès Interdit",
+      "HTTP_404": "Introuvable",
+      "HTTP_405": "Méthode non autorisée",
+      "HTTP_406": "Non acceptable",
+      "HTTP_407": "Authentification proxy requise",
+      "HTTP_408": "Délai d'expiration de la demande",
+      "HTTP_409": "Conflit",
+      "HTTP_410": "Parti",
+      "HTTP_411": "Longueur requise",
+      "HTTP_412": "Échec de la précondition",
+      "HTTP_413": "Entité de demande trop grande",
+      "HTTP_414": "URI de requête trop long",
+      "HTTP_415": "Type de média non pris en charge",
+      "HTTP_416": "Plage demandée non satisfaisante",
+      "HTTP_417": "Échec de l'attente",
+      "HTTP_422": "Entité non traitable",
+      "HTTP_500": "Erreur interne du serveur",
+      "HTTP_501": "Non implémenté",
+      "HTTP_502": "Mauvaise passerelle",
+      "HTTP_503": "Service indisponible",
+      "HTTP_504": "Délai d'expiration de la passerelle",
+      "HTTP_505": "Version HTTP non prise en charge",
+      "err_validation": "problème de validation"
+    },
+    "error": {
+      "not_logged": "nom d'utilisateur ou/et mot de passe invalide",
+      "not_registered": "nom d'utilisateur, e-mail ou mot de passe invalide",
+      "email_exist": "cet adresse email existe déjà"
+    }
+  },
+  "pattern": {
+    "name": "veuillez entrer un(e) '$1' valide !",
+    "email": "veuillez entrer une adresse email valide !",
+    "password": {
+      "length": "le mot de passe doit comporter au moins 8 caractères !",
+      "force": "le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial @#.$%^&:+= !",
+      "repeat": "les mots de passe ne correspondent pas"
+    }
+  }
+}

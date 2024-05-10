@@ -26,27 +26,28 @@ class ApiClient {
     relative_url: string,
     method: string,
     token: string | null = null,
-    payload = {}
+    payload?: {} | null
   ): Promise<T> {
     /* Cette instruction « console.log » enregistre un message sur la console avec des informations sur
   la requête HTTP en cours. Il concatène la constante `API_BASE` avec le paramètre `relative_url`
   pour former l'URL complète demandée. De plus, il inclut la méthode HTTP utilisée pour la requête. */
-    console.log(
-      "fetching : url -> ",
-      `${API_BASE}${relative_url}`,
-      "; method -> ",
-      method
-    );
+    // console.log(
+    //   "fetching : url -> ",
+    //   `${API_BASE}${relative_url}`,
+    //   "; method -> ",
+    //   method
+    // );
 
     /* Ce bloc de code configure les en-têtes d'une requête HTTP : */
     let headers: HeadersInit = {};
-    if (payload) {
-      headers["Content-Type"] = "application/json";
-      headers["Accept"] = "application/json";
-      headers["cty"] = "JWTTranquillo";
-    }
+    // if (payload) {
+    headers["User-Agent"] = "Tranquillo (https://tranquillo.corbisier.fr)";
+    headers["Content-Type"] = "application/json";
+    headers["Accept"] = "application/json";
+    headers["cty"] = "JWTTranquillo";
+    // }
     if (token) {
-      headers["Authorization"] = `Token ${token}`;
+      headers["Authorization"] = `Bearer ${token}`;
     }
 
     /* Cet extrait de code effectue une requête HTTP asynchrone à l'aide de l'API « fetch » en
@@ -64,13 +65,16 @@ class ApiClient {
       throw e;
     }
     /* Ce bloc de code gère les réponses d'erreur de la requête API  : */
+    // console.log("Error res 1 : " + Object.keys(res));
+    // console.log("Error res 2 : " + Object.values(res));
     if (!res.ok) {
       let err = new ApiError(res.statusText, res.status);
       try {
         let validation_errors: ErrorResponse = await res.json();
-        console.log("Error serveur1 : " + Object.keys(validation_errors));
+        console.log("Error serveur1 : " + validation_errors.title);
+        console.log("Error serveur1 : " + validation_errors.status);
         err.errors = validation_errors;
-        console.log("Error serveur2 : " + Object.values(err.errors));
+        console.log("Error serveur2 : " + err.errors.detail);
       } catch {}
 
       this.onError.fire(err);
