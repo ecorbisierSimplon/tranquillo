@@ -30,7 +30,7 @@
   margin: 0 0 0 10;
 }
 
-.form .btn {
+.btn.rectangle {
   background-color: hsl(224, 83%, 26%);
   color: white;
   font-size: 15;
@@ -38,9 +38,55 @@
   width: 40%;
   box-shadow: 10px 10px 10px 1px #8a8a8a;
 }
-.form .btn.cancel {
+.btn.rectangle.cancel {
   background-color: hsl(0, 83%, 26%);
 }
+.btn.round {
+  width: 45;
+  height: 45;
+  border-radius: 50%;
+  margin: 4px 2px 4px 4px;
+  padding: 5px;
+  text-align: center;
+  box-shadow: 0 0 0 rgb(255, 255, 255);
+  font-weight: bold;
+  font-size: 20px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: hsla(0, 0%, 100%, 0);
+  color: rgb(150, 150, 150);
+}
+.btn.round.islogin {
+  color: hsl(0, 80%, 65%);
+  font-size: 25px;
+}
+.btn.round.check {
+  color: hsl(117, 54%, 52%);
+}
+.btn.round.sign-in {
+  color: hsl(0, 80%, 65%);
+}
+.btn.round.refresh {
+  color: hsl(221, 54%, 52%);
+}
+.btn.round.disabled {
+  border-color: hsl(54, 98%, 63%);
+  box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
+  font-size: 25px;
+}
+.btn.round.disabled.home {
+  color: hsl(221, 54%, 52%);
+}
+.btn.round.disabled.login {
+  color: hsl(117, 54%, 52%);
+}
+.btn.round.disabled.register {
+  color: hsl(24, 54%, 52%);
+}
+.btn.round.enabled {
+  box-shadow: 3px 3px 3px 1px hsla(32, 97%, 24%, 0.856) !important;
+}
+
 .form label.title {
   font-weight: bold;
   font-size: 20;
