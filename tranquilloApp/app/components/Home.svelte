@@ -1,6 +1,6 @@
 <script lang="ts">
-  import ActionBar from "~/layout/ActionBar.svelte";
-  import Menu from "~/layout/Menu.svelte";
+  import ActionBar from "~/components/layout/ActionBar.svelte";
+  import Menu from "~/components/layout/Menu.svelte";
   import Task from "./task/TaskList.svelte";
   import { isPage } from "~/lib/packages/variables";
   import { user_profile } from "~/stores/user";

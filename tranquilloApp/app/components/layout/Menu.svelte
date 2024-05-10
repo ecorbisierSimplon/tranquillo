@@ -40,7 +40,7 @@
 <flexboxLayout justifyContent="space-around">
   <label
     text={icons.home}
-    class="btn home icon menu home {$classHome}"
+    class="btn round home icon menu home {$classHome}"
     on:tap={home}
   />
 
@@ -48,20 +48,20 @@
     <!-- isEnabled={$isPage != "home"} -->
     <label
       text={icons.power}
-      class="btn login icon menu power {$classLogin}"
+      class="btn round login icon menu power {$classLogin}"
       on:tap={login}
     />
 
     <!-- isEnabled={$isPage != "login"} -->
     <label
       text={icons.account_add}
-      class="btn register icon menu account-add {$classRegister}"
+      class="btn round register icon menu account-add {$classRegister}"
       on:tap={register}
     />
   {:else}
     <label
       text={icons.power}
-      class="btn islogin icon power enabled"
+      class="btn round islogin icon power enabled"
       on:tap={logout}
     />
   {/if}
@@ -79,45 +79,6 @@
     background-color: hsl(30, 100%, 98%);
   }
   // background-color: hsl(44, 100%, 88%);
-  label {
-    &.btn {
-      width: 45;
-      height: 45;
-      border-radius: 50%;
-      margin: 4px 2px 4px 4px;
-      padding: 5px;
-      text-align: center;
-      box-shadow: 0 0 0 rgb(255, 255, 255);
-      font-weight: bold;
-      font-size: 20px;
-
-      border-style: solid;
-      border-width: 2px;
-      border-color: hsl(0, 0%, 100%, 0);
-      color: rgb(150, 150, 150);
-      &.islogin {
-        color: hsl(0, 80%, 65%);
-        font-size: 25px;
-      }
-
-      &.disabled {
-        border-color: hsl(54, 98%, 63%);
-        box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
-        font-size: 25px;
-        &.home {
-          color: hsl(221, 54%, 52%);
-        }
-        &.login {
-          color: hsl(117, 54%, 52%);
-        }
-
-        &.register {
-          color: hsl(24, 54%, 52%);
-        }
-      }
-      &.enabled {
-        box-shadow: 3px 3px 3px 1px hsla(32, 97%, 24%, 0.856) !important;
-      }
-    }
-  }
+  //label {
+  //}
 </style>

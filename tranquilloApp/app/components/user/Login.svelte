@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { validateForm } from "./../../lib/packages/Pattern.ts";
   isPage.set("login");
 
   import { alert } from "@nativescript/core/ui/dialogs";
@@ -6,14 +7,13 @@
   import { navigate } from "svelte-native";
   import Register from "./Register.svelte";
   import Home from "~/components/Home.svelte";
-  import ActionBar from "~/layout/ActionBar.svelte";
-  import Menu from "~/layout/Menu.svelte";
+  import ActionBar from "~/components/layout/ActionBar.svelte";
+  import Menu from "~/components/layout/Menu.svelte";
   import { localize } from "~/lib/packages/localize";
   import { isPage } from "~/lib/packages/variables";
-  import { user_token, user_profile, login } from "~/stores/user";
-  import { get } from "svelte/store";
+  import { user_profile, login } from "~/stores/user";
+  import { icons } from "~/utils/icons";
 
-  // export let msg;
   let isLoading: boolean = false,
     email: string = "",
     password: string = "",
@@ -30,14 +30,9 @@
     isLoading = true;
     login(email as string, password as string).then(
       (user) => {
-        // console.log("Token : " + get(user_token));
-        // console.log("Token : " + Object.values(user));
-
         homeResult(user);
       },
       (err) => {
-        console.log(err.errorCode);
-
         if (err.errorCode > 202) {
           alert(localize("message.error.not_logged", true));
         } else {
@@ -46,14 +41,6 @@
         isLoading = false;
       },
     );
-  }
-
-  function handleEmailChange(event: { value: string }): void {
-    email = event.value;
-  }
-
-  function handlePasswordChange(event: { value: string }): void {
-    password = event.value;
   }
 
   function register(): void {
@@ -83,7 +70,9 @@
           <stackLayout class="form-contro">
             <textField
               bind:this={email_edit}
-              on:textChange={handleEmailChange}
+              on:textChange={(event) => {
+                email = event.value;
+              }}
               hint={localize("user.email")}
               class="input"
               keyboardType="email"
@@ -91,28 +80,31 @@
               autocapitalizationType="none"
               returnKeyType="next"
               editable={!isLoading}
-              on:returnPress={() => password_edit.nativeView.focus()}
             />
+            <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
             <!-- <stackLayout class="hr-light" /> -->
           </stackLayout>
 
           <stackLayout class="input-field">
             <textField
               bind:this={password_edit}
-              on:textChange={handlePasswordChange}
+              on:textChange={(event) => {
+                password = event.value;
+              }}
               hint={localize("user.password")}
               class="input"
               secure="true"
               returnKeyType="done"
-              on:returnPress={doLogin}
               editable={!isLoading}
             />
+            <!-- on:returnPress={doLogin} -->
             <!-- <stackLayout class="hr-light" /> -->
           </stackLayout>
 
-          <button
-            text={localize("button.validate", true)}
-            class="btn"
+          <!-- text={localize("button.validate", true)} -->
+          <label
+            text={icons.check}
+            class="btn round icon check enabled"
             on:tap={doLogin}
             isEnabled={!isLoading}
           />

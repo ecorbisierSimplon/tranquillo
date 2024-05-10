@@ -10,6 +10,7 @@
   import { get, writable } from "svelte/store";
   import { user_token } from "~/stores/user";
   import { getWritable } from "~/lib/packages/getWritable";
+  import { icons } from "~/utils/icons";
 
   export let task: Task;
   export let userToken = get(user_token);
@@ -127,16 +128,24 @@
               editable={!isLoading}
             />
             <flexboxLayout justifyContent="space-around">
+              <!-- text={localize("button.validate", true)} -->
               <button
-                text={localize("button.validate", true)}
+                text={icons.check}
                 on:tap={onTapNavigValidate}
-                class="btn submit validate"
+                class="btn round icon check enabled"
+                isEnabled={!isLoading}
+              />
+              <!-- text={localize("button.cancel", true)} -->
+              <button
+                text={icons.sign_in}
+                on:tap={onTapNavigCancel}
+                class="btn round icon sign-in enabled"
                 isEnabled={!isLoading}
               />
               <button
-                text={localize("button.cancel", true)}
+                text={icons.refresh}
                 on:tap={onTapNavigCancel}
-                class="btn cancel"
+                class="btn round icon refresh enabled"
                 isEnabled={!isLoading}
               />
             </flexboxLayout>

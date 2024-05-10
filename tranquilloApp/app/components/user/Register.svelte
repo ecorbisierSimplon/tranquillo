@@ -2,8 +2,8 @@
   isPage.set("register");
 
   import Login from "~/components/user/Login.svelte";
-  import ActionBar from "~/layout/ActionBar.svelte";
-  import Menu from "~/layout/Menu.svelte";
+  import ActionBar from "~/components/layout/ActionBar.svelte";
+  import Menu from "~/components/layout/Menu.svelte";
   import { alert } from "@nativescript/core/ui/dialogs";
   import { onMount } from "svelte";
   import { navigate } from "svelte-native";
@@ -11,7 +11,8 @@
   import { localize } from "~/lib/packages/localize";
   import { isPage } from "~/lib/packages/variables";
   import { ErrRegister, ErrRespRegister } from "~/models/user";
-  import { control } from "../../lib/packages/control";
+  import { control } from "~/lib/packages/control";
+  import { icons } from "~/utils/icons";
 
   let errMessage: ErrRegister = {};
 
@@ -93,25 +94,6 @@
     }
   }
 
-  function handleLastnameChange(event: { value: string }): void {
-    lastname = event.value;
-  }
-
-  function handleFirstnameChange(event: { value: string }): void {
-    firstname = event.value;
-  }
-  function handleEmailChange(event: { value: string }): void {
-    email = event.value;
-  }
-
-  function handlePasswordChange(event: { value: string }): void {
-    password = event.value;
-  }
-
-  function handlePasswordRepeatChange(event: { value: string }): void {
-    password_repeat = event.value;
-  }
-
   function login(): void {
     navigate({ page: Login, clearHistory: true });
   }
@@ -140,7 +122,9 @@
           <stackLayout class="input-field">
             <textField
               bind:this={firstname_edit}
-              on:textChange={handleFirstnameChange}
+              on:textChange={(event) => {
+                firstname = event.value;
+              }}
               hint={localize("user.firstname")}
               class="input"
               autocapitalizationType="none"
@@ -159,7 +143,9 @@
           <stackLayout class="input-field m-t-10">
             <textField
               bind:this={lastname_edit}
-              on:textChange={handleLastnameChange}
+              on:textChange={(event) => {
+                lastname = event.value;
+              }}
               hint={localize("user.lastname")}
               class="input"
               autocapitalizationType="none"
@@ -178,7 +164,9 @@
           <stackLayout class="input-field m-t-10">
             <textField
               bind:this={email_edit}
-              on:textChange={handleEmailChange}
+              on:textChange={(event) => {
+                email = event.value;
+              }}
               hint={localize("user.email")}
               class="input"
               keyboardType="email"
@@ -199,7 +187,9 @@
           <stackLayout class="input-field">
             <textField
               bind:this={password_edit}
-              on:textChange={handlePasswordChange}
+              on:textChange={(event) => {
+                password = event.value;
+              }}
               hint={localize("user.password")}
               class="input"
               secure="true"
@@ -218,7 +208,9 @@
           <stackLayout class="input-field">
             <textField
               bind:this={password_repeat_edit}
-              on:textChange={handlePasswordRepeatChange}
+              on:textChange={(event) => {
+                password_repeat = event.value;
+              }}
               hint={localize("user.password_repeat")}
               class="input"
               secure="true"
@@ -234,9 +226,9 @@
             {/if}
           </stackLayout>
           <button
-            text={localize("form.register", true)}
+            text={icons.check}
             on:tap={doRegister}
-            class="btn m-t-20 submit"
+            class="btn round icon check enabled"
             isEnabled={!isLoading}
           />
 
