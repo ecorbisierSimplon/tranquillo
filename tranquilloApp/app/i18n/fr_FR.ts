@@ -1,9 +1,16 @@
 export const i18n = {
   name_app: "Tranquillo",
-  global: {
-    yes: "oui",
-    no: "non",
-  },
+  yes: "oui",
+  no: "non",
+  date: "la date",
+  time: "l'heure",
+  minutes: "minute$1",
+  hours: "heure$1",
+  days: "jour$1",
+  previously: "auparavant",
+  none: "aucun",
+  description: "description",
+
   user: {
     email: "courriel",
     password: "mot de passe",
@@ -12,8 +19,16 @@ export const i18n = {
     firstname: "prénom",
   },
   task: {
-    title: "Listes des taches",
-    no_task: "Aucune tâche n'est ici... pour le moment",
+    title: "listes des taches",
+    no_task: "aucune tâche n'est ici... pour le moment",
+    name: "titre",
+    start_date: "date de début",
+    start_time: "heure de début",
+    end_date: "date de fin",
+    end_time: "heure de fin",
+    start: "à partir de",
+    before: "avant le",
+    delay: "délai d'exécution",
   },
   form: {
     no_account: "vous n'avez pas de compte ?",
@@ -21,6 +36,11 @@ export const i18n = {
     registration: "inscription",
     register: "s'enregistrer",
     login: "se connecter",
+  },
+  dialog: {
+    approve: "approuver",
+    reject: "rejeter",
+    confirm_select: "confirmer $1",
   },
   button: {
     validate: "valider",
@@ -95,5 +115,6 @@ export const i18n = {
         "le mot de passe doit contenir au moins une majuscule, une minuscule, un chiffre et un caractère spécial @#.$%^&:+= !",
       repeat: "les mots de passe ne correspondent pas",
     },
+    type: "la valeur n'est pas de type '$1'",
   },
 };

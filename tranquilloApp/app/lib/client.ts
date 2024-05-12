@@ -1,4 +1,4 @@
-import { ErrRespRegister, ErrorResponse } from "~/models/user";
+import { ErrorResponse } from "~/models/profile";
 import { EventEmitter } from "~/utils/eventemitter";
 
 const API_BASE = "http://192.168.178.27:8088/api";

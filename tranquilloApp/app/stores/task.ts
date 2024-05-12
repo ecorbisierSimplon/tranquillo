@@ -1,10 +1,11 @@
 import { writable } from "svelte/store";
 import { client } from "../lib/client";
-import { ErrorResponse, Task, TaskResponse } from "../models/task";
+import { Task, TaskResponse } from "../models/task";
+import { ErrorResponse } from "~/models/profile";
 
 const TASKS_PER_PAGE = 20;
 
-export class TaskStore {
+class TaskStore {
   tasks = writable<Task[]>([]);
   per_page = 20;
   page = -1;
@@ -28,7 +29,6 @@ export class TaskStore {
       "get",
       user_token
     );
-    // console.log(response);
     // this.page = page;
     this.user_token = user_token;
 
@@ -43,25 +43,6 @@ export class TaskStore {
     // }
   }
 
-  private async delete(id: number, user_token: string) {
-    let url = "/task/" + id;
-    // url += `offset=${page * TASKS_PER_PAGE}&limit=${TASKS_PER_PAGE}`;
-    let response = await client.sendRequest<ErrorResponse>(
-      url,
-      "delete",
-      user_token
-    );
-    // console.log(response);
-    // this.page = page;
-    this.user_token = user_token;
-
-    return response.status;
-  }
-
-  deleteTask(id: number, user_token: string = "") {
-    return this.delete(id, user_token);
-  }
-
   loadTasks(user_token: string = "") {
     return this.loadPage(0, user_token);
   }
@@ -70,4 +51,50 @@ export class TaskStore {
     if (this.no_more_results) return;
     return this.loadPage(this.page + 1, this.user_token);
   }
+
+  private async createUpdate(
+    task: Task,
+    user_token: string,
+    method: string = "post"
+  ) {
+    let url = "/task/";
+
+    let response = await client.sendRequest<ErrorResponse>(
+      url,
+      method,
+      user_token,
+      task
+    );
+    this.user_token = user_token;
+
+    return response.status;
+  }
+
+  updateTask(task: Task, user_token: string = "") {
+    return this.createUpdate(task, user_token, "put");
+  }
+  createTask(task: Task, user_token: string = "") {
+    return this.createUpdate(task, user_token, "post");
+  }
+
+  private async delete(id: number, user_token: string) {
+    let url = "/task/" + id;
+    // url += `offset=${page * TASKS_PER_PAGE}&limit=${TASKS_PER_PAGE}`;
+    let response = await client.sendRequest<ErrorResponse>(
+      url,
+      "delete",
+      user_token
+    );
+    this.user_token = user_token;
+
+    return response.status;
+  }
+
+  deleteTask(id: number, user_token: string = "") {
+    return this.delete(id, user_token);
+  }
 }
+
+export let taskStore = new TaskStore();
+
+// name, description, reminder, startAt, endAt;

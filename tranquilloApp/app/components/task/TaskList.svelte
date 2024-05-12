@@ -5,7 +5,7 @@
 
   import Task from "./Task.svelte";
   import { icons } from "~/utils/icons";
-  import { TaskStore } from "~/stores/task";
+  import { taskStore } from "~/stores/task";
   import { localize } from "~/lib/packages/localize";
   import { user_token } from "~/stores/user";
   import { get } from "svelte/store";
@@ -14,15 +14,14 @@
   export let userToken = get(user_token);
   let loading = false;
 
-  let items = new TaskStore();
   $: {
-    items.loadTasks(userToken);
+    taskStore.loadTasks(userToken);
     loading = true;
   }
 
   let list_items: Task[] = [];
   $: {
-    list_items = $items;
+    list_items = $taskStore;
     loading = false;
   }
 
@@ -38,7 +37,7 @@
       items={list_items}
       height="100%"
       width="100%"
-      on:loadMoreItems={() => items.loadNextPage()}
+      on:loadMoreItems={() => taskStore.loadNextPage()}
       on:itemTap={openTask}
     >
       <Template let:item>
@@ -82,9 +81,7 @@
   .task-desc {
     font-size: 16;
   }
-  .task-footer {
-    margin-top: 10;
-  }
+
   .tags {
     margin-bottom: 0;
     margin-top: 15;
@@ -97,13 +94,5 @@
     border-radius: 10;
     border-color: #ccc;
     border-width: 1;
-  }
-  .icon {
-    font-size: 15;
-    margin-left: 5;
-  }
-
-  .icon.favorited {
-    color: black;
   }
 </style>

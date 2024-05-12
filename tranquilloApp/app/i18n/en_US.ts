@@ -1,9 +1,17 @@
+import { start } from "@nativescript/core/profiling";
+
 export const i18n = {
   name_app: "Tranquillo",
-  global: {
-    yes: "yes",
-    no: "no",
-  },
+  yes: "yes",
+  no: "no",
+  date: "date",
+  time: "time",
+  minutes: "minute$1",
+  hours: "hour$1",
+  days: "day$1",
+  previously: "previously",
+  none: "none",
+  description: "description",
   user: {
     email: "email",
     password: "password",
@@ -13,7 +21,15 @@ export const i18n = {
   },
   task: {
     title: "list of tasks",
-    no_task: "No tasks are here... yet",
+    no_task: "no tasks are here... yet",
+    name: "title",
+    start_date: "start date",
+    start_time: "start time",
+    end_date: "end date",
+    end_time: "end time",
+    start: "starting at",
+    before: "before the",
+    delay: "lead time",
   },
   form: {
     no_account: "don't have an account?",
@@ -21,6 +37,11 @@ export const i18n = {
     registration: "registration",
     register: "register",
     login: "login",
+  },
+  dialog: {
+    approve: "approve",
+    reject: "reject",
+    confirm_select: "confirm $1",
   },
   button: {
     validate: "Confirm",
@@ -95,5 +116,6 @@ export const i18n = {
         "the password must contain at least one uppercase, lowercase, number and special character @#.$%^&:+=! !",
       repeat: "the passwords don't match",
     },
+    type: "the value is not of type '$1'",
   },
 };

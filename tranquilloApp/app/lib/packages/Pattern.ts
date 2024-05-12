@@ -1,4 +1,4 @@
-import { printR } from "./functions";
+import { getType, printR } from "./functions";
 import { localize } from "./localize";
 
 class ValidateForm {
@@ -8,7 +8,7 @@ class ValidateForm {
     const namePattern: RegExp =
       /^[a-zA-ZÀ-ÖØ-öø-ÿ]+(?:[-\s_a-zA-ZÀ-ÖØ-öø-ÿ]+)[a-zA-ZÀ-ÖØ-öø-ÿ]+$/;
     if (!namePattern.test(value.trim())) {
-      return printR(await localize("pattern.name"), fieldName);
+      return printR(localize("pattern.name"), fieldName);
     }
     return null;
   }
@@ -16,7 +16,7 @@ class ValidateForm {
   public async email(email: string): Promise<string | null> {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email.trim())) {
-      return await localize("pattern.email");
+      return localize("pattern.email");
     }
     return null;
   }
@@ -25,10 +25,10 @@ class ValidateForm {
     const passPattern =
       /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%.^&:§+=!])(?!.*[ç<\">\'µ`~\\\/]).{0,}$/;
     if (password.trim().length < 8) {
-      return await localize("pattern.password.length");
+      return localize("pattern.password.length");
     }
     if (!passPattern.test(password.trim())) {
-      return await localize("pattern.password.force");
+      return localize("pattern.password.force");
     }
     return null;
   }
@@ -43,8 +43,21 @@ class ValidateForm {
     confirmPassword: string
   ): Promise<string | null> {
     if (password !== confirmPassword) {
-      return await localize("pattern.password.repeat");
+      return localize("pattern.password.repeat");
     }
+    return null;
+  }
+
+  public async checkType(value: any, type: string): Promise<string | null> {
+    // const date: boolean = type === "Date";
+    // console.log(date);
+
+    // if (!date && typeof value != type) {
+    //   return printR(localize("pattern.type"), type) + " : " + getType(value);
+    // }
+    // if (date && !(value instanceof Date)) {
+    //   return printR(localize("pattern.type"), type) + " : " + getType(value);
+    // }
     return null;
   }
 }

@@ -28,25 +28,10 @@ export class Login {
   password: string = "";
 }
 
-export interface ApiHeader {
-  "User-Agent"?: string;
-  "Content-Type"?: string;
-  Authorization?: string;
-  Accept?: string;
-  cty?: string;
-  // Ajoute d'autres propriétés nécessaires selon les besoins de ton API
-}
-
 export interface UserResponse {
   token: string;
   code: number;
   user?: User;
-}
-
-export interface ErrorResponse {
-  title?: string;
-  status?: number;
-  detail?: string;
 }
 
 export interface LoginResponse {
@@ -60,4 +45,10 @@ export interface ProfileUpdate {
   firstname: string;
   lastname: string;
   new_password: string;
+}
+
+export interface Profile {
+  lastname: string;
+  firstname: string;
+  email: string;
 }
