@@ -1,9 +1,33 @@
-﻿// @import "../node_modules/bootstrap/scss/bootstrap.scss";
+﻿// @import "./fonts/fonts";
 // @import "./scss/buttons";
+// @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 // @import "@nativescript/theme/css/core.css";
 // @import "@nativescript/theme/css/default.css";
+.title {
+  font-family: "Amaranth", "Amaranth-Bold";
+  // font-weight: bold;
+  font-size: 26;
+  margin: 10 0;
+  color: hsl(44, 98%, 42%);
+}
 
+.amab {
+  font-family: "Amaranth", "Amaranth-Bold";
+  font-weight: 700;
+}
+.amas {
+  font-family: "Amaranth", "Amaranth-BoldItalic";
+  font-weight: 700;
+}
+.amai {
+  font-family: "Amaranth", "Amaranth-Italic";
+  font-weight: 400;
+}
+.amar {
+  font-family: "Amaranth", "Amaranth-Regular";
+  font-weight: 400;
+}
 
 .fab {
   font-family: "Font Awesome 5 Brands", "fa-brands-400";
@@ -20,15 +44,14 @@
   font-weight: 400;
 }
 
-.btn {
-  font-size: 18;
-  font-weight: bold;
-}
-
 .icon {
   font-family: "Material-Design-Iconic-Font";
 }
 
+.btn {
+  font-size: 18;
+  font-weight: bold;
+}
 
 .error {
   color: #d30000;
@@ -45,7 +68,7 @@
 
 .btn {
   &.rectangle {
-    background-color: hsl(224, 83%, 26%);
+    background-color: hsl(221, 83%, 26%);
     color: white;
     font-size: 15;
     max-width: 280;
@@ -64,14 +87,14 @@
     margin: 4px 2px 4px 4px;
     padding: 5px;
     text-align: center;
-    box-shadow: 0 0 0 rgb(255, 255, 255);
+    box-shadow: 4px 5px 6px 1px hsla(46, 100%, 16%, 0.856);
     font-weight: bold;
     font-size: 20px;
 
     border-style: solid;
     border-width: 2px;
     border-color: hsl(0, 0%, 100%, 0);
-    color: rgb(150, 150, 150);
+    color: hsl(0, 0%, 59%);
 
     &.islogin {
       color: hsl(0, 80%, 65%);
@@ -82,17 +105,20 @@
       color: hsl(117, 54%, 52%);
     }
 
-    &.sign-in {
+    &.sign-in,
+    &.delete {
       color: hsl(0, 80%, 65%);
     }
 
-    &.refresh {
+    &.refresh,
+    &.edit {
       color: hsl(221, 54%, 52%);
     }
 
-    &.disabled {
-      border-color: hsl(54, 98%, 63%);
-      box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
+    &.actif {
+      border-color: hsl(45, 85%, 79%);
+      border-width: 4px;
+      box-shadow: 0 0 5px 1px hsl(45, 100%, 53%) !important;
       font-size: 25px;
 
       &.home {
@@ -109,19 +135,31 @@
     }
 
     &.enabled {
-      box-shadow: 3px 3px 3px 1px hsla(32, 97%, 24%, 0.856) !important;
+      box-shadow: 3px 3px 3px 1px hsla(45, 97%, 24%, 0.856) !important;
+    }
+
+    &.disabled {
+      border-style: solid;
+      border-width: 2px;
+      border-color: hsl(0, 0%, 100%, 0);
+      color: hsl(0, 0%, 59%);
+      box-shadow: 0 0 2px 1px hsl(0, 0%, 31%) !important;
     }
   }
 }
 
-.form {
+.back-button {
+  margin-right: 5;
+  padding: 10 10 10 0;
+}
 
+.form {
   label.title {
     font-weight: bold;
     font-size: 20;
     margin-top: 20;
     margin-bottom: 20;
-    color: rgb(211, 155, 2);
+    color: hsl(45, 98%, 42%);
   }
 
   .input {
@@ -136,23 +174,27 @@
 
   .bold {
     font-weight: bold;
-    color: rgb(15, 61, 104);
-  }
-
-  .hr-light {
-    background-color: rgb(181, 189, 218);
-    height: 0.5;
-    margin: 0;
-    padding: 0;
+    color: hsl(221, 75%, 23%);
   }
 
   .error {
     margin-top: -10;
 
-    &>label {
+    & > label {
       padding: 2;
       margin: 0;
       white-space: normal;
     }
+  }
+}
+.hr {
+  background-color: hsl(221, 33%, 78%);
+  margin: 0;
+  padding: 0;
+  &-light {
+    height: 0.5;
+  }
+  &-tick {
+    height: 4;
   }
 }

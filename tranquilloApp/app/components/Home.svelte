@@ -30,13 +30,6 @@
 </page>
 
 <style>
-  .title {
-    font-weight: bold;
-    font-size: 20;
-    margin: 10 0;
-    color: rgb(211, 155, 2);
-  }
-
   .info .fas {
     font-size: 20;
     color: hsl(221, 100%, 61%);

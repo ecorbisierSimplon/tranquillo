@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { validateForm } from "./../../lib/packages/Pattern.ts";
   isPage.set("login");
 
   import { alert } from "@nativescript/core/ui/dialogs";
@@ -19,6 +18,7 @@
     password: string = "",
     email_edit: string = "",
     password_edit: string = "";
+  let disabled: string = "";
 
   onMount(() => {
     if ($user_profile) {
@@ -27,20 +27,28 @@
   });
 
   function doLogin(): void {
-    isLoading = true;
-    login(email as string, password as string).then(
-      (user) => {
-        homeResult(user);
-      },
-      (err) => {
-        if (err.errorCode > 202) {
-          alert(localize("message.error.not_logged", true));
-        } else {
-          alert(err.message);
-        }
-        isLoading = false;
-      },
-    );
+    if (disabled === "") {
+      isLoading = true;
+      disabled = "disabled";
+      login(email as string, password as string).then(
+        (user) => {
+          homeResult(user);
+        },
+        (err) => {
+          if (err.errorCode > 202) {
+            alert({
+              title: "Connexion",
+              message: localize("message.error.not_logged", true),
+              okButtonText: "OK",
+            });
+          } else {
+            alert(err.message);
+          }
+          isLoading = false;
+          disabled = "";
+        },
+      );
+    }
   }
 
   function register(): void {
@@ -48,6 +56,7 @@
   }
   function homeResult(result: any): void {
     isLoading = true;
+    disabled = "disabled";
     navigate({ page: Home, clearHistory: true });
   }
 </script>
@@ -59,75 +68,73 @@
       <Menu />
     </stackLayout>
     <scrollView scrollBarIndicatorVisible="true">
-      <stackLayout class="form">
-        <stackLayout row="1" class="mb-3 mt-3" verticalAlignment="middle">
-          <label
-            text={localize("form.login", true)}
-            class="title form-label"
-            horizontalAlignment="center"
-          />
-          <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
-          <stackLayout class="form-contro">
-            <textField
-              bind:this={email_edit}
-              on:textChange={(event) => {
-                email = event.value;
-              }}
-              hint={localize("user.email")}
-              class="input"
-              keyboardType="email"
-              autocorrect="false"
-              autocapitalizationType="none"
-              returnKeyType="next"
-              editable={!isLoading}
-            />
-            <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
-            <!-- <stackLayout class="hr-light" /> -->
-          </stackLayout>
-
-          <stackLayout class="input-field">
-            <textField
-              bind:this={password_edit}
-              on:textChange={(event) => {
-                password = event.value;
-              }}
-              hint={localize("user.password")}
-              class="input"
-              secure="true"
-              returnKeyType="done"
-              editable={!isLoading}
-            />
-            <!-- on:returnPress={doLogin} -->
-            <!-- <stackLayout class="hr-light" /> -->
-          </stackLayout>
-
-          <!-- text={localize("button.validate", true)} -->
-          <label
-            text={icons.check}
-            class="btn round icon check enabled"
-            on:tap={doLogin}
-            isEnabled={!isLoading}
-          />
-
-          <activityIndicator
-            busy={isLoading}
-            horizontalAlignment="center"
-            verticalAlignment="middle"
-            class="activity-indicator"
-          />
-        </stackLayout>
-
+      <stackLayout>
         <label
-          row="2"
-          class="login-label sign-up-label"
-          on:tap={register}
+          text={localize("form.login", true)}
+          class="title"
           horizontalAlignment="center"
-        >
-          <formattedString>
-            <span text={localize("form.no_account", true)} />
-            <span text=" {localize('form.register', true)}" class="bold" />
-          </formattedString>
-        </label>
+        />
+        <stackLayout class="form">
+          <stackLayout verticalAlignment="middle">
+            <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
+            <stackLayout class="form-contro">
+              <textField
+                bind:this={email_edit}
+                on:textChange={(event) => {
+                  email = event.value;
+                }}
+                hint={localize("user.email")}
+                class="input"
+                keyboardType="email"
+                autocorrect="false"
+                autocapitalizationType="none"
+                returnKeyType="next"
+                editable={!isLoading}
+              />
+              <!-- on:returnPress={() => password_edit.nativeView.focus()} -->
+              <!-- <stackLayout class="hr-light" /> -->
+            </stackLayout>
+
+            <stackLayout class="input-field">
+              <textField
+                bind:this={password_edit}
+                on:textChange={(event) => {
+                  password = event.value;
+                }}
+                hint={localize("user.password")}
+                class="input"
+                secure="true"
+                returnKeyType="done"
+                editable={!isLoading}
+              />
+            </stackLayout>
+
+            <label
+              text={icons.check}
+              class="btn round icon check {disabled}"
+              on:tap={doLogin}
+              isEnabled={!isLoading}
+            />
+            <activityIndicator
+              busy={isLoading}
+              horizontalAlignment="center"
+              verticalAlignment="middle"
+              class="activity-indicator"
+            />
+          </stackLayout>
+
+          <label
+            row="2"
+            class="login-label sign-up-label"
+            on:tap={register}
+            horizontalAlignment="center"
+          >
+            <formattedString>
+              <span text={localize("form.no_account", true)} />
+              <span text=" {localize('form.register', true)}" class="bold" />
+            </formattedString>
+          </label>
+        </stackLayout>
       </stackLayout>
     </scrollView>
   </dockLayout>

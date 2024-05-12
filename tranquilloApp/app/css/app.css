@@ -1,3 +1,30 @@
+.title {
+  font-family: "Amaranth", "Amaranth-Bold";
+  font-size: 26;
+  margin: 10 0;
+  color: hsl(44, 98%, 42%);
+}
+
+.amab {
+  font-family: "Amaranth", "Amaranth-Bold";
+  font-weight: 700;
+}
+
+.amas {
+  font-family: "Amaranth", "Amaranth-BoldItalic";
+  font-weight: 700;
+}
+
+.amai {
+  font-family: "Amaranth", "Amaranth-Italic";
+  font-weight: 400;
+}
+
+.amar {
+  font-family: "Amaranth", "Amaranth-Regular";
+  font-weight: 400;
+}
+
 .fab {
   font-family: "Font Awesome 5 Brands", "fa-brands-400";
   font-weight: 400;
@@ -13,13 +40,13 @@
   font-weight: 400;
 }
 
+.icon {
+  font-family: "Material-Design-Iconic-Font";
+}
+
 .btn {
   font-size: 18;
   font-weight: bold;
-}
-
-.icon {
-  font-family: "Material-Design-Iconic-Font";
 }
 
 .error {
@@ -31,7 +58,7 @@
 }
 
 .btn.rectangle {
-  background-color: hsl(224, 83%, 26%);
+  background-color: hsl(221, 83%, 26%);
   color: white;
   font-size: 15;
   max-width: 280;
@@ -48,13 +75,13 @@
   margin: 4px 2px 4px 4px;
   padding: 5px;
   text-align: center;
-  box-shadow: 0 0 0 rgb(255, 255, 255);
+  box-shadow: 4px 5px 6px 1px hsla(46, 100%, 16%, 0.856);
   font-weight: bold;
   font-size: 20px;
   border-style: solid;
   border-width: 2px;
   border-color: hsla(0, 0%, 100%, 0);
-  color: rgb(150, 150, 150);
+  color: hsl(0, 0%, 59%);
 }
 .btn.round.islogin {
   color: hsl(0, 80%, 65%);
@@ -63,28 +90,41 @@
 .btn.round.check {
   color: hsl(117, 54%, 52%);
 }
-.btn.round.sign-in {
+.btn.round.sign-in, .btn.round.delete {
   color: hsl(0, 80%, 65%);
 }
-.btn.round.refresh {
+.btn.round.refresh, .btn.round.edit {
   color: hsl(221, 54%, 52%);
 }
-.btn.round.disabled {
-  border-color: hsl(54, 98%, 63%);
-  box-shadow: -2px -2px 5px 1px hsl(0, 0%, 89%) !important;
+.btn.round.actif {
+  border-color: hsl(45, 85%, 79%);
+  border-width: 4px;
+  box-shadow: 0 0 5px 1px hsl(45, 100%, 53%) !important;
   font-size: 25px;
 }
-.btn.round.disabled.home {
+.btn.round.actif.home {
   color: hsl(221, 54%, 52%);
 }
-.btn.round.disabled.login {
+.btn.round.actif.login {
   color: hsl(117, 54%, 52%);
 }
-.btn.round.disabled.register {
+.btn.round.actif.register {
   color: hsl(24, 54%, 52%);
 }
 .btn.round.enabled {
-  box-shadow: 3px 3px 3px 1px hsla(32, 97%, 24%, 0.856) !important;
+  box-shadow: 3px 3px 3px 1px hsla(45, 97%, 24%, 0.856) !important;
+}
+.btn.round.disabled {
+  border-style: solid;
+  border-width: 2px;
+  border-color: hsla(0, 0%, 100%, 0);
+  color: hsl(0, 0%, 59%);
+  box-shadow: 0 0 2px 1px hsl(0, 0%, 31%) !important;
+}
+
+.back-button {
+  margin-right: 5;
+  padding: 10 10 10 0;
 }
 
 .form label.title {
@@ -92,7 +132,7 @@
   font-size: 20;
   margin-top: 20;
   margin-bottom: 20;
-  color: rgb(211, 155, 2);
+  color: hsl(45, 98%, 42%);
 }
 .form .input {
   font-size: 13;
@@ -104,13 +144,7 @@
 }
 .form .bold {
   font-weight: bold;
-  color: rgb(15, 61, 104);
-}
-.form .hr-light {
-  background-color: rgb(181, 189, 218);
-  height: 0.5;
-  margin: 0;
-  padding: 0;
+  color: hsl(221, 75%, 23%);
 }
 .form .error {
   margin-top: -10;
@@ -119,4 +153,16 @@
   padding: 2;
   margin: 0;
   white-space: normal;
+}
+
+.hr {
+  background-color: hsl(221, 33%, 78%);
+  margin: 0;
+  padding: 0;
+}
+.hr-light {
+  height: 0.5;
+}
+.hr-tick {
+  height: 4;
 }/*# sourceMappingURL=app.css.map */

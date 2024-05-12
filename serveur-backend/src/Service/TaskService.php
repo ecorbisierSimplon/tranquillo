@@ -171,15 +171,12 @@ class TaskService extends AbstractController
         if ($newDescription !== null) {
             $task->setDescription($newDescription);
         }
-        if ($newReminder !== null) {
-            $task->setReminder($newReminder);
-        }
-        if ($newStartAt !== null) {
-            $task->setStartAt($newStartAt);
-        }
-        if ($newEndAt !== null) {
-            $task->setEndAt($newEndAt);
-        }
+
+        $task->setReminder($newReminder);
+
+        $task->setStartAt($newStartAt);
+
+        $task->setEndAt($newEndAt);
 
         $this->em->flush();
 

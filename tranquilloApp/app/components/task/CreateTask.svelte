@@ -1,9 +1,7 @@
 <script lang="ts">
   import ChoiceTime from "./ChoiceTime.svelte";
-  import { confirm } from "@nativescript/core/ui/dialogs";
-  import { goBack, showModal } from "svelte-native";
-  import { format } from "timeago.js";
-  import BackButton from "./BackButton.svelte";
+  import Home from "~/components/Home.svelte";
+  import { navigate, showModal } from "svelte-native";
   import { localize } from "~/lib/packages/localize";
   import { printR } from "~/lib/packages/functions";
   import { ErrRespTask, ErrTask, Task } from "~/models/task";
@@ -16,7 +14,6 @@
   import { DateTimePickerFields } from "@nativescript/datetimepicker";
   import { listReminder } from "./ListReminder";
 
-  export let task: Task;
   export let userToken = get(user_token);
   export const reminderIndex = writable<string>("aucun");
   let isLoading = false;
@@ -24,11 +21,12 @@
 
   let errMessage: ErrTask = {};
 
-  let name: string = task.name ?? "",
-    description: string = task.description ?? "",
-    reminder: number = task.reminder ?? 0,
-    startAt: Date | undefined | null = task.startAt,
-    endAt: Date | undefined | null = task.endAt;
+  let name: string = "",
+    description: string = "",
+    reminder: number = 0,
+    startAt: Date | undefined | null = null,
+    endAt: Date | undefined | null = null,
+    createAt: Date | undefined | null = null;
 
   let name_edit: any,
     description_edit: any,
@@ -38,15 +36,13 @@
 
   let task_date: string, task_name: string;
 
-  $: task_name = task.name ?? "";
-  $: task_date = task.createAt ? format(task.createAt, "fr_FR") : "";
+  $: task_name = "Create new task";
 
   async function launchModal() {
     let result: { s: string; n: number } = await showModal({
       page: ChoiceTime,
     });
     reminder = await result.n;
-    task.reminder = await result.n;
   }
 
   async function onTapNavigValidate(): Promise<void> {
@@ -66,15 +62,14 @@
       });
 
       if (res.ok) {
-        const id: number = task.id ?? 0;
         taskStore
-          .updateTask(
-            { id, name, description, reminder, startAt, endAt },
+          .createTask(
+            { name, description, reminder, startAt, endAt },
             userToken,
           )
           .then(
             () => {
-              goBack();
+              onTapNavigCancel();
             },
             async (err) => {
               console.log(err.errors);
@@ -119,39 +114,23 @@
   }
 
   function onTapNavigCancel(): void {
-    goBack();
-  }
-
-  function onTapDelete() {
-    isLoading = true;
-    disabled = "disabled";
-    confirm({
-      title: localize("message.title.delete_task", true),
-      message: printR(localize("message.confirm_delete"), task_name),
-      okButtonText: localize("yes", true),
-      cancelButtonText: localize("no", true),
-    }).then(async (res) => {
-      if (res) {
-        let result: number =
-          (await taskStore.deleteTask(task.id || 0, userToken)) ?? 0;
-
-        goBack();
-      }
-    });
-    isLoading = false;
-    disabled = "";
+    navigate({ page: Home, clearHistory: true });
   }
 </script>
 
 <page>
   <actionBar title="">
     <stackLayout orientation="horizontal" horizontalAlignment="left">
-      <BackButton />
-      <!-- <image class="author-image" src={avatar_url} stretch="aspectFill" /> -->
+      <label
+        text={icons["arrow_left"]}
+        class="icon back-button"
+        verticalAlignment="middle"
+        horizontalAlignment="left"
+        on:tap={onTapNavigCancel}
+      />
+
       <stackLayout orientation="vertical">
         <label text={task_name} class="author-name" />
-        <label text={task_date} class="date" />
-        <!-- <label text={task.usersId} class="" /> -->
       </stackLayout>
     </stackLayout>
   </actionBar>
@@ -171,7 +150,7 @@
                 name = event.value;
               }}
               hint={localize("task.name")}
-              text={task.name}
+              text={name}
               class="task-name input"
               autocapitalizationType="none"
               returnKeyType="next"
@@ -194,7 +173,7 @@
                 description = event.value;
               }}
               hint={localize("task.description")}
-              text={task.description}
+              text={description}
               class="task-body input"
               autocapitalizationType="none"
               returnKeyType="next"
@@ -234,8 +213,8 @@
                 localize("dialog.confirm_select"),
                 localize("time"),
               )}
-              pickerDefaultDate={dtDisplay.datetime(task.startAt)}
-              date={task.startAt}
+              pickerDefaultDate={dtDisplay.datetime(startAt)}
+              date={startAt}
               autoPickTime="true"
               is24Hours="true"
             ></dateTimePickerFields>
@@ -243,7 +222,6 @@
               class="label-icon icon close-circle"
               text={icons.close_circle}
               on:tap={() => {
-                task.startAt = null;
                 startAt = null;
               }}
             />
@@ -274,10 +252,9 @@
                 localize("dialog.confirm_select"),
                 localize("time"),
               )}
-              pickerDefaultDate={dtDisplay.datetime(task.endAt)}
-              date={task.endAt}
+              pickerDefaultDate={dtDisplay.datetime(endAt)}
+              date={endAt}
               minDate={startAt}
-              minTime={startAt}
               autoPickTime="true"
               title="date de fin "
               is24Hours="true"
@@ -286,7 +263,6 @@
               class="label-icon icon close-circle"
               text={icons.close_circle}
               on:tap={() => {
-                task.endAt = null;
                 endAt = null;
               }}
             />
@@ -304,7 +280,7 @@
               text={icons.alarm_snooze}
             />
             <label
-              text={listReminder.convertToDHM(task.reminder ?? 0)}
+              text={listReminder.convertToDHM(reminder ?? 0)}
               on:tap={launchModal}
             />
           </stackLayout>
@@ -325,12 +301,6 @@
               text={icons.sign_in}
               on:tap={onTapNavigCancel}
               class="btn round icon sign-in {disabled}"
-              isEnabled={!isLoading}
-            />
-            <label
-              on:tap={onTapDelete}
-              text={icons.delete}
-              class="btn round icon delete {disabled}"
               isEnabled={!isLoading}
             />
           </flexboxLayout>
@@ -393,5 +363,10 @@
     &-tick {
       margin-bottom: 10;
     }
+  }
+
+  .error {
+    margin-top: -30;
+    margin-left: 45;
   }
 </style>

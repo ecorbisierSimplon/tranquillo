@@ -4,16 +4,17 @@
 </script>
 
 <label
-  text={icons["arrow_left"]}
-  class="icon back-button"
+  text={icons.arrow_left}
+  class="icon arrow-left"
   verticalAlignment="center"
   horizontalAlignment="left"
   on:tap={goBack}
 />
 
 <style lang="scss">
-  .back-button {
-    margin-right: 5;
-    padding: 10 10 10 0;
+  .icon {
+    margin-right: 10;
+    font-weight: bold;
+    color: hsl(0, 100%, 26%);
   }
 </style>
