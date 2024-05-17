@@ -19,6 +19,7 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "@nativescript/android": "8.7.0",
     "@nativescript/preview-cli": "1.0.13",
     "@nativescript/types": "^8.7.0",
     "@nativescript/webpack": "^5.0.21",

@@ -48,7 +48,7 @@ class Task
     private ?string $description = null;
 
     #[ORM\Column(name: "task_reminder")]
-    #[UserRegex(regex: 'number', information: "Reminder task is calculated in minute(s)", entity: "task", field: "reminder")]
+    #[UserRegex(regex: 'number', information: "Reminder task is Model classe.vpdcalculated in minute(s)", entity: "task", field: "reminder")]
     #[Assert\PositiveOrZero()]
     private ?int $reminder = null;
 
@@ -72,7 +72,7 @@ class Task
 
 
     /** @return void  */
-    public function setId()
+    public function setId(): void
     {
     }
 
