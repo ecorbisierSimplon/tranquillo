@@ -76,7 +76,7 @@ composer require lexik/jwt-authentication-bundle
 ###> lexik/jwt-authentication-bundle ###
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
-JWT_PASSPHRASE=<clé à générer et ne transmettre ni envoyer sur git, ni sur quelconque dépôt distant>
+JWT_PASSPHRASE=<mot de passe et ne transmettre ni envoyer sur git, ni sur quelconque dépôt distant>
 ###< lexik/jwt-authentication-bundle ###
 ```
 
